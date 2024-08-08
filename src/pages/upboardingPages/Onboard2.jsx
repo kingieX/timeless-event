@@ -21,18 +21,31 @@ const Onboard2 = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col justify-center items-center mx-6">
         <div className="flex flex-col justify-center items-center lg:w-1/2  my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
             Customize your experience
           </h2>
           <div className="lg:w-3/4 w-full mb-12">
-            <label className="block text-gray-700">Name</label>
-            <input
+            <label className="block text-gray-700">What is your role?</label>
+            {/* <input
               type="text"
               placeholder="Enter your name"
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            />
+            /> */}
+            <select
+              id="options"
+              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+            >
+              <option value="" disabled>
+                Select an option
+              </option>
+              <option value="option1">I own or run the company</option>
+              <option value="option2">
+                I lead a team within the company or organisation
+              </option>
+              <option value="option3">I’m a team member</option>
+            </select>
           </div>
           <button
             onClick={handleButtonClick}
