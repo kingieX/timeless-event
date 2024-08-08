@@ -9,6 +9,8 @@ import Pricing from './pages/navigationPages/Pricing';
 import Upgrade from './pages/navigationPages/Upgrade';
 import Onboard1 from './pages/upboardingPages/Onboard1';
 import Onboard2 from './pages/upboardingPages/Onboard2';
+import Onboard3 from './pages/upboardingPages/Onboard3';
+import Onboard4 from './pages/upboardingPages/Onboard4';
 
 const App = () => {
   return (
@@ -25,6 +27,8 @@ const App = () => {
         {/* Onborading routes */}
         <Route path="/signup/onboard" element={<Onboard1 />} />
         <Route path="/signup/customize-experience" element={<Onboard2 />} />
+        <Route path="/signup/create-team" element={<Onboard3 />} />
+        <Route path="/signup/about-team" element={<Onboard4 />} />
       </Routes>
     </Router>
   );

@@ -1,12 +1,16 @@
-// import React from 'react'
+// import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
 
-const Onboard2 = () => {
+const Onboard3 = () => {
   const navigate = useNavigate();
 
+  const handleSkipClick = () => {
+    navigate('/dashboard');
+  };
+
   const handleButtonClick = () => {
-    navigate('/signup/create-team');
+    navigate('/signup/about-team');
   };
 
   return (
@@ -24,16 +28,16 @@ const Onboard2 = () => {
       <div className="flex flex-col justify-center items-center mx-6">
         <div className="flex flex-col justify-center items-center lg:w-1/2  my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
-            Customize your experience
+            Create a team
           </h2>
           <div className="lg:w-3/4 w-full mb-12">
-            <label className="block text-gray-700">What is your role?</label>
-            {/* <input
+            <label className="block text-gray-700">Team Name</label>
+            <input
               type="text"
-              placeholder="Enter your name"
+              placeholder="Enter your team name"
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            /> */}
-            <select
+            />
+            {/* <select
               id="options"
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
@@ -45,18 +49,40 @@ const Onboard2 = () => {
                 I lead a team within the company or organisation
               </option>
               <option value="option3">I’m a team member</option>
-            </select>
+            </select> */}
+            <div className="flex items-center space-x-4 py-6">
+              <label
+                htmlFor="sharedWorkspace"
+                className="lg:text-normal text-sm text-gray-700"
+              >
+                Set up shared workspace for team project or event alongside your
+                personal?
+              </label>
+              <input
+                id="sharedWorkspace"
+                type="checkbox"
+                className="mr-2 w-6 h-6"
+              />
+            </div>
           </div>
-          <button
-            onClick={handleButtonClick}
-            className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
-          >
-            Continue
-          </button>
+          <div className="lg:w-3/4 w-full flex justify-between gap-8">
+            <button
+              onClick={handleButtonClick}
+              className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+            >
+              Continue
+            </button>
+            <button
+              onClick={handleSkipClick}
+              className="lg:w-1/2 w-full border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
+            >
+              Skip
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Onboard2;
+export default Onboard3;
