@@ -18,10 +18,10 @@ const Hero = () => {
           Bringing Your Vision to Life with Ease and Elegance
         </h1>
         <p className="lg:text-lg lg:text-left text-center text-gray-700 mb-6">
-          TimelessEvent is your ultimate event planning companion, designed to
+          TimelessPlanner is your ultimate event planning companion, designed to
           help you create unforgettable experiences with minimal effort. Whether
           you're a professional event planner, a bride-to-be, or organizing a
-          corporate event, TimelessEvent provides all the tools you need to
+          corporate event, TimelessPlanner provides all the tools you need to
           plan, manage, and execute your event flawlessly.
         </p>
         <Link to="/signup">
