@@ -1,13 +1,21 @@
 // import React from 'react';
+import { Link } from 'react-router-dom';
 import { FaFacebook, FaYoutube, FaInstagram } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import Logo from '/image/logo.svg';
 
 const Footer = () => {
   return (
     <footer className="bg-footer text-white py-8 lg;px-16 px-4">
       <div className="container mx-auto px-4">
         <div className="mb-4">
-          <img src="" alt="logo" />
+          {/* Logo and Name */}
+          <Link className="flex items-center" to="/">
+            <img src={Logo} alt="Logo" className="h-16 w-16" />
+            <span className="ml-2 lg:text-2xl lg:font-normal text-gray-800">
+              Timeless Planner
+            </span>
+          </Link>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-8 md:space-y-0">
           <div className="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 w-full justify-around">
