@@ -2,6 +2,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
 
+const roleOptions = [
+  { value: '', label: 'Select your role', disabled: true },
+  { value: 'owner', label: 'I own or run the company' },
+  {
+    value: 'leader',
+    label: 'I lead a team within the company or organisation',
+  },
+  { value: 'team_member', label: 'I’m a team member' },
+];
+
 const Onboard2 = () => {
   const navigate = useNavigate();
 
@@ -38,13 +48,13 @@ const Onboard2 = () => {
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
               <option value="" disabled>
-                Select an option
+                Select role
               </option>
-              <option value="option1">I own or run the company</option>
-              <option value="option2">
-                I lead a team within the company or organisation
-              </option>
-              <option value="option3">I’m a team member</option>
+              {roleOptions.map(role => (
+                <option key={role.value} value={role.value}>
+                  {role.label}
+                </option>
+              ))}
             </select>
           </div>
           <button
