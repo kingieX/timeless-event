@@ -1,17 +1,22 @@
 // import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import SignupImage from '/image/signup.png';
 import Logo from '/image/logo.svg';
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/signup/onboard');
+  };
   return (
     <div className="">
-      <div className="mb-6 flex items-center border-b py-4 px-8">
+      <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
-          <span className="ml-2 lg:text-xl lg:font-bold text-gray-800">
+          <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
             Timeless Planner
           </span>
         </Link>
@@ -50,7 +55,10 @@ const SignUp = () => {
                   className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
                 />
               </div>
-              <button className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300">
+              <button
+                onClick={handleButtonClick}
+                className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              >
                 Sign up
               </button>
             </form>

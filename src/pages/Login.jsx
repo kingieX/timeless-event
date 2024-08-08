@@ -8,11 +8,11 @@ import Logo from '/image/logo.svg';
 const Login = () => {
   return (
     <div className="">
-      <div className="mb-6 flex items-center border-b py-4 px-8">
+      <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
-          <span className="ml-2 lg:text-xl lg:font-bold text-gray-800">
+          <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
             Timeless Planner
           </span>
         </Link>

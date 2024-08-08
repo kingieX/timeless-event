@@ -7,6 +7,8 @@ import Features from './pages/navigationPages/Features';
 import Resources from './pages/navigationPages/Resources';
 import Pricing from './pages/navigationPages/Pricing';
 import Upgrade from './pages/navigationPages/Upgrade';
+import Onboard1 from './pages/upboardingPages/Onboard1';
+import Onboard2 from './pages/upboardingPages/Onboard2';
 
 const App = () => {
   return (
@@ -19,6 +21,10 @@ const App = () => {
         <Route path="/resources" element={<Resources />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/upgrade" element={<Upgrade />} />
+
+        {/* Onborading routes */}
+        <Route path="/signup/onboard" element={<Onboard1 />} />
+        <Route path="/signup/customize-experience" element={<Onboard2 />} />
       </Routes>
     </Router>
   );

@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="mb-4">
           {/* Logo and Name */}
           <Link className="flex items-center" to="/">
-            <img src={Logo} alt="Logo" className="h-16 w-16" />
+            <img src={Logo} alt="Logo" className="lg:h-16 lg:w-16 w-8 h-8" />
             <span className="ml-2 lg:text-2xl lg:font-normal text-gray-800">
               Timeless Planner
             </span>

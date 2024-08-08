@@ -19,7 +19,7 @@ const NavBar = () => {
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
-          <span className="ml-2 lg:text-xl lg:font-bold text-gray-800">
+          <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
             Timeless Planner
           </span>
         </Link>
@@ -79,7 +79,7 @@ const NavBar = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="lg:hidden">
-          <ul className="flex flex-col border-t-2 space-y-4 px-4 py-4">
+          <ul className="flex flex-col border-t space-y-4 px-4 py-4">
             <li>
               <Link to="/features" className={menuStyle}>
                 Features
