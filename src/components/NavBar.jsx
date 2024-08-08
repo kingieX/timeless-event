@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import Logo from '/image/logo.svg';
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,7 +18,7 @@ const NavBar = () => {
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
-          <img src="/path/to/logo.png" alt="Logo" className="h-8 w-8" />
+          <img src={Logo} alt="Logo" className="h-8 w-8" />
           <span className="ml-2 lg:text-xl lg:font-bold text-gray-800">
             Timeless Planner
           </span>

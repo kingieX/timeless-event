@@ -2,12 +2,19 @@
 import { Link } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import SignupImage from '/image/signup.png';
+import Logo from '/image/logo.svg';
 
 const SignUp = () => {
   return (
     <div className="">
       <div className="mb-6 flex items-center border-b py-4 px-8">
-        <h1 className="text-lg font-bold">Logo</h1>
+        {/* Logo and Name */}
+        <Link className="flex items-center" to="/">
+          <img src={Logo} alt="Logo" className="h-8 w-8" />
+          <span className="ml-2 lg:text-xl lg:font-bold text-gray-800">
+            Timeless Planner
+          </span>
+        </Link>
       </div>
 
       <div className="lg:px-48 px-8 py-8">
