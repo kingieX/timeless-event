@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
-import SidebarModal from './SidebarModal';
+import UserMenuModal from './SidebarModal';
 
 const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
   const location = useLocation();
@@ -109,7 +109,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 alt={userData.username}
                 className="w-10 h-10 rounded-full bg-accent"
               />
-              <div className="flex ml-3">
+              <div className="flex ml-3 relative">
                 <h4 className="font-semibold">{userData.username}</h4>
                 <button
                   className="text-gray-500 flex items-center"
@@ -119,7 +119,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 </button>
 
                 {/* Render the Modal */}
-                {isModalOpen && <SidebarModal toggleModal={toggleModal} />}
+                {isModalOpen && <UserMenuModal toggleModal={toggleModal} />}
               </div>
             </div>
             <div className="flex items-center">
