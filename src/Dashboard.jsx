@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex lg:items-start justify-center items-center">
         {/* Overlay for mobile when sidebar is open */}
         {isSidebarOpen && isMobile && (
           <div
@@ -70,7 +70,7 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="flex flex-col flex-grow lg:justify-center items-center py-16">
+        <div className="flex flex-col flex-grow justify-center items-center py-16">
           {/* Main Content */}
           <h2 className="lg:text-6xl text-4xl font-semibold lg:mb-12 mb-8 text-center">
             What’s New
