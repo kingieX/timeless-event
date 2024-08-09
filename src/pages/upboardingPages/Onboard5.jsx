@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
@@ -21,7 +22,7 @@ const Onboard5 = () => {
   const [inviteLink, setInviteLink] = useState(
     'https://timelessevent.com/auth/join?invite_code=ksdfkm'
   );
-  const [role, setRole] = useState('');
+  //   const [role, setRole] = useState('');
   const [newPeopleRole, setNewPeopleRole] = useState('');
   const [emailAddresses, setEmailAddresses] = useState('');
 
@@ -41,7 +42,7 @@ const Onboard5 = () => {
   };
 
   const handleButtonClick = () => {
-    navigate('/signup/about-team');
+    navigate('/dashboard');
   };
 
   return (
