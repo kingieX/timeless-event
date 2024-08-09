@@ -62,12 +62,12 @@ const organizationSizeOptions = [
 const Onboard4 = () => {
   const navigate = useNavigate();
 
-  const handleSkipClick = () => {
-    navigate('/dashboard');
-  };
+  // const handleSkipClick = () => {
+  //   navigate('/dashboard');
+  // };
 
   const handleButtonClick = () => {
-    navigate('/signup/about-team');
+    navigate('/signup/invite');
   };
   return (
     <div>
@@ -82,7 +82,7 @@ const Onboard4 = () => {
       </div>
 
       <div className="flex flex-col justify-center items-center mx-6">
-        <div className="flex flex-col justify-center items-center lg:w-1/2  my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
+        <div className="flex flex-col justify-center items-center lg:w-1/2  lg:my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold text-center">
             About you and your team
           </h2>
@@ -164,19 +164,19 @@ const Onboard4 = () => {
             </div>
           </div>
 
-          <div className="lg:w-3/4 w-full flex justify-between gap-8">
+          <div className="lg:w-3/4 w-full flex justify-center">
             <button
               onClick={handleButtonClick}
               className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
               Continue
             </button>
-            <button
+            {/* <button
               onClick={handleSkipClick}
               className="lg:w-1/2 w-full border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
             >
               Skip
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

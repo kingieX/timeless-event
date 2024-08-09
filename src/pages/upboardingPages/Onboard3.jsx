@@ -67,16 +67,16 @@ const Onboard3 = () => {
           </div>
           <div className="lg:w-3/4 w-full flex justify-between gap-8">
             <button
-              onClick={handleButtonClick}
-              className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
-            >
-              Continue
-            </button>
-            <button
               onClick={handleSkipClick}
               className="lg:w-1/2 w-full border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
             >
               Skip
+            </button>
+            <button
+              onClick={handleButtonClick}
+              className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+            >
+              Continue
             </button>
           </div>
         </div>

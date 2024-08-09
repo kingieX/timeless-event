@@ -11,6 +11,7 @@ import Onboard1 from './pages/upboardingPages/Onboard1';
 import Onboard2 from './pages/upboardingPages/Onboard2';
 import Onboard3 from './pages/upboardingPages/Onboard3';
 import Onboard4 from './pages/upboardingPages/Onboard4';
+import Onboard5 from './pages/upboardingPages/Onboard5';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/signup/customize-experience" element={<Onboard2 />} />
         <Route path="/signup/create-team" element={<Onboard3 />} />
         <Route path="/signup/about-team" element={<Onboard4 />} />
+        <Route path="/signup/invite" element={<Onboard5 />} />
       </Routes>
     </Router>
   );
