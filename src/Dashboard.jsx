@@ -32,25 +32,34 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="dashboard flex">
-      {/* Sidebar Toggle Button */}
-      {(!isSidebarOpen || (!isMobile && isSidebarOpen)) && (
-        <button
-          className="fixed top-4 left-4 p-2 bg-gray-100 rounded-full shadow-lg z-10"
-          onClick={handleToggleSidebar}
-        >
-          <PiSidebarSimpleThin className="text-gray-500 w-6 h-6" />
-        </button>
-      )}
+    <>
+      <div className="flex">
+        {/* Overlay for mobile when sidebar is open */}
+        {isSidebarOpen && isMobile && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-20 z-10"
+            onClick={handleToggleSidebar}
+          ></div>
+        )}
+        {/* Sidebar Toggle Button */}
+        {(!isSidebarOpen || (!isMobile && isSidebarOpen)) && (
+          <button
+            className="fixed top-4 left-4 p-2 bg-gray-100 rounded-full shadow-lg z-20"
+            onClick={handleToggleSidebar}
+          >
+            <PiSidebarSimpleThin className="text-gray-500 w-6 h-6" />
+          </button>
+        )}
 
-      <Sidebar
-        userData={userData}
-        onToggleSidebar={handleToggleSidebar}
-        isSidebarOpen={isSidebarOpen}
-      />
+        <Sidebar
+          userData={userData}
+          onToggleSidebar={handleToggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+        />
 
-      <div className="content flex-grow">{/* Main Content */}</div>
-    </div>
+        <div className="content flex-grow">{/* Main Content */}</div>
+      </div>
+    </>
   );
 };
 

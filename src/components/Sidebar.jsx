@@ -98,7 +98,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
 
   return (
     <div
-      className={`bg-sidebar h-screen ${isSidebarOpen ? 'w-64' : 'w-0'} transition-width duration-300`}
+      className={`bg-sidebar h-screen z-50 ${isSidebarOpen ? 'w-64' : 'w-0'} transition-width duration-300`}
     >
       {isSidebarOpen && (
         <>
