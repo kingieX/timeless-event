@@ -133,7 +133,15 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 </button>
 
                 {/* Render the Modal */}
-                {isModalOpen && <UserMenuModal toggleModal={toggleModal} />}
+                {/* {isModalOpen && <UserMenuModal toggleModal={toggleModal} />} */}
+
+                {/* Render the Modal and pass the onToggleSidebar prop */}
+                {isModalOpen && (
+                  <UserMenuModal
+                    toggleModal={toggleModal}
+                    onToggleSidebar={onToggleSidebar}
+                  />
+                )}
               </div>
             </div>
             <div className="flex items-center">

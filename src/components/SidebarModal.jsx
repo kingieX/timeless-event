@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 const menuGroups = [
@@ -94,9 +94,10 @@ const menuGroups = [
   ],
 ];
 
-const Modal = ({ toggleModal }) => {
+const Modal = ({ toggleModal, onToggleSidebar }) => {
   const [openMenus, setOpenMenus] = useState({});
   const [activeMenu, setActiveMenu] = useState(null);
+  const navigate = useNavigate();
 
   const handleToggleMenu = index => {
     setOpenMenus(prevState => ({
@@ -105,9 +106,13 @@ const Modal = ({ toggleModal }) => {
     }));
   };
 
-  const handleMenuClick = menuName => {
+  const handleMenuClick = (menuName, link) => {
     setActiveMenu(menuName);
-    toggleModal();
+    toggleModal(); // Close the modal
+    if (window.innerWidth < 768) {
+      onToggleSidebar(); // Close the sidebar on mobile view
+    }
+    navigate(link); // Navigate to the page without reloading
   };
 
   return (
@@ -127,7 +132,11 @@ const Modal = ({ toggleModal }) => {
                   {menu.subMenu ? (
                     <div>
                       <button
-                        className={`text-left py-2 px-4 hover:bg-blue-100 w-full flex justify-between items-center ${activeMenu === menu.name ? 'bg-blue-100 text-blue-600' : ''}`}
+                        className={`text-left py-2 px-4 hover:bg-blue-100 w-full flex justify-between items-center ${
+                          activeMenu === menu.name
+                            ? 'bg-blue-100 text-blue-600'
+                            : ''
+                        }`}
                         onClick={() =>
                           handleToggleMenu(`${groupIndex}-${menuIndex}`)
                         }
@@ -149,11 +158,16 @@ const Modal = ({ toggleModal }) => {
                       {openMenus[`${groupIndex}-${menuIndex}`] && (
                         <div className="ml-4">
                           {menu.subMenu.map((subMenu, subIndex) => (
-                            <Link
-                              to={subMenu.link}
+                            <div
                               key={subIndex}
-                              className={`text-left py- px-4 hover:bg-blue-100 w-full flex items-center ${activeMenu === subMenu.name ? 'bg-blue-100 text-blue-600' : ''}`}
-                              onClick={() => handleMenuClick(subMenu.name)}
+                              className={`text-left py-2 px-4 hover:bg-blue-100 w-full flex items-center ${
+                                activeMenu === subMenu.name
+                                  ? 'bg-blue-100 text-blue-600'
+                                  : ''
+                              }`}
+                              onClick={() =>
+                                handleMenuClick(subMenu.name, subMenu.link)
+                              }
                             >
                               <img
                                 src={subMenu.logo}
@@ -161,16 +175,19 @@ const Modal = ({ toggleModal }) => {
                                 className="w-5 h-5 mr-2"
                               />
                               {subMenu.name}
-                            </Link>
+                            </div>
                           ))}
                         </div>
                       )}
                     </div>
                   ) : (
-                    <Link
-                      to={menu.link}
-                      className={`text-left py-1 px-4 hover:bg-blue-100 w-full flex items-center ${activeMenu === menu.name ? 'bg-blue-100 text-blue-600' : ''}`}
-                      onClick={() => handleMenuClick(menu.name)}
+                    <div
+                      className={`text-left py-1 px-4 hover:bg-blue-100 w-full flex items-center ${
+                        activeMenu === menu.name
+                          ? 'bg-blue-100 text-blue-600'
+                          : ''
+                      }`}
+                      onClick={() => handleMenuClick(menu.name, menu.link)}
                     >
                       <img
                         src={menu.logo}
@@ -178,7 +195,7 @@ const Modal = ({ toggleModal }) => {
                         className="w-5 h-5 mr-2"
                       />
                       {menu.name}
-                    </Link>
+                    </div>
                   )}
                 </div>
               ))}
