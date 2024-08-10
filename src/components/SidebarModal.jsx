@@ -123,7 +123,7 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
         onClick={toggleModal}
       ></div>
 
-      <div className="fixed left-0 mt-6 border border-gray bg-white rounded-lg shadow-md w-72 z-50">
+      <div className="fixed left-0 lg:mt-6 border border-gray bg-white rounded-lg shadow-md w-72 z-50">
         <div className="flex flex-col py-2 overflow-y-auto max-h-svh">
           {menuGroups.map((group, groupIndex) => (
             <div key={groupIndex}>
