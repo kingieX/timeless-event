@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
@@ -24,6 +25,12 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
       ...prev,
       [index]: !prev[index],
     }));
+  };
+
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) {
+      onToggleSidebar();
+    }
   };
 
   const menuItems = [
@@ -166,7 +173,11 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                     {openSubMenus[index] && (
                       <div className="ml-8">
                         {menu.subMenu.map((subMenu, subIndex) => (
-                          <Link key={subIndex} to={subMenu.link}>
+                          <Link
+                            key={subIndex}
+                            to={subMenu.link}
+                            onClick={handleLinkClick}
+                          >
                             <div
                               className={`flex items-center px-4 py-2 hover:bg-blue-100 cursor-pointer ${
                                 currentPath === subMenu.link
@@ -187,7 +198,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                     )}
                   </>
                 ) : (
-                  <Link to={menu.link}>
+                  <Link to={menu.link} onClick={handleLinkClick}>
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
                         currentPath === menu.link ? 'bg-blue-100' : ''

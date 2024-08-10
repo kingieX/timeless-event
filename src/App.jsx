@@ -34,6 +34,25 @@ import Upcoming from './pages/sidebarMenuPages/Upcoming';
 import MyWork from './pages/sidebarMenuPages/myProject/MyWork';
 import MyHome from './pages/sidebarMenuPages/myProject/MyHome';
 
+// userMenu
+import Task from './pages/userMenuPages/Task';
+import Event from './pages/userMenuPages/Event';
+import Settings from './pages/userMenuPages/Settings';
+import AddTeam from './pages/userMenuPages/AddTeam';
+import AddGuest from './pages/userMenuPages/AddGuest';
+import AddVendor from './pages/userMenuPages/AddVendor';
+import ActivityLog from './pages/userMenuPages/ActivityLog';
+import Print from './pages/userMenuPages/Print';
+import ContactSupport from './pages/userMenuPages/resources/ContactSupport';
+import FAQs from './pages/userMenuPages/resources/Faqs';
+import Integrations from './pages/userMenuPages/resources/Integrations';
+import UserGuide from './pages/userMenuPages/resources/UserGuide';
+import DownloadApp from './pages/userMenuPages/resources/DownloadApp';
+import WhatsNew from './pages/userMenuPages/WhatsNew';
+import UpgradeTeam from './pages/userMenuPages/UpgradeTeam';
+import Sync from './pages/userMenuPages/Sync';
+import LogOut from './pages/userMenuPages/LogOut';
+
 const App = () => {
   return (
     <Router>
@@ -54,7 +73,7 @@ const App = () => {
         <Route path="/signup/invite" element={<Onboard5 />} />
 
         {/* Outlet route */}
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route path="/dashboard/*" element={<Dashboard />}>
           {/* Default content to render when just "/dashboard" is accessed */}
           <Route index element={<MainContent />} />
 
@@ -71,9 +90,26 @@ const App = () => {
           <Route path="upcoming" element={<Upcoming />} />
           <Route path="my-project/my-work" element={<MyWork />} />
           <Route path="my-project/my-home" element={<MyHome />} />
-        </Route>
 
-        {/* userMenu routes */}
+          {/* userMenu routes */}
+          <Route path="tasks" element={<Task />} />
+          <Route path="events" element={<Event />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="add-team" element={<AddTeam />} />
+          <Route path="add-guest" element={<AddGuest />} />
+          <Route path="add-vendor" element={<AddVendor />} />
+          <Route path="activity-log" element={<ActivityLog />} />
+          <Route path="print" element={<Print />} />
+          <Route path="contact-support" element={<ContactSupport />} />
+          <Route path="faqs" element={<FAQs />} />
+          <Route path="integrations" element={<Integrations />} />
+          <Route path="user-guide" element={<UserGuide />} />
+          <Route path="download-app" element={<DownloadApp />} />
+          <Route path="whats-new" element={<WhatsNew />} />
+          <Route path="upgrade-team" element={<UpgradeTeam />} />
+          <Route path="sync" element={<Sync />} />
+          <Route path="log-out" element={<LogOut />} />
+        </Route>
       </Routes>
     </Router>
   );

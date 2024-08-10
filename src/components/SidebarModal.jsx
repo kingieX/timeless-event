@@ -7,44 +7,44 @@ const menuGroups = [
   [
     {
       name: '0/7 tasks',
-      link: '/0-7-tasks',
+      link: 'tasks',
       logo: '/image/modal-assets/btn1.svg',
     },
     {
       name: '0/7 events',
-      link: '/0-7-events',
+      link: 'events',
       logo: '/image/modal-assets/btn2.svg',
     },
   ],
   [
     {
       name: 'Settings',
-      link: '/settings',
+      link: 'settings',
       logo: '/image/modal-assets/btn3.svg',
     },
     {
       name: 'Add a Team',
-      link: '/add-team',
+      link: 'add-team',
       logo: '/image/modal-assets/btn4.svg',
     },
     {
       name: 'Add a Guest',
-      link: '/add-guest',
+      link: 'add-guest',
       logo: '/image/modal-assets/btn5.svg',
     },
     {
       name: 'Add a Vendor',
-      link: '/add-vendor',
+      link: 'add-vendor',
       logo: '/image/modal-assets/btn6.svg',
     },
   ],
   [
     {
       name: 'Activity Log',
-      link: '/activity-log',
+      link: 'activity-log',
       logo: '/image/modal-assets/btn7.svg',
     },
-    { name: 'Print', link: '/print', logo: '/image/modal-assets/btn8.svg' },
+    { name: 'Print', link: 'print', logo: '/image/modal-assets/btn8.svg' },
     {
       name: 'Resources',
       link: '#',
@@ -52,23 +52,23 @@ const menuGroups = [
       subMenu: [
         {
           name: 'Contact Support',
-          link: '/contact-support',
+          link: 'contact-support',
           logo: '/image/modal-assets/btn10.svg',
         },
-        { name: 'FAQs', link: '/faqs', logo: '/image/modal-assets/btn11.svg' },
+        { name: 'FAQs', link: 'faqs', logo: '/image/modal-assets/btn11.svg' },
         {
           name: 'Integrations',
-          link: '/integrations',
+          link: 'integrations',
           logo: '/image/modal-assets/btn12.svg',
         },
         {
           name: 'User guide',
-          link: '/user-guide',
+          link: 'user-guide',
           logo: '/image/modal-assets/btn13.svg',
         },
         {
           name: 'Download app',
-          link: '/download-app',
+          link: 'download-app',
           logo: '/image/modal-assets/btn14.svg',
         },
       ],
@@ -77,18 +77,18 @@ const menuGroups = [
   [
     {
       name: "What's new",
-      link: '/whats-new',
+      link: 'whats-new',
       logo: '/image/modal-assets/btn15.svg',
     },
     {
       name: 'Upgrade team',
-      link: '/upgrade-team',
+      link: 'upgrade-team',
       logo: '/image/modal-assets/btn16.svg',
     },
-    { name: 'Sync', link: '/sync', logo: '/image/modal-assets/btn17.svg' },
+    { name: 'Sync', link: 'sync', logo: '/image/modal-assets/btn17.svg' },
     {
       name: 'Log out',
-      link: '/log-out',
+      link: 'log-out',
       logo: '/image/modal-assets/btn18.svg',
     },
   ],
