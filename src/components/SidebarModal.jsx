@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 const menuGroups = [
@@ -124,7 +124,7 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
       ></div>
 
       <div className="fixed left-0 mt-6 border border-gray bg-white rounded-lg shadow-md w-72 z-50">
-        <div className="flex flex-col py-2">
+        <div className="flex flex-col py-2 overflow-y-auto max-h-svh">
           {menuGroups.map((group, groupIndex) => (
             <div key={groupIndex}>
               {group.map((menu, menuIndex) => (

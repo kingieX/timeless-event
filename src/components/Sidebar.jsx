@@ -6,6 +6,84 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
 import UserMenuModal from './SidebarModal';
 
+// data
+const menuItems = [
+  {
+    name: 'Add event',
+    icon: '/image/sidebar-assets/btn1.svg',
+    link: '/dashboard/add-event',
+  },
+  {
+    name: 'Add task',
+    icon: '/image/sidebar-assets/btn1.svg',
+    link: '/dashboard/add-task',
+  },
+  {
+    name: 'Search',
+    icon: '/image/sidebar-assets/btn2.svg',
+    link: '/dashboard/search',
+  },
+  {
+    name: 'Send notifications',
+    icon: '/image/sidebar-assets/btn3.svg',
+    link: '/dashboard/send-notifications',
+  },
+  {
+    name: 'Inbox',
+    icon: '/image/sidebar-assets/btn4.svg',
+    link: '#',
+    subMenu: [
+      {
+        name: 'User messages',
+        icon: '/image/sidebar-assets/btn5.svg',
+        link: '/dashboard/inbox/user-messages',
+      },
+      {
+        name: 'Team messages',
+        icon: '/image/sidebar-assets/btn5.svg',
+        link: '/dashboard/inbox/team-messages',
+      },
+      {
+        name: 'Vendor messages',
+        icon: '/image/sidebar-assets/btn6.svg',
+        link: '/dashboard/inbox/vendor-messages',
+      },
+      {
+        name: 'RSVP tracking',
+        icon: '/image/sidebar-assets/btn7.svg',
+        link: '/dashboard/inbox/rsvp-tracking',
+      },
+    ],
+  },
+  {
+    name: 'Today',
+    icon: '/image/sidebar-assets/btn8.svg',
+    link: '/dashboard/today',
+  },
+  {
+    name: 'Upcoming',
+    icon: '/image/sidebar-assets/btn9.svg',
+    link: '/dashboard/upcoming',
+  },
+  {
+    name: 'My Projects',
+    icon: '/image/sidebar-assets/btn10.svg',
+    link: '#',
+    subMenu: [
+      {
+        name: 'My work',
+        icon: '/image/sidebar-assets/btn11.svg',
+        link: '/dashboard/my-project/my-work',
+      },
+      {
+        name: 'My home',
+        icon: '/image/sidebar-assets/btn12.svg',
+        link: '/dashboard/my-project/my-home',
+      },
+    ],
+  },
+];
+
 const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -32,83 +110,6 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
       onToggleSidebar();
     }
   };
-
-  const menuItems = [
-    {
-      name: 'Add event',
-      icon: '/image/sidebar-assets/btn1.svg',
-      link: '/dashboard/add-event',
-    },
-    {
-      name: 'Add task',
-      icon: '/image/sidebar-assets/btn1.svg',
-      link: '/dashboard/add-task',
-    },
-    {
-      name: 'Search',
-      icon: '/image/sidebar-assets/btn2.svg',
-      link: '/dashboard/search',
-    },
-    {
-      name: 'Send notifications',
-      icon: '/image/sidebar-assets/btn3.svg',
-      link: '/dashboard/send-notifications',
-    },
-    {
-      name: 'Inbox',
-      icon: '/image/sidebar-assets/btn4.svg',
-      link: '#',
-      subMenu: [
-        {
-          name: 'User messages',
-          icon: '/image/sidebar-assets/btn5.svg',
-          link: '/dashboard/inbox/user-messages',
-        },
-        {
-          name: 'Team messages',
-          icon: '/image/sidebar-assets/btn5.svg',
-          link: '/dashboard/inbox/team-messages',
-        },
-        {
-          name: 'Vendor messages',
-          icon: '/image/sidebar-assets/btn6.svg',
-          link: '/dashboard/inbox/vendor-messages',
-        },
-        {
-          name: 'RSVP tracking',
-          icon: '/image/sidebar-assets/btn7.svg',
-          link: '/dashboard/inbox/rsvp-tracking',
-        },
-      ],
-    },
-    {
-      name: 'Today',
-      icon: '/image/sidebar-assets/btn8.svg',
-      link: '/dashboard/today',
-    },
-    {
-      name: 'Upcoming',
-      icon: '/image/sidebar-assets/btn9.svg',
-      link: '/dashboard/upcoming',
-    },
-    {
-      name: 'My Projects',
-      icon: '/image/sidebar-assets/btn10.svg',
-      link: '#',
-      subMenu: [
-        {
-          name: 'My work',
-          icon: '/image/sidebar-assets/btn11.svg',
-          link: '/dashboard/my-project/my-work',
-        },
-        {
-          name: 'My home',
-          icon: '/image/sidebar-assets/btn12.svg',
-          link: '/dashboard/my-project/my-home',
-        },
-      ],
-    },
-  ];
 
   return (
     <div
@@ -153,7 +154,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
             </div>
           </div>
 
-          <div className="menu-list">
+          <div className="overflow-y-auto bg-sidebar">
             {menuItems.map((menu, index) => (
               <div key={index}>
                 {menu.subMenu ? (
