@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
@@ -31,18 +30,22 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
     {
       name: 'Add event',
       icon: '/image/sidebar-assets/btn1.svg',
-      link: '/add-event',
+      link: '/dashboard/add-event',
     },
     {
       name: 'Add task',
       icon: '/image/sidebar-assets/btn1.svg',
-      link: '/add-task',
+      link: '/dashboard/add-task',
     },
-    { name: 'Search', icon: '/image/sidebar-assets/btn2.svg', link: '/search' },
+    {
+      name: 'Search',
+      icon: '/image/sidebar-assets/btn2.svg',
+      link: '/dashboard/search',
+    },
     {
       name: 'Send notifications',
       icon: '/image/sidebar-assets/btn3.svg',
-      link: '/send-notifications',
+      link: '/dashboard/send-notifications',
     },
     {
       name: 'Inbox',
@@ -52,30 +55,34 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
         {
           name: 'User messages',
           icon: '/image/sidebar-assets/btn5.svg',
-          link: '/inbox/user-messages',
+          link: '/dashboard/inbox/user-messages',
         },
         {
           name: 'Team messages',
           icon: '/image/sidebar-assets/btn5.svg',
-          link: '/inbox/team-messages',
+          link: '/dashboard/inbox/team-messages',
         },
         {
           name: 'Vendor messages',
           icon: '/image/sidebar-assets/btn6.svg',
-          link: '/inbox/vendor-messages',
+          link: '/dashboard/inbox/vendor-messages',
         },
         {
           name: 'RSVP tracking',
           icon: '/image/sidebar-assets/btn7.svg',
-          link: '/inbox/rsvp-tracking',
+          link: '/dashboard/inbox/rsvp-tracking',
         },
       ],
     },
-    { name: 'Today', icon: '/image/sidebar-assets/btn8.svg', link: '/today' },
+    {
+      name: 'Today',
+      icon: '/image/sidebar-assets/btn8.svg',
+      link: '/dashboard/today',
+    },
     {
       name: 'Upcoming',
       icon: '/image/sidebar-assets/btn9.svg',
-      link: '/upcoming',
+      link: '/dashboard/upcoming',
     },
     {
       name: 'My Projects',
@@ -85,12 +92,12 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
         {
           name: 'My work',
           icon: '/image/sidebar-assets/btn11.svg',
-          link: '/my-projects/my-work',
+          link: '/dashboard/my-project/my-work',
         },
         {
           name: 'My home',
           icon: '/image/sidebar-assets/btn12.svg',
-          link: '/my-projects/my-home',
+          link: '/dashboard/my-project/my-home',
         },
       ],
     },
@@ -137,7 +144,9 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 {menu.subMenu ? (
                   <>
                     <div
-                      className="flex items-center px-4 py-3  hover:bg-blue-100 cursor-pointer"
+                      className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
+                        currentPath.startsWith(menu.link) ? 'bg-blue-100' : ''
+                      }`}
                       onClick={() => toggleSubMenu(index)}
                     >
                       <img
@@ -161,7 +170,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                             <div
                               className={`flex items-center px-4 py-2 hover:bg-blue-100 cursor-pointer ${
                                 currentPath === subMenu.link
-                                  ? 'bg-blue-100 text-blue-600'
+                                  ? 'bg-blue-100'
                                   : ''
                               }`}
                             >
@@ -181,9 +190,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                   <Link to={menu.link}>
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
-                        currentPath === menu.link
-                          ? 'bg-blue-100 text-blue-600'
-                          : ''
+                        currentPath === menu.link ? 'bg-blue-100' : ''
                       }`}
                     >
                       <img

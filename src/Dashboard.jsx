@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
-import { useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+
+// Profile data
+const userData = {
+  username: 'User name',
+  profileImage: '/path/to/profile-image.jpg',
+};
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const navigate = useNavigate();
-
-  const userData = {
-    username: 'User name',
-    profileImage: '/path/to/profile-image.jpg', // Dynamically passed image path
-  };
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -32,10 +32,6 @@ const Dashboard = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
-  const handleClick = () => {
-    navigate('/upgrade-team');
-  };
 
   return (
     <>
@@ -70,25 +66,9 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="flex flex-col flex-grow justify-center items-center py-16">
-          {/* Main Content */}
-          <h2 className="lg:text-6xl text-4xl font-semibold lg:mb-12 mb-8 text-center">
-            What’s New
-          </h2>
-          <div className="lg:w-1/4 flex lg:justify-between justify-center space-x-4">
-            <button
-              onClick={handleClick}
-              className="border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
-            >
-              Upgrade Team
-            </button>
-            <button
-              onClick={handleClick}
-              className="border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
-            >
-              Sync
-            </button>
-          </div>
+        <div className="flex-grow p-4">
+          {/* All Pages Content Outlets */}
+          <Outlet />
         </div>
       </div>
     </>
