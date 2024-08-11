@@ -6,7 +6,6 @@ import { IoMdNotificationsOutline } from 'react-icons/io';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
 import UserMenuModal from './SidebarModal';
 
-// data
 const menuItems = [
   {
     name: 'Add event',
@@ -91,12 +90,12 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
   // State to control the modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // State to manage which submenu is open
+  const [openSubMenus, setOpenSubMenus] = useState({});
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
-  // State to manage which submenu is open
-  const [openSubMenus, setOpenSubMenus] = useState({});
 
   const toggleSubMenu = index => {
     setOpenSubMenus(prev => ({
@@ -109,6 +108,13 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
     if (window.innerWidth < 768) {
       onToggleSidebar();
     }
+  };
+
+  const isMenuActive = (menu, currentPath) => {
+    if (menu.subMenu) {
+      return menu.subMenu.some(subMenu => subMenu.link === currentPath);
+    }
+    return menu.link === currentPath;
   };
 
   return (
@@ -133,10 +139,6 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                   <IoMdArrowDropdown className="cursor-pointer w-6 h-6" />
                 </button>
 
-                {/* Render the Modal */}
-                {/* {isModalOpen && <UserMenuModal toggleModal={toggleModal} />} */}
-
-                {/* Render the Modal and pass the onToggleSidebar prop */}
                 {isModalOpen && (
                   <UserMenuModal
                     toggleModal={toggleModal}
@@ -154,14 +156,14 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
             </div>
           </div>
 
-          <div className="overflow-y-auto bg-sidebar">
+          <div className="overflow-y-auto bg-sidebar max-h-full">
             {menuItems.map((menu, index) => (
               <div key={index}>
                 {menu.subMenu ? (
                   <>
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
-                        currentPath.startsWith(menu.link) ? 'bg-blue-100' : ''
+                        isMenuActive(menu, currentPath) ? 'bg-blue-100' : ''
                       }`}
                       onClick={() => toggleSubMenu(index)}
                     >
