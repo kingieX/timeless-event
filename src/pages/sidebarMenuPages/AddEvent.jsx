@@ -52,15 +52,15 @@ const AddEvent = () => {
             />
           </div>
 
-          <div className="w-full mb-4 flex">
-            <div className="w-1/2 mr-2">
+          <div className="w-full mb-4 flex lg:flex-row flex-col gap-4">
+            <div className="lg:w-1/2">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="dateTime"
               >
                 Date & Time
               </label>
-              <div className="flex items-center w-full px-4 py-2 border border-gray focus-within:border-primary">
+              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
                 {/* <input
                 id="dateTime"
                 type="datetime-local"
@@ -76,13 +76,13 @@ const AddEvent = () => {
                   timeFormat="hh:mm A"
                   inputProps={{
                     id: 'dateTime',
-                    className: 'w-full flex-grow outline-none pl-2',
+                    className: 'w-full text-sm flex-grow outline-none pl-1',
                     placeholder: 'Date & Time',
                   }}
                 />
               </div>
             </div>
-            <div className="w-1/2 ml-2">
+            <div className="lg:w-1/2">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="location"
