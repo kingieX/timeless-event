@@ -31,10 +31,10 @@ const AddEvent = () => {
 
   return (
     <div className="flex justify-center items-center mt-12 mx-4">
-      <div className="bg-white w-full max-w-md py-6 lg:border border-gray rounded-lg lg:shadow-md">
+      <div className="bg-white w-full max-w-xl py-6 lg:border border-gray rounded-lg lg:shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Add an Event</h2>
         <hr className="hidden lg:block mb-4 border-gray" />
-        <form className="flex flex-col justify-center items-center lg:px-6">
+        <form className="flex flex-col justify-center items-center lg:px-12">
           <div className="w-full mb-6">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
