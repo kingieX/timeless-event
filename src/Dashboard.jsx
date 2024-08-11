@@ -47,7 +47,7 @@ const Dashboard = () => {
         {/* Sidebar Toggle Button */}
         {(!isSidebarOpen || (!isMobile && isSidebarOpen)) && (
           <button
-            className="fixed top-4 left-4 p-2 bg-gray-100 rounded-full shadow-lg z-20"
+            className="fixed top-4 left-4 p-2 bg-gray-100 rounded-sm shadow-sm z-20 hover:bg-slate-100"
             onClick={handleToggleSidebar}
           >
             <PiSidebarSimpleThin className="text-gray-500 w-6 h-6" />
@@ -66,9 +66,12 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="flex-grow p-4">
+        <div className="flex flex-col flex-grow">
+          <div className="lg:hidden block fixed bg-white w-full h-16 shadow-sm z-10 -p-4"></div>
           {/* All Pages Content Outlets */}
-          <Outlet />
+          <div className="p-4 mt-8 lg:mt-0">
+            <Outlet />
+          </div>
         </div>
       </div>
     </>
