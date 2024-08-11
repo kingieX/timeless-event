@@ -57,7 +57,8 @@ const Dashboard = () => {
         <div
           className={`${
             isSidebarOpen ? 'translate-x-0' : ''
-          } md:translate-x-0 fixed md:static inset-y-0 left-0 z-30`}
+            // md:translate-x-0 fixed md:static inset-y-0 left-0 z-30`
+          } md:translate-x-0 fixed inset-y-0 left-0 z-30`}
         >
           <Sidebar
             userData={userData}
@@ -66,10 +67,15 @@ const Dashboard = () => {
           />
         </div>
 
-        <div className="flex flex-col flex-grow">
+        <div className="flex flex-col flex-grow overflow-hidden">
           <div className="lg:hidden block fixed bg-white w-full h-16 shadow-sm z-10 -p-4"></div>
           {/* All Pages Content Outlets */}
-          <div className="p-4 mt-8 lg:mt-0">
+          <div
+            // className="p-4 mt-8 lg:mt-0"
+            className={`flex-grow transition-all duration-300 ease-in-out ${
+              isSidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
+            } p-4 mt-8 lg:mt-0 overflow-y-auto`}
+          >
             <Outlet />
           </div>
         </div>
