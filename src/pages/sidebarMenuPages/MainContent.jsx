@@ -4,8 +4,12 @@ import { useNavigate } from 'react-router-dom';
 const MainContent = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate('/upgrade-team');
+  const handleUpgradeTeamClick = () => {
+    navigate('upgrade-team');
+  };
+
+  const handleSyncClick = () => {
+    navigate('sync');
   };
 
   return (
@@ -16,13 +20,13 @@ const MainContent = () => {
       </h2>
       <div className="lg:w-1/4 flex lg:justify-between justify-center space-x-4">
         <button
-          onClick={handleClick}
+          onClick={handleUpgradeTeamClick}
           className="border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
         >
           Upgrade Team
         </button>
         <button
-          onClick={handleClick}
+          onClick={handleSyncClick}
           className="border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
         >
           Sync
