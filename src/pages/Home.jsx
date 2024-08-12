@@ -49,7 +49,9 @@ const featuresData = [
 const Home = () => {
   return (
     <div>
-      <NavBar />
+      <div className="fixed z-20 w-full">
+        <NavBar />
+      </div>
       <div className="containe w-full mx-auto py-8">
         <Hero />
         <Feature feature={featuresData} />

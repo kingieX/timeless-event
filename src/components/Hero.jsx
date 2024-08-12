@@ -13,7 +13,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="container relative flex lg:flex-row flex-col-reverse items-center justify-between lg:py-16 px-8 lg:space-y-12">
+    <section className="container relative flex lg:flex-row flex-col-reverse items-center justify-between lg:py-16 px-8 lg:space-y-12 mt-12">
       <div className="max-w-xl lg:block flex flex-col justify-center items-center">
         <h1 className="lg:text-4xl text-2xl lg:text-left text-center font-bold text-black mb-4">
           Bringing Your Vision to Life with Ease and Elegance
