@@ -11,7 +11,29 @@ const NavBar = () => {
   };
 
   const menuStyle =
-    'text-gray-600 hover:text-gray-800 hover:text-primary hover:underline-offset-4 hover:border-b-2';
+    'text-gray-600 px-3 py-2 hover:text-gray-800 hover: hover:rounded-sm hover:bg-blue-100';
+
+  // Dynamic links data
+  const links = [
+    { to: '/features', text: 'Features' },
+    { to: '/resources', text: 'Resources' },
+    { to: '/pricing', text: 'Pricing' },
+    { to: '/upgrade', text: 'Upgrade to Premium' },
+  ];
+
+  const buttons = [
+    {
+      to: '/login',
+      text: 'Login',
+      className: `${menuStyle} px-4 py-2`,
+    },
+    {
+      to: '/signup',
+      text: 'Sign Up',
+      className:
+        'border border-primary text-primary px-4 py-2 hover:bg-primary hover:text-black',
+    },
+  ];
 
   return (
     <nav className="bg-white shadow-md">
@@ -39,40 +61,24 @@ const NavBar = () => {
         <ul
           className={`lg:flex space-x-6 ${menuOpen ? 'block' : 'hidden'} lg:block hidden`}
         >
-          <li>
-            <Link to="/features" className={menuStyle}>
-              Features
-            </Link>
-          </li>
-          <li>
-            <Link to="/resources" className={menuStyle}>
-              Resources
-            </Link>
-          </li>
-          <li>
-            <Link to="/pricing" className={menuStyle}>
-              Pricing
-            </Link>
-          </li>
-          <li>
-            <Link to="/upgrade" className={menuStyle}>
-              Upgrade to Premium
-            </Link>
-          </li>
+          {links.map(link => (
+            <li key={link.to}>
+              <Link to={link.to} className={menuStyle}>
+                {link.text}
+              </Link>
+            </li>
+          ))}
         </ul>
 
         {/* Buttons */}
         <div
           className={`lg:flex space-x-4 ${menuOpen ? 'block' : 'hidden'} lg:block hidden`}
         >
-          <Link to="/login">
-            <button className={`${menuStyle} px-4 py-2`}>Login</button>
-          </Link>
-          <Link to="/signup">
-            <button className="border border-primary text-primary px-4 py-2 hover:bg-primary hover:text-white">
-              Sign Up
-            </button>
-          </Link>
+          {buttons.map(button => (
+            <Link key={button.to} to={button.to}>
+              <button className={button.className}>{button.text}</button>
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -80,35 +86,22 @@ const NavBar = () => {
       {menuOpen && (
         <div className="lg:hidden">
           <ul className="flex flex-col border-t space-y-4 px-4 py-4">
-            <li>
-              <Link to="/features" className={menuStyle}>
-                Features
+            {links.map(link => (
+              <li key={link.to}>
+                <Link to={link.to} className={`${menuStyle}`}>
+                  {link.text}
+                </Link>
+              </li>
+            ))}
+            {buttons.map(button => (
+              <Link
+                key={button.to}
+                to={button.to}
+                className={`${button.className} text-center`}
+              >
+                <button>{button.text}</button>
               </Link>
-            </li>
-            <li>
-              <Link to="/resources" className={menuStyle}>
-                Resources
-              </Link>
-            </li>
-            <li>
-              <Link to="/pricing" className={menuStyle}>
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link to="/upgrade" className={menuStyle}>
-                Upgrade to Premium
-              </Link>
-            </li>
-            <Link to="/login" className={`${menuStyle} px-4 py-2 text-center`}>
-              <button>Login</button>
-            </Link>
-            <Link
-              to="/signup"
-              className="border border-primary text-primary px-4 py-2 hover:bg-primary hover:text-white text-center"
-            >
-              <button>Sign Up</button>
-            </Link>
+            ))}
           </ul>
         </div>
       )}

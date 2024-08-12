@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useEffect, useRef } from 'react';
 import heroImage from '/image/hero.png';
+import heroImage2 from '/image/hero2.svg';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -53,6 +54,21 @@ const Hero = () => {
       >
         <img
           src={heroImage}
+          alt="Hero"
+          className="w-full h-auto object-cover"
+          width={128}
+          height={128}
+        />
+      </motion.div>
+      <motion.div
+        ref={imageRef}
+        initial={{ y: '-100%' }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="lg:hidden block -mt-4 w-3/4 h-full overflow-hidden mb-4 -z-10"
+      >
+        <img
+          src={heroImage2}
           alt="Hero"
           className="w-full h-auto object-cover"
           width={128}
