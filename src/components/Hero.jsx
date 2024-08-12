@@ -60,13 +60,7 @@ const Hero = () => {
           height={128}
         />
       </motion.div>
-      <motion.div
-        ref={imageRef}
-        initial={{ y: '-100%' }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="lg:hidden block -mt-4 w-3/4 h-full overflow-hidden mb-4 -z-10"
-      >
+      <div className="lg:hidden block -mt-4 w-3/4 h-full overflow-hidden mb-4 -z-10">
         <img
           src={heroImage2}
           alt="Hero"
@@ -74,7 +68,7 @@ const Hero = () => {
           width={128}
           height={128}
         />
-      </motion.div>
+      </div>
     </section>
   );
 };

@@ -36,7 +36,7 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white lg:shadow-md border-b border-gray lg:border-none">
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
