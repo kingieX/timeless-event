@@ -123,7 +123,7 @@ const AddEvent = () => {
           <div className="lg:w-3/4 w-full flex justify-center gap-8">
             <button
               type="button"
-              className="lg:w-1/2 w-full border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
+              className="lg:w-1/2 w-full border border-red-400 text-red-400 font-semibold py-2 px-4 hover:bg-red-400 hover:text-white transition duration-300"
               onClick={handleCancel}
             >
               Cancel
