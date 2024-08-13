@@ -47,7 +47,7 @@ const Hero = () => {
       </div>
       <motion.div
         ref={imageRef}
-        className="lg:block hidden lg:absolute right-0 bottom-0 lg:-mr-10 w-1/2 h-full overflow-hidden"
+        className="lg:block hidden lg:absolute right-0 bottom-0 lg:-mr-24 w-1/2 h-full overflow-hidden"
         initial={{ x: '100%' }}
         animate={{ x: 0 }}
         transition={{ duration: 1 }}
