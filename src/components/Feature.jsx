@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-// import React from 'react';
+import { SlArrowRight } from 'react-icons/sl';
 import featuresImage from '/image/hero2.png';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const Feature = ({ feature }) => {
   return (
@@ -19,9 +20,10 @@ const Feature = ({ feature }) => {
         <h2 className="lg:text-2xl font-normal mb-8">FEATURES</h2>
         <div className="space-y-6">
           {feature.map((feature, index) => (
-            <div
+            <Link
               key={index}
-              className="flex justify-between items-start space-x-8"
+              to={feature.link} // Use 'to' prop instead of 'href'
+              className="flex justify-between items-start space-x-8 group"
             >
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -37,17 +39,11 @@ const Feature = ({ feature }) => {
                     <p className="lg:text-normal text-sm text-gray-600">
                       {feature.description}
                     </p>
-                    <a href={feature.link} className="w-12 hover:translate-x-4">
-                      <img
-                        src="/image/assets/arrow-right.svg"
-                        alt="arrow"
-                        className="h-10 w-10"
-                      />
-                    </a>
+                    <SlArrowRight className="h-6 w-6 text-black transition-transform duration-200 group-hover:text-primary group-hover:translate-x-4" />
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,5 +1,8 @@
 // import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ScrollToTop from './ScrollToTop';
+
+// pages
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
@@ -56,6 +59,8 @@ import LogOut from './pages/userMenuPages/LogOut';
 const App = () => {
   return (
     <Router>
+      {/* Include this line to apply the scroll behavior */}
+      <ScrollToTop offset={50} />{' '}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />

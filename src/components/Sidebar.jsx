@@ -163,7 +163,9 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                   <>
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
-                        isMenuActive(menu, currentPath) ? 'bg-blue-100' : ''
+                        isMenuActive(menu, currentPath)
+                          ? 'bg-blue-100 border-l-4 border-l-primary'
+                          : ''
                       }`}
                       onClick={() => toggleSubMenu(index)}
                     >
@@ -212,7 +214,9 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                   <Link to={menu.link} onClick={handleLinkClick}>
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
-                        currentPath === menu.link ? 'bg-blue-100' : ''
+                        currentPath === menu.link
+                          ? 'bg-blue-100 border-l-4 border-l-primary'
+                          : ''
                       }`}
                     >
                       <img

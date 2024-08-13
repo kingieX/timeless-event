@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import Logo from '/image/logo.svg';
 
@@ -11,7 +11,9 @@ const NavBar = () => {
   };
 
   const menuStyle =
-    'text-gray-600 px-3 py-2 hover:text-gray-800 hover: hover:rounded-sm hover:bg-blue-100';
+    'text-gray-600 text-center px-3 py-2 hover:text-gray-800 hover: hover:rounded-sm hover:bg-blue-100';
+
+  const activeStyle = 'font-bold border-b-2 border-primary pb-1';
 
   // Dynamic links data
   const links = [
@@ -36,15 +38,15 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="bg-white lg:shadow-md border-b border-gray lg:border-none">
+    <nav className="fixed z-20 w-full bg-white lg:shadow-md border-b border-gray lg:border-none">
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo and Name */}
-        <Link className="flex items-center" to="/">
+        <NavLink className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
           <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
             Timeless Planner
           </span>
-        </Link>
+        </NavLink>
 
         {/* Hamburger Menu for Mobile */}
         <div className="lg:hidden">
@@ -63,9 +65,14 @@ const NavBar = () => {
         >
           {links.map(link => (
             <li key={link.to}>
-              <Link to={link.to} className={menuStyle}>
+              <NavLink
+                to={link.to}
+                className={({ isActive }) =>
+                  `${menuStyle} ${isActive ? activeStyle : ''}`
+                }
+              >
                 {link.text}
-              </Link>
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -75,9 +82,9 @@ const NavBar = () => {
           className={`lg:flex space-x-4 ${menuOpen ? 'block' : 'hidden'} lg:block hidden`}
         >
           {buttons.map(button => (
-            <Link key={button.to} to={button.to}>
+            <NavLink key={button.to} to={button.to}>
               <button className={button.className}>{button.text}</button>
-            </Link>
+            </NavLink>
           ))}
         </div>
       </div>
@@ -88,19 +95,24 @@ const NavBar = () => {
           <ul className="flex flex-col border-t space-y-4 px-4 py-4">
             {links.map(link => (
               <li key={link.to}>
-                <Link to={link.to} className={`${menuStyle}`}>
+                <NavLink
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `${menuStyle} ${isActive ? activeStyle : ''}`
+                  }
+                >
                   {link.text}
-                </Link>
+                </NavLink>
               </li>
             ))}
             {buttons.map(button => (
-              <Link
+              <NavLink
                 key={button.to}
                 to={button.to}
                 className={`${button.className} text-center`}
               >
                 <button>{button.text}</button>
-              </Link>
+              </NavLink>
             ))}
           </ul>
         </div>

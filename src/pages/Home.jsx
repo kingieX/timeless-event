@@ -15,34 +15,34 @@ const featuresData = [
     title: 'BUDGET MANAGEMENT',
     description:
       'Keep track of your expenses and stay within budget effortlessly.',
-    link: '#budget-management',
+    link: '/features/#budget-management',
   },
   {
     icon: '/image/assets/feature2.svg',
     title: 'TEAM AND GUEST LIST MANAGEMENT',
     description:
       'Easily manage your guest or team list, send invitations, and track RSVPs.',
-    link: '#team-management',
+    link: '/features/#team-management',
   },
   {
     icon: '/image/assets/feature3.svg',
     title: 'TASK TRACKING',
     description:
       'Assign and monitor tasks to ensure everything is on schedule.',
-    link: '#task-tracking',
+    link: '/features/#task-tracking',
   },
   {
     icon: '/image/assets/feature4.svg',
     title: 'VENDOR COORDINATION',
     description: 'Find and manage vendors, all in one place.',
-    link: '#vendor-coordination',
+    link: '/features/#vendor-coordination',
   },
   {
     icon: '/image/assets/feature5.svg',
     title: 'TASK AND EVENT TIMELINE CREATION',
     description:
       'Create detailed timelines to ensure your event or schedules run smoothly.',
-    link: '#timeline-creation',
+    link: '/features/#timeline-creation',
   },
 ];
 
