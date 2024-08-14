@@ -133,7 +133,7 @@ const Onboard4 = () => {
           {/* Organization size options */}
           <div className="lg:w-3/4 w-full mb-8">
             <label className="block text-gray-700">
-              What industry do you work in?
+              How big is your Organisation?
             </label>
             <select
               id="options"
