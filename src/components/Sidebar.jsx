@@ -22,11 +22,6 @@ const menuItems = [
     icon: '/image/sidebar-assets/btn2.svg',
     link: '/dashboard/search',
   },
-  // {
-  //   name: 'Send notifications',
-  //   icon: '/image/sidebar-assets/btn3.svg',
-  //   link: '/dashboard/send-notifications',
-  // },
   {
     name: 'Inbox',
     icon: '/image/sidebar-assets/btn4.svg',
