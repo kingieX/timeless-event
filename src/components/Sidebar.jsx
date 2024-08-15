@@ -133,11 +133,11 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
 
   return (
     <div
-      className={`bg-sidebar h-screen z-50 ${isSidebarOpen ? 'w-fit' : 'w-0'} transition-width duration-300`}
+      className={`bg-sidebar bg-opacity-10 h-screen z-50 ${isSidebarOpen ? 'w-fit' : 'w-0'} transition-width duration-300`}
     >
       {isSidebarOpen && (
         <>
-          <div className="bg-sidebar flex items-center justify-between p-4 border-b border-gray">
+          <div className="flex items-center justify-between p-4 border-b border-gray">
             <div className="flex items-center">
               <img
                 src={userData.profileImage}
@@ -172,7 +172,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
             </div>
           </div>
 
-          <div className="overflow-y-auto bg-sidebar max-h-full">
+          <div className="overflow-y-auto max-h-full">
             {menuItems.map((menu, index) => (
               <div key={index}>
                 {menu.subMenu ? (

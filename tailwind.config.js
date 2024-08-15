@@ -7,7 +7,7 @@ export default {
         primary: '#16E1F5',
         secondary: '#03A9F4',
         footer: '#4905F6',
-        sidebar: '#F3F0F0',
+        sidebar: '#16E1F5',
         accent: '#8BC34A',
         gray: '#D1D5DB',
         black: '#111827',
