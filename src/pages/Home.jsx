@@ -4,6 +4,7 @@ import NavBar from '../components/NavBar';
 import Hero from '../components/Hero';
 import Feature from '../components/Feature';
 import HowItWorks from '../components/HowItWorks';
+import { SlArrowRight } from 'react-icons/sl';
 
 import image from '/image/hero3.png';
 import Footer from '../components/Footer';
@@ -124,22 +125,9 @@ const Home = () => {
             seamless and unforgettable event experience.
           </p>
           <Link to="/signup">
-            <button className="bg-primary text-black font-bold py-3 px-6 inline-flex items-center transition-transform transform lg:hover:translate-x-2 hover:border hover:border-primary hover:bg-transparent hover:text-primary">
+            <button className="group bg-primary text-black font-bold py-3 px-6 inline-flex items-center transition-transform transform hover:border hover:border-primary hover:bg-transparent hover:text-primary">
               Get Started
-              <svg
-                className="ml-2 w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                ></path>
-              </svg>
+              <SlArrowRight className="ml-4 h-6 w-6 text-black transition-transform duration-200 group-hover:text-primary group-hover:translate-x-2" />
             </button>
           </Link>
         </section>

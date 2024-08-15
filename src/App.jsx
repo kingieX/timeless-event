@@ -60,7 +60,7 @@ const App = () => {
   return (
     <Router>
       {/* Include this line to apply the scroll behavior */}
-      <ScrollToTop offset={50} />{' '}
+      <ScrollToTop offset={50} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />

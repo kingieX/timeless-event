@@ -4,6 +4,7 @@ import heroImage from '/image/hero.png';
 import heroImage2 from '/image/hero2.svg';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { SlArrowRight } from 'react-icons/sl';
 
 const Hero = () => {
   const imageRef = useRef(null);
@@ -26,22 +27,9 @@ const Hero = () => {
           plan, manage, and execute your event flawlessly.
         </p>
         <Link to="/signup">
-          <button className="bg-primary text-black font-bold py-3 px-6 inline-flex items-center transition-transform transform lg:hover:translate-x-2 hover:border hover:border-primary hover:bg-transparent hover:text-primary">
+          <button className="group bg-primary text-black font-bold py-3 px-6 inline-flex items-center transition-transform transform hover:border hover:border-primary hover:bg-transparent hover:text-primary">
             Get Started
-            <svg
-              className="ml-2 w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              ></path>
-            </svg>
+            <SlArrowRight className="ml-4 h-6 w-6 text-black transition-transform duration-200 group-hover:text-primary group-hover:translate-x-2" />
           </button>
         </Link>
       </div>
