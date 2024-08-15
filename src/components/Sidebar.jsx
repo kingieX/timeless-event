@@ -1,82 +1,96 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
-import { IoMdNotificationsOutline } from 'react-icons/io';
-import { PiSidebarSimpleThin } from 'react-icons/pi';
 import UserMenuModal from './SidebarModal';
+
+// icons
+import { IoAddCircleOutline, IoSearchOutline } from 'react-icons/io5';
+import { HiOutlineInboxIn } from 'react-icons/hi';
+import { TbMessage, TbMessages, TbMessage2Pin } from 'react-icons/tb';
+import { PiCalendarStarDuotone, PiSidebarSimpleThin } from 'react-icons/pi';
+import { BsCalendar4Event } from 'react-icons/bs';
+import { MdOutlineCalendarMonth } from 'react-icons/md';
+import { FaRegCalendarCheck } from 'react-icons/fa6';
+import { TiFolder } from 'react-icons/ti';
+import { MdWorkOutline } from 'react-icons/md';
+import { SlHome } from 'react-icons/sl';
+import {
+  IoMdArrowDropdown,
+  IoMdArrowDropup,
+  IoMdNotificationsOutline,
+} from 'react-icons/io';
 
 const menuItems = [
   {
     name: 'Add event',
-    icon: '/image/sidebar-assets/btn1.svg',
+    icon: IoAddCircleOutline,
     link: '/dashboard/add-event',
   },
   {
     name: 'Add task',
-    icon: '/image/sidebar-assets/btn1.svg',
+    icon: IoAddCircleOutline,
     link: '/dashboard/add-task',
   },
   {
     name: 'Search',
-    icon: '/image/sidebar-assets/btn2.svg',
+    icon: IoSearchOutline,
     link: '/dashboard/search',
   },
   {
     name: 'Inbox',
-    icon: '/image/sidebar-assets/btn4.svg',
+    icon: HiOutlineInboxIn,
     link: '#',
     subMenu: [
       {
         name: 'User messages',
-        icon: '/image/sidebar-assets/btn5.svg',
+        icon: TbMessage,
         link: '/dashboard/inbox/user-messages',
       },
       {
         name: 'Team messages',
-        icon: '/image/sidebar-assets/btn5.svg',
+        icon: TbMessages,
         link: '/dashboard/inbox/team-messages',
       },
       {
         name: 'Vendor messages',
-        icon: '/image/sidebar-assets/btn6.svg',
+        icon: TbMessage2Pin,
         link: '/dashboard/inbox/vendor-messages',
       },
       {
         name: 'RSVP tracking',
-        icon: '/image/sidebar-assets/btn7.svg',
+        icon: PiCalendarStarDuotone,
         link: '/dashboard/inbox/rsvp-tracking',
       },
     ],
   },
   {
     name: 'Today',
-    icon: '/image/sidebar-assets/btn8.svg',
+    icon: BsCalendar4Event,
     link: '/dashboard/today',
   },
   {
     name: 'Upcoming',
-    icon: '/image/sidebar-assets/btn9.svg',
+    icon: MdOutlineCalendarMonth,
     link: '/dashboard/upcoming',
   },
   {
     name: 'Completed',
-    icon: '/image/sidebar-assets/btn3.svg',
+    icon: FaRegCalendarCheck,
     link: '/dashboard/completed',
   },
   {
     name: 'My Projects',
-    icon: '/image/sidebar-assets/btn10.svg',
+    icon: TiFolder,
     link: '#',
     subMenu: [
       {
         name: 'My work',
-        icon: '/image/sidebar-assets/btn11.svg',
+        icon: MdWorkOutline,
         link: '/dashboard/my-project/my-work',
       },
       {
         name: 'My home',
-        icon: '/image/sidebar-assets/btn12.svg',
+        icon: SlHome,
         link: '/dashboard/my-project/my-home',
       },
     ],
@@ -165,18 +179,18 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                   <>
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
-                        isMenuActive(menu, currentPath)
-                          ? 'bg-blue-100 border-l-4 border-l-primary'
-                          : ''
+                        isMenuActive(menu, currentPath) ? 'bg-blue-100' : ''
                       }`}
                       onClick={() => toggleSubMenu(index)}
                     >
-                      <img
-                        src={menu.icon}
-                        alt={`${menu.name} icon`}
-                        className="w-6 h-6 mr-4"
+                      <menu.icon
+                        className={`w-6 h-6 mr-4 ${isMenuActive(menu, currentPath) ? '' : ''}`}
                       />
-                      <span>{menu.name}</span>
+                      <span
+                        className={`${isMenuActive(menu, currentPath) ? '' : ''}`}
+                      >
+                        {menu.name}
+                      </span>
                       <span className="ml-auto">
                         {openSubMenus[index] ? (
                           <IoMdArrowDropup className="w-6 h-6" />
@@ -186,7 +200,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                       </span>
                     </div>
                     {openSubMenus[index] && (
-                      <div className="ml-8">
+                      <div className="">
                         {menu.subMenu.map((subMenu, subIndex) => (
                           <Link
                             key={subIndex}
@@ -194,18 +208,20 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                             onClick={handleLinkClick}
                           >
                             <div
-                              className={`flex items-center px-4 py-2 hover:bg-blue-100 cursor-pointer ${
+                              className={`flex items-center pl-8 px-4 py-2 hover:bg-blue-100 cursor-pointer ${
                                 currentPath === subMenu.link
-                                  ? 'bg-blue-100'
+                                  ? 'bg-blue-100 text-primary border-l-4 border-l-primary'
                                   : ''
                               }`}
                             >
-                              <img
-                                src={subMenu.icon}
-                                alt={`${subMenu.name} icon`}
-                                className="w-6 h-6 mr-4"
+                              <subMenu.icon
+                                className={`w-6 h-6 mr-4 ${currentPath === subMenu.link ? 'text-primary' : ''}`}
                               />
-                              <span>{subMenu.name}</span>
+                              <span
+                                className={`${currentPath === subMenu.link ? 'text-primary' : ''}`}
+                              >
+                                {subMenu.name}
+                              </span>
                             </div>
                           </Link>
                         ))}
@@ -217,16 +233,18 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                     <div
                       className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
                         currentPath === menu.link
-                          ? 'bg-blue-100 border-l-4 border-l-primary'
+                          ? 'bg-blue-100 text-primary border-l-4 border-l-primary'
                           : ''
                       }`}
                     >
-                      <img
-                        src={menu.icon}
-                        alt={`${menu.name} icon`}
-                        className="w-6 h-6 mr-4"
+                      <menu.icon
+                        className={`w-6 h-6 mr-4 ${currentPath === menu.link ? 'text-primary' : ''}`}
                       />
-                      <span>{menu.name}</span>
+                      <span
+                        className={`${currentPath === menu.link ? 'text-primary' : ''}`}
+                      >
+                        {menu.name}
+                      </span>
                     </div>
                   </Link>
                 )}
