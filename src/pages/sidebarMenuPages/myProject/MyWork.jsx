@@ -1,7 +1,13 @@
 // import React from 'react'
 
+import UnderConstruction from '../../../components/UnderConstruction';
+
 const MyWork = () => {
-  return <div>My work</div>;
+  return (
+    <div>
+      <UnderConstruction />
+    </div>
+  );
 };
 
 export default MyWork;

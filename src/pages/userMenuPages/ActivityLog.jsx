@@ -1,7 +1,12 @@
-import React from 'react';
+// import React from 'react';
+import UnderConstruction from '../../components/UnderConstruction';
 
 const ActivityLog = () => {
-  return <div>Activity Log</div>;
+  return (
+    <div>
+      <UnderConstruction />
+    </div>
+  );
 };
 
 export default ActivityLog;

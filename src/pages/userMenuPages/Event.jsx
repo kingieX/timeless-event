@@ -1,7 +1,13 @@
-import React from 'react';
+// import React from 'react';
+
+import UnderConstruction from '../../components/UnderConstruction';
 
 const Event = () => {
-  return <div>Event</div>;
+  return (
+    <div>
+      <UnderConstruction />
+    </div>
+  );
 };
 
 export default Event;

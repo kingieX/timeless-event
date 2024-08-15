@@ -22,11 +22,11 @@ const menuItems = [
     icon: '/image/sidebar-assets/btn2.svg',
     link: '/dashboard/search',
   },
-  {
-    name: 'Send notifications',
-    icon: '/image/sidebar-assets/btn3.svg',
-    link: '/dashboard/send-notifications',
-  },
+  // {
+  //   name: 'Send notifications',
+  //   icon: '/image/sidebar-assets/btn3.svg',
+  //   link: '/dashboard/send-notifications',
+  // },
   {
     name: 'Inbox',
     icon: '/image/sidebar-assets/btn4.svg',
@@ -63,6 +63,11 @@ const menuItems = [
     name: 'Upcoming',
     icon: '/image/sidebar-assets/btn9.svg',
     link: '/dashboard/upcoming',
+  },
+  {
+    name: 'Completed',
+    icon: '/image/sidebar-assets/btn3.svg',
+    link: '/dashboard/completed',
   },
   {
     name: 'My Projects',

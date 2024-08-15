@@ -1,7 +1,12 @@
-import React from 'react';
+// import React from 'react';
+import UnderConstruction from '../../../components/UnderConstruction';
 
 const UserGuide = () => {
-  return <div>User Guide</div>;
+  return (
+    <div>
+      <UnderConstruction />
+    </div>
+  );
 };
 
 export default UserGuide;

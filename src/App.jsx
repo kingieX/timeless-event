@@ -27,7 +27,7 @@ import MainContent from './pages/sidebarMenuPages/MainContent';
 import AddEvent from './pages/sidebarMenuPages/AddEvent';
 import AddTask from './pages/sidebarMenuPages/AddTask';
 import Search from './pages/sidebarMenuPages/Search';
-import SendNotification from './pages/sidebarMenuPages/SendNotification';
+import SendNotification from './pages/sidebarMenuPages/Completed';
 import UserMessage from './pages/sidebarMenuPages/inbox/UserMessage';
 import TeamMessage from './pages/sidebarMenuPages/inbox/TeamMessage';
 import VendorMessage from './pages/sidebarMenuPages/inbox/VendorMessage';
@@ -55,6 +55,7 @@ import WhatsNew from './pages/userMenuPages/WhatsNew';
 import UpgradeTeam from './pages/userMenuPages/UpgradeTeam';
 import Sync from './pages/userMenuPages/Sync';
 import LogOut from './pages/userMenuPages/LogOut';
+import Completed from './pages/sidebarMenuPages/Completed';
 
 const App = () => {
   return (
@@ -86,7 +87,7 @@ const App = () => {
           <Route path="add-event" element={<AddEvent />} />
           <Route path="add-task" element={<AddTask />} />
           <Route path="search" element={<Search />} />
-          <Route path="send-notifications" element={<SendNotification />} />
+          <Route path="completed" element={<Completed />} />
           <Route path="inbox/user-messages" element={<UserMessage />} />
           <Route path="inbox/team-messages" element={<TeamMessage />} />
           <Route path="inbox/vendor-messages" element={<VendorMessage />} />

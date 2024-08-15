@@ -1,7 +1,12 @@
-import React from 'react';
+// import React from 'react';
+import UnderConstruction from '../../components/UnderConstruction';
 
 const Sync = () => {
-  return <div>Sync</div>;
+  return (
+    <div>
+      <UnderConstruction />
+    </div>
+  );
 };
 
 export default Sync;

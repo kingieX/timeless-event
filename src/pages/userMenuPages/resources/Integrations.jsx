@@ -1,7 +1,12 @@
-import React from 'react';
+// import React from 'react';
+import UnderConstruction from '../../../components/UnderConstruction';
 
 const Integrations = () => {
-  return <div>Integrations</div>;
+  return (
+    <div>
+      <UnderConstruction />
+    </div>
+  );
 };
 
 export default Integrations;

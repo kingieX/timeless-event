@@ -1,7 +1,8 @@
-// import React from 'react';
+// import React from 'react'
+
 import UnderConstruction from '../../components/UnderConstruction';
 
-const WhatsNew = () => {
+const Completed = () => {
   return (
     <div>
       <UnderConstruction />
@@ -9,4 +10,4 @@ const WhatsNew = () => {
   );
 };
 
-export default WhatsNew;
+export default Completed;
