@@ -79,7 +79,7 @@ const App = () => {
         <Route path="/signup/invite" element={<Onboard5 />} />
 
         {/* Outlet route */}
-        <Route path="/dashboard/*" element={<Dashboard />}>
+        <Route path="/app/*" element={<Dashboard />}>
           {/* Default content to render when just "/dashboard" is accessed */}
           <Route index element={<MainContent />} />
 

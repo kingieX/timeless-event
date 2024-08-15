@@ -24,17 +24,17 @@ const menuItems = [
   {
     name: 'Add event',
     icon: IoAddCircleOutline,
-    link: '/dashboard/add-event',
+    link: '/app/add-event',
   },
   {
     name: 'Add task',
     icon: IoAddCircleOutline,
-    link: '/dashboard/add-task',
+    link: '/app/add-task',
   },
   {
     name: 'Search',
     icon: IoSearchOutline,
-    link: '/dashboard/search',
+    link: '/app/search',
   },
   {
     name: 'Inbox',
@@ -44,39 +44,39 @@ const menuItems = [
       {
         name: 'User messages',
         icon: TbMessage,
-        link: '/dashboard/inbox/user-messages',
+        link: '/app/inbox/user-messages',
       },
       {
         name: 'Team messages',
         icon: TbMessages,
-        link: '/dashboard/inbox/team-messages',
+        link: '/app/inbox/team-messages',
       },
       {
         name: 'Vendor messages',
         icon: TbMessage2Pin,
-        link: '/dashboard/inbox/vendor-messages',
+        link: '/app/inbox/vendor-messages',
       },
       {
         name: 'RSVP tracking',
         icon: PiCalendarStarDuotone,
-        link: '/dashboard/inbox/rsvp-tracking',
+        link: '/app/inbox/rsvp-tracking',
       },
     ],
   },
   {
     name: 'Today',
     icon: BsCalendar4Event,
-    link: '/dashboard/today',
+    link: '/app/today',
   },
   {
     name: 'Upcoming',
     icon: MdOutlineCalendarMonth,
-    link: '/dashboard/upcoming',
+    link: '/app/upcoming',
   },
   {
     name: 'Completed',
     icon: FaRegCalendarCheck,
-    link: '/dashboard/completed',
+    link: '/app/completed',
   },
   {
     name: 'My Projects',
@@ -86,12 +86,12 @@ const menuItems = [
       {
         name: 'My work',
         icon: MdWorkOutline,
-        link: '/dashboard/my-project/my-work',
+        link: '/app/my-project/my-work',
       },
       {
         name: 'My home',
         icon: SlHome,
-        link: '/dashboard/my-project/my-home',
+        link: '/app/my-project/my-home',
       },
     ],
   },
