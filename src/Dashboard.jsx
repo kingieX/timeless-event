@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 
 // Profile data
 const userData = {
-  username: 'User name',
+  username: 'Kingsley',
   profileImage: '/path/to/profile-image.jpg',
 };
 

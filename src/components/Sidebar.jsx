@@ -124,7 +124,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
 
   return (
     <div
-      className={`bg-sidebar h-screen z-50 ${isSidebarOpen ? 'w-64' : 'w-0'} transition-width duration-300`}
+      className={`bg-sidebar h-screen z-50 ${isSidebarOpen ? 'w-fit' : 'w-0'} transition-width duration-300`}
     >
       {isSidebarOpen && (
         <>
@@ -152,8 +152,10 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 )}
               </div>
             </div>
-            <div className="flex items-center">
-              <IoMdNotificationsOutline className="text-gray-500 mr-1 cursor-pointer w-6 h-6" />
+            <div className="flex items-center space-x-2">
+              <Link to="notification">
+                <IoMdNotificationsOutline className="text-gray-500 mr-1 cursor-pointer w-6 h-6" />
+              </Link>
               <PiSidebarSimpleThin
                 className="text-gray-500 cursor-pointer w-6 h-6"
                 onClick={onToggleSidebar}

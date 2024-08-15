@@ -27,7 +27,6 @@ import MainContent from './pages/sidebarMenuPages/MainContent';
 import AddEvent from './pages/sidebarMenuPages/AddEvent';
 import AddTask from './pages/sidebarMenuPages/AddTask';
 import Search from './pages/sidebarMenuPages/Search';
-import SendNotification from './pages/sidebarMenuPages/Completed';
 import UserMessage from './pages/sidebarMenuPages/inbox/UserMessage';
 import TeamMessage from './pages/sidebarMenuPages/inbox/TeamMessage';
 import VendorMessage from './pages/sidebarMenuPages/inbox/VendorMessage';
@@ -36,6 +35,8 @@ import Today from './pages/sidebarMenuPages/Today';
 import Upcoming from './pages/sidebarMenuPages/Upcoming';
 import MyWork from './pages/sidebarMenuPages/myProject/MyWork';
 import MyHome from './pages/sidebarMenuPages/myProject/MyHome';
+import Completed from './pages/sidebarMenuPages/Completed';
+import Notification from './pages/Notification';
 
 // userMenu
 import Task from './pages/userMenuPages/Task';
@@ -55,7 +56,6 @@ import WhatsNew from './pages/userMenuPages/WhatsNew';
 import UpgradeTeam from './pages/userMenuPages/UpgradeTeam';
 import Sync from './pages/userMenuPages/Sync';
 import LogOut from './pages/userMenuPages/LogOut';
-import Completed from './pages/sidebarMenuPages/Completed';
 
 const App = () => {
   return (
@@ -82,6 +82,9 @@ const App = () => {
         <Route path="/dashboard/*" element={<Dashboard />}>
           {/* Default content to render when just "/dashboard" is accessed */}
           <Route index element={<MainContent />} />
+
+          {/* notificatio */}
+          <Route path="notification" element={<Notification />} />
 
           {/* Sidebar menus routes */}
           <Route path="add-event" element={<AddEvent />} />
