@@ -139,11 +139,18 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
         <>
           <div className="flex items-center justify-between p-4 border-b border-gray">
             <div className="flex items-center">
-              <img
-                src={userData.profileImage}
-                alt={userData.username}
-                className="w-10 h-10 rounded-full bg-accent"
-              />
+              {userData.profileImage ? (
+                <img
+                  src={userData.profileImage}
+                  alt={userData.username}
+                  className="w-10 h-10 rounded-full"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                  {userData.username.charAt(0).toUpperCase()}
+                </div>
+              )}
+
               <div className="flex ml-3 relative">
                 <h4 className="font-semibold">{userData.username}</h4>
                 <button
