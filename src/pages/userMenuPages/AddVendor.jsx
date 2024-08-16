@@ -39,8 +39,13 @@ const sendNotificationOptions = [
 
 const serviceTypeOptions = [
   { value: '', label: 'Select option', disabled: true },
-  { value: 'physical', label: 'Physical' },
-  { value: 'remote', label: 'Remote' },
+  { value: 'catering', label: 'Catering' },
+  { value: 'photography', label: 'Photography' },
+  { value: 'decor', label: 'Decor' },
+  { value: 'dj', label: 'DJ' },
+  { value: 'entertainer', label: 'Entertainer' },
+  { value: 'graphic-artist', label: 'Graphic Artist' },
+  { value: 'others', label: 'Others' },
 ];
 
 const AddVendor = () => {
