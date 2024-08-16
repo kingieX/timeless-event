@@ -38,11 +38,11 @@ const Onboard5 = () => {
   const navigate = useNavigate();
 
   const handleSkipClick = () => {
-    navigate('/dashboard');
+    navigate('/app');
   };
 
   const handleButtonClick = () => {
-    navigate('/dashboard');
+    navigate('/app');
   };
 
   return (

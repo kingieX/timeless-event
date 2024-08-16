@@ -6,7 +6,7 @@ const Onboard3 = () => {
   const navigate = useNavigate();
 
   const handleSkipClick = () => {
-    navigate('/dashboard');
+    navigate('/app');
   };
 
   const handleButtonClick = () => {
