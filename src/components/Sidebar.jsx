@@ -133,7 +133,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
 
   return (
     <div
-      className={`bg-sidebar bg-opacity-10 h-screen z-50 ${isSidebarOpen ? 'w-fit' : 'w-0'} transition-width duration-300`}
+      className={`lg:bg-sidebar lg:bg-opacity-10 bg-white h-screen z-50 ${isSidebarOpen ? 'w-fit' : 'w-0'} transition-width duration-300`}
     >
       {isSidebarOpen && (
         <>
