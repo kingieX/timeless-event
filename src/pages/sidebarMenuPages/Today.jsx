@@ -1,17 +1,64 @@
-import React, { useState } from 'react';
-import { FaCheckCircle, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useState, useEffect, useRef } from 'react';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { IoCheckmarkCircleOutline } from 'react-icons/io5';
+
 import DateTimePicker from '../../components/DateTimePicker';
+import TaskCard from '../../components/TaskCard';
 
 const Today = () => {
   const [showTasks, setShowTasks] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const datePickerRef = useRef(null);
+
+  // eslint-disable-next-line no-unused-vars
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      title: 'Browse the Todoist Inspiration Hub',
+      description: 'For productivity advice and to sign up for our newsletter',
+      dueDate: 'Jul 26',
+      statusColor: 'bg-gray-400',
+      location: 'Inbox',
+    },
+    {
+      id: 2,
+      title: 'Join existing team projects',
+      description: '',
+      dueDate: 'Jul 27',
+      statusColor: 'bg-red-500',
+      location: 'Inbox / Welcome to Heliscom',
+    },
+    // Add more tasks as needed
+  ]);
 
   const toggleTasks = () => setShowTasks(!showTasks);
   const toggleDatePicker = () => setShowDatePicker(!showDatePicker);
 
+  // Handle click outside logic
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (
+        datePickerRef.current &&
+        !datePickerRef.current.contains(event.target)
+      ) {
+        setShowDatePicker(false);
+      }
+    };
+
+    if (showDatePicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDatePicker]);
+
   return (
-    <div className="w-full h-screen lg:p-10 p-6">
+    <div className="w-full h-screen lg:p-10 py-6 lg:px-8 px-4">
       {/* Header Section */}
       <div className="flex">
         <div className="flex flex-col lg:gap-2">
@@ -19,7 +66,7 @@ const Today = () => {
             Today
           </h1>
           <div className="flex justify-start items-center space-x-2">
-            <FaCheckCircle className="text-slate-500" />
+            <IoCheckmarkCircleOutline className="text-slate-500" />
             <p className="text-slate-600">7 tasks</p>
           </div>
         </div>
@@ -37,7 +84,7 @@ const Today = () => {
             ) : (
               <FaChevronDown className="mr-2 text-slate-600 w-3" />
             )}
-            <span className="lg:text-lg text-sm font-semibold">Overdue</span>
+            <span className="lg:text-sm text-sm font-semibold">Overdue</span>
           </div>
           <button
             onClick={toggleDatePicker}
@@ -48,7 +95,7 @@ const Today = () => {
         </div>
 
         {showDatePicker && (
-          <div className="mt-4 relative">
+          <div className="mt-4 relative" ref={datePickerRef}>
             <DateTimePicker
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
@@ -57,11 +104,10 @@ const Today = () => {
         )}
 
         {showTasks && (
-          <div className="mt-4">
-            {/* Tasks will go here */}
-            <p>Task 1</p>
-            <p>Task 2</p>
-            <p>Task 3</p>
+          <div className="mt-">
+            {tasks.map(task => (
+              <TaskCard key={task.id} task={task} />
+            ))}
           </div>
         )}
       </div>

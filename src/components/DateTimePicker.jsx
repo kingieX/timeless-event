@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import DateTime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
@@ -40,13 +41,13 @@ const DateTimePicker = ({ selectedDate, setSelectedDate }) => {
 
       {/* {showCalendar && ( */}
       <div className="absolute z-50 right-0 -top-10 bg-white shadow-lg p-4 rounded mt-2">
-        <ul className="space-y-2">
+        <ul className="space-y-1">
           <li
             className="cursor-pointer hover:bg-gray-100 p-2 rounded"
             onClick={handleToday}
           >
             <div className="flex justify-between items-center">
-              <span>Today</span>
+              <span className="text-sm font-bold">Today</span>
               <span>
                 {new Date().toLocaleDateString('en-US', { weekday: 'short' })}
               </span>
@@ -57,7 +58,7 @@ const DateTimePicker = ({ selectedDate, setSelectedDate }) => {
             onClick={handleTomorrow}
           >
             <div className="flex justify-between items-center">
-              <span>Tomorrow</span>
+              <span className="text-sm font-bold">Tomorrow</span>
               <span>
                 {new Date(
                   new Date().setDate(new Date().getDate() + 1)
@@ -66,7 +67,7 @@ const DateTimePicker = ({ selectedDate, setSelectedDate }) => {
             </div>
           </li>
           <li
-            className="cursor-pointer hover:bg-gray-100 p-2 rounded"
+            className="cursor-pointer hover:bg-gray-100 p-2 rounded text-sm font-bold"
             onClick={handleNoDate}
           >
             <span>No Date</span>
