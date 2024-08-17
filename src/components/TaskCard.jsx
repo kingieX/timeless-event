@@ -4,9 +4,8 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import { FaRegMessage } from 'react-icons/fa6';
 import { CiCalendar } from 'react-icons/ci';
 import { BsCalendar2 } from 'react-icons/bs';
-import { PiDotsThreeOutlineThin } from 'react-icons/pi';
-
-import { PiDotsSixVerticalLight } from 'react-icons/pi';
+import { PiDotsThreeOutlineThin, PiDotsSixVerticalLight } from 'react-icons/pi';
+import { IoCheckmark } from 'react-icons/io5';
 
 const TaskCard = ({ task }) => {
   return (
@@ -17,8 +16,9 @@ const TaskCard = ({ task }) => {
           <PiDotsSixVerticalLight className="w-8 h-6 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
         <div className="flex items-center space-x-2">
-          <div className="flex-shrink-0 w-4 h-4 rounded-full border">
-            <span className={`w-4 h-4 rounded-full ${task.statusColor}`}></span>
+          <div className="flex justify-center items-center w-5 h-5 rounded-full border">
+            {/* <span className={`w-4 h-4 rounded-full ${task.statusColor}`}></span> */}
+            <IoCheckmark className="w-4 h-4 cursor-pointer opacity-0 hover:opacity-100 transition-opacity" />
           </div>
           <div className="flex justify-center items-center">
             {/* Task Title */}
