@@ -6,24 +6,31 @@ import { CiCalendar } from 'react-icons/ci';
 import { BsCalendar2 } from 'react-icons/bs';
 import { PiDotsThreeOutlineThin } from 'react-icons/pi';
 
+import { PiDotsSixVerticalLight } from 'react-icons/pi';
+
 const TaskCard = ({ task }) => {
   return (
-    <div className="w-full flex flex-col justify-between items-start py-4 pr-8 border-b border-b-gray group relative">
+    <div className="w-full flex flex-col justify-between items-start py-4 px-4 pr-8 border-b border-b-gray group relative">
       {/* first line */}
-      <div className="flex items-center space-x-2">
-        <div className="flex-shrink-0 w-4 h-4 rounded-full border">
-          <span className={`w-4 h-4 rounded-full ${task.statusColor}`}></span>
+      <div className="flex -ml-8">
+        <div>
+          <PiDotsSixVerticalLight className="w-8 h-6 opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
-        <div className="flex justify-center items-center">
-          {/* Task Title */}
-          <h3 className="text-sm">{task.title}</h3>
-        </div>
-        {/* Hover Icons */}
-        <div className="hidden lg:flex justify-center items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity absolute top-4 right-0">
-          <AiOutlineEdit className="text-slate-700 cursor-pointer w-6 h-6" />
-          <FaRegMessage className="text-slate-700 cursor-pointer w-4 h-4" />
-          <CiCalendar className="text-slate-700 cursor-pointer w-6 h-6" />
-          <PiDotsThreeOutlineThin className="text-slate-700 cursor-pointer w-6 h-6" />
+        <div className="flex items-center space-x-2">
+          <div className="flex-shrink-0 w-4 h-4 rounded-full border">
+            <span className={`w-4 h-4 rounded-full ${task.statusColor}`}></span>
+          </div>
+          <div className="flex justify-center items-center">
+            {/* Task Title */}
+            <h3 className="text-sm">{task.title}</h3>
+          </div>
+          {/* Hover Icons */}
+          <div className="hidden lg:flex justify-center items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity absolute top-4 right-0">
+            <AiOutlineEdit className="text-slate-700 cursor-pointer w-6 h-6" />
+            <FaRegMessage className="text-slate-700 cursor-pointer w-4 h-4" />
+            <CiCalendar className="text-slate-700 cursor-pointer w-6 h-6" />
+            <PiDotsThreeOutlineThin className="text-slate-700 cursor-pointer w-6 h-6" />
+          </div>
         </div>
       </div>
 

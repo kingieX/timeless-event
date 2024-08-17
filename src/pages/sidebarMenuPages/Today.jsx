@@ -74,7 +74,7 @@ const Today = () => {
 
       {/* Overdue Section */}
       <div className="mt-4">
-        <div className="flex items-center justify-between border-b border-b-gray pb-2">
+        <div className="flex items-center justify-between border-b border-b-gray">
           <div
             className="flex items-center cursor-pointer"
             onClick={toggleTasks}
