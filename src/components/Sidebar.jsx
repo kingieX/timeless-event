@@ -137,16 +137,16 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
     >
       {isSidebarOpen && (
         <>
-          <div className="flex items-center justify-between p-4 border-b border-gray">
-            <div className="flex items-center">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray">
+            <div className="flex items-center hover:bg-blue-50">
               {userData.profileImage ? (
                 <img
                   src={userData.profileImage}
                   alt={userData.username}
-                  className="w-10 h-10 rounded-full"
+                  className="w-9 h-9 rounded-full"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold">
                   {userData.username.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -185,7 +185,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 {menu.subMenu ? (
                   <>
                     <div
-                      className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
+                      className={`flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer ${
                         isMenuActive(menu, currentPath) ? 'bg-blue-100' : ''
                       }`}
                       onClick={() => toggleSubMenu(index)}
@@ -215,7 +215,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                             onClick={handleLinkClick}
                           >
                             <div
-                              className={`flex items-center pl-8 px-4 py-2 hover:bg-blue-100 cursor-pointer ${
+                              className={`flex items-center pl-8 px-4 py-2 hover:bg-blue-50 cursor-pointer ${
                                 currentPath === subMenu.link
                                   ? 'bg-blue-100 text-primary border-l-4 border-l-primary'
                                   : ''
@@ -238,7 +238,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 ) : (
                   <Link to={menu.link} onClick={handleLinkClick}>
                     <div
-                      className={`flex items-center px-4 py-3 hover:bg-blue-100 cursor-pointer ${
+                      className={`flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer ${
                         currentPath === menu.link
                           ? 'bg-blue-100 text-primary border-l-4 border-l-primary'
                           : ''
