@@ -1,128 +1,10 @@
-// import { useState, useEffect, useRef } from 'react';
-// import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-// import { IoCheckmarkCircleOutline } from 'react-icons/io5';
-
-// import DateTimePicker from '../../components/DateTimePicker';
-// import TaskCard from '../../components/TaskCard';
-
-// const Today = () => {
-//   const [showTasks, setShowTasks] = useState(true);
-//   const [showDatePicker, setShowDatePicker] = useState(false);
-//   const [selectedDate, setSelectedDate] = useState(null);
-//   const datePickerRef = useRef(null);
-
-//   // eslint-disable-next-line no-unused-vars
-//   const [tasks, setTasks] = useState([
-//     {
-//       id: 1,
-//       title: 'Browse the Todoist Inspiration Hub',
-//       description: 'For productivity advice and to sign up for our newsletter',
-//       dueDate: 'Jul 26',
-//       statusColor: 'bg-gray-400',
-//       location: 'Inbox',
-//     },
-//     {
-//       id: 2,
-//       title: 'Join existing team projects',
-//       description: '',
-//       dueDate: 'Jul 27',
-//       statusColor: 'bg-red-500',
-//       location: 'Inbox / Welcome to Heliscom',
-//     },
-//     // Add more tasks as needed
-//   ]);
-
-//   const toggleTasks = () => setShowTasks(!showTasks);
-//   const toggleDatePicker = () => setShowDatePicker(!showDatePicker);
-
-//   // Handle click outside logic
-//   useEffect(() => {
-//     const handleClickOutside = event => {
-//       if (
-//         datePickerRef.current &&
-//         !datePickerRef.current.contains(event.target)
-//       ) {
-//         setShowDatePicker(false);
-//       }
-//     };
-
-//     if (showDatePicker) {
-//       document.addEventListener('mousedown', handleClickOutside);
-//     } else {
-//       document.removeEventListener('mousedown', handleClickOutside);
-//     }
-
-//     return () => {
-//       document.removeEventListener('mousedown', handleClickOutside);
-//     };
-//   }, [showDatePicker]);
-
-//   return (
-//     <div className="w-full h-screen lg:p-10 py-6 lg:px-8 px-4">
-//       {/* Header Section */}
-//       <div className="flex">
-//         <div className="flex flex-col lg:gap-2">
-//           <h1 className="lg:text-2xl text-xl font-bold flex items-center">
-//             Today
-//           </h1>
-//           <div className="flex justify-start items-center space-x-2">
-//             <IoCheckmarkCircleOutline className="text-slate-500" />
-//             <p className="text-slate-600">7 tasks</p>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Overdue Section */}
-//       <div className="mt-4">
-//         <div className="flex items-center justify-between border-b border-b-gray">
-//           <div
-//             className="flex items-center cursor-pointer"
-//             onClick={toggleTasks}
-//           >
-//             {showTasks ? (
-//               <FaChevronUp className="mr-2 text-slate-600 w-3" />
-//             ) : (
-//               <FaChevronDown className="mr-2 text-slate-600 w-3" />
-//             )}
-//             <span className="lg:text-sm text-sm font-semibold">Overdue</span>
-//           </div>
-//           <button
-//             onClick={toggleDatePicker}
-//             className="text-primary px-2 py-2 text-sm font-semibold hover:bg-blue-100"
-//           >
-//             Reschedule tasks
-//           </button>
-//         </div>
-
-//         {showDatePicker && (
-//           <div className="mt-4 relative" ref={datePickerRef}>
-//             <DateTimePicker
-//               selectedDate={selectedDate}
-//               setSelectedDate={setSelectedDate}
-//             />
-//           </div>
-//         )}
-
-//         {showTasks && (
-//           <div className="mt-">
-//             {tasks.map(task => (
-//               <TaskCard key={task.id} task={task} />
-//             ))}
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Today;
-
 import { useState, useEffect, useRef } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 
 import DateTimePicker from '../../components/DateTimePicker';
 import TaskCard from '../../components/TaskCard';
+import { Link } from 'react-router-dom';
 
 const Today = () => {
   const [showTasks, setShowTasks] = useState(true);
@@ -213,8 +95,13 @@ const Today = () => {
     }
   };
 
+  // Get the current date
+  const today = new Date();
+  const options = { month: 'short', day: 'numeric', weekday: 'long' };
+  const formattedDate = today.toLocaleDateString('en-US', options);
+
   return (
-    <div className="w-full h-screen lg:p-10 py-6 lg:px-8 px-4">
+    <div className="w-full lg:p-10 py-6 lg:px-8 px-4">
       {/* Header Section */}
       <div className="flex">
         <div className="flex flex-col lg:gap-2">
@@ -273,6 +160,28 @@ const Today = () => {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Add Task & Add Event Section */}
+      <div className="mt-6 flex flex-col py-4">
+        <h2 className="lg:text-sm text-sm font-semibold px-2">
+          {formattedDate}
+        </h2>
+        <span className="border-b border-b-gray pb-2"></span>
+        <div className="flex flex-col space-y-1 py-2 px-4">
+          <Link
+            to="/app/add-task"
+            className="text-sm text-slate-600 hover:text-primary"
+          >
+            + Add task
+          </Link>
+          <Link
+            to="/app/add-event"
+            className="text-sm text-slate-600 hover:text-primary"
+          >
+            + Add event
+          </Link>
+        </div>
       </div>
     </div>
   );
