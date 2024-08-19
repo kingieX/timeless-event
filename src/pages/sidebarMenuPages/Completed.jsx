@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
+import Logo from '/image/completed.svg';
+
 const Completed = () => {
   const [showCompletedTasks, setShowCompletedTasks] = useState(true);
 
@@ -10,9 +12,9 @@ const Completed = () => {
   return (
     <div className="w-full lg:p-10 py-6 lg:px-8 px-4">
       {/* Header Section */}
-      <div className="flex">
+      <div className="">
         <div
-          className="flex flex-row justify-center items-center lg:gap-2 cursor-pointer"
+          className="flex flex-row items-center lg:gap-2 cursor-pointer mb-4"
           onClick={toggleTasks}
         >
           <h1 className="lg:text-2xl text-xl font-bold flex items-center">
@@ -24,6 +26,15 @@ const Completed = () => {
             <FaChevronDown className="mr-2 text-slate-600 w-3" />
           )}
         </div>
+        {showCompletedTasks && (
+          <div className="w-full flex flex-col justify-center items-center py-8">
+            <img src={Logo} alt="empty project" className="w-2/5 mb-4" />
+            <h2 className="lg:text-2xl text-xl font-bold flex items-center">
+              No activity at the moment
+            </h2>
+            <p>View changes made by you or your collaborator</p>
+          </div>
+        )}
       </div>
     </div>
   );
