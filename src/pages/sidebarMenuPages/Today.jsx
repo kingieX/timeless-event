@@ -15,7 +15,7 @@ const Today = () => {
   const [tasks, setTasks] = useState([
     {
       id: 1,
-      title: 'Browse the Todoist Inspiration Hub',
+      title: 'Browse the Timeless Event',
       description: 'For productivity advice and to sign up for our newsletter',
       dueDate: 'Jul 26',
       statusColor: 'bg-gray-400',
