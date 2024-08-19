@@ -14,7 +14,7 @@ const Completed = () => {
       {/* Header Section */}
       <div className="">
         <div
-          className="flex flex-row items-center lg:gap-2 cursor-pointer mb-4"
+          className="flex flex-row items-center gap-2 cursor-pointer mb-4"
           onClick={toggleTasks}
         >
           <h1 className="lg:text-2xl text-xl font-bold flex items-center">
@@ -28,11 +28,17 @@ const Completed = () => {
         </div>
         {showCompletedTasks && (
           <div className="w-full flex flex-col justify-center items-center py-8">
-            <img src={Logo} alt="empty project" className="w-2/5 mb-4" />
+            <img
+              src={Logo}
+              alt="empty project"
+              className="lg:w-2/5 w-3/4 mb-4"
+            />
             <h2 className="lg:text-2xl text-xl font-bold flex items-center">
               No activity at the moment
             </h2>
-            <p>View changes made by you or your collaborator</p>
+            <p className="lg:text-lg text-center text-sm text-gray-600">
+              View changes made by you or your collaborator
+            </p>
           </div>
         )}
       </div>
