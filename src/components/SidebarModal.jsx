@@ -1,9 +1,9 @@
-/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 const menuGroups = [
+  // Your existing menu groups here
   [
     {
       name: '0/7 tasks',
@@ -44,7 +44,7 @@ const menuGroups = [
       link: 'activity-log',
       logo: '/image/modal-assets/btn7.svg',
     },
-    { name: 'Print', link: 'print', logo: '/image/modal-assets/btn8.svg' },
+    { name: 'Print', link: 'print', logo: '/image/modal-assets/btn8.svg' }, // Print menu item
     {
       name: 'Resources',
       link: '#',
@@ -112,7 +112,13 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
     if (window.innerWidth < 768) {
       onToggleSidebar(); // Close the sidebar on mobile view
     }
-    navigate(link); // Navigate to the page without reloading
+
+    // Check if the user clicked on the "Print" menu
+    if (menuName === 'Print') {
+      window.print(); // Trigger the print dialog
+    } else {
+      navigate(link); // Navigate to the page without reloading
+    }
   };
 
   return (
