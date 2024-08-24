@@ -106,6 +106,20 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
     }));
   };
 
+  const printPage = () => {
+    const sidebar = document.querySelector('.sidebar'); // Assuming your sidebar has a class of 'sidebar'
+    const outlet = document.querySelector('.outlet'); // Assuming your outlet has a class of 'outlet'
+
+    // Hide the sidebar
+    sidebar.style.display = 'none';
+
+    // Print the outlet content
+    window.print();
+
+    // After printing, show the sidebar again
+    sidebar.style.display = '';
+  };
+
   const handleMenuClick = (menuName, link) => {
     setActiveMenu(menuName);
     toggleModal(); // Close the modal
@@ -113,11 +127,10 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
       onToggleSidebar(); // Close the sidebar on mobile view
     }
 
-    // Check if the user clicked on the "Print" menu
-    if (menuName === 'Print') {
-      window.print(); // Trigger the print dialog
+    if (link === 'print') {
+      printPage(); // Call the printPage function if "Print" is clicked
     } else {
-      navigate(link); // Navigate to the page without reloading
+      navigate(link); // Navigate to the page without reloading for other links
     }
   };
 

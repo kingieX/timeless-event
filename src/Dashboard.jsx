@@ -100,7 +100,7 @@ const Dashboard = () => {
         <div
           className={`${
             isSidebarOpen ? 'translate-x-0' : ''
-          } md:translate-x-0 fixed inset-y-0 left-0 z-30`}
+          } sidebar md:translate-x-0 fixed inset-y-0 left-0 z-30`}
         >
           <Sidebar
             userData={userData}
@@ -134,7 +134,7 @@ const Dashboard = () => {
           <div
             className={`flex-grow transition-all duration-300 ease-in-out ${
               isSidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
-            } px-4 mt-8 lg:mt-4 overflow-y-auto`}
+            } outlet px-4 mt-8 lg:mt-4 overflow-y-auto`}
           >
             <Outlet />
           </div>
