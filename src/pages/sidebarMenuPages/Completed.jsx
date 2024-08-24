@@ -10,7 +10,7 @@ const Completed = () => {
   const toggleTasks = () => setShowCompletedTasks(!showCompletedTasks);
 
   return (
-    <div className="w-full lg:p-10 py-6 lg:px-8 px-4">
+    <div className="w-full lg:p-10 py-2 lg:px-8 px-4">
       {/* Header Section */}
       <div className="">
         <div
