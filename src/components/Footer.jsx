@@ -2,7 +2,8 @@
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaYoutube, FaInstagram } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import Logo from '/image/logo.svg';
+// import Logo from '/image/logo.svg';
+import Logo from '/image/logo-preview.png';
 
 const Footer = () => {
   return (
@@ -11,7 +12,7 @@ const Footer = () => {
         <div className="mb-4">
           {/* Logo and Name */}
           <Link className="flex items-center" to="/">
-            <img src={Logo} alt="Logo" className="lg:h-16 lg:w-16 w-8 h-8" />
+            <img src={Logo} alt="Logo" className="lg:h-16 lg:w-32 w-16 h-8" />
             <span className="ml-2 lg:text-2xl lg:font-normal text-gray-800">
               Timeless Planner
             </span>

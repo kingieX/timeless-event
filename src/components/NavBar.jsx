@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import Logo from '/image/logo.svg';
+// import Logo from '/image/logo.svg';
+import Logo from '/image/logo-preview.png';
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,7 +43,7 @@ const NavBar = () => {
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo and Name */}
         <NavLink className="flex items-center" to="/">
-          <img src={Logo} alt="Logo" className="h-8 w-8" />
+          <img src={Logo} alt="Logo" className="lg:h-8 lg:w-16 h-4 w-8" />
           <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
             Timeless Planner
           </span>
