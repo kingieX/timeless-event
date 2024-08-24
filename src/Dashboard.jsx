@@ -69,6 +69,9 @@ const Dashboard = () => {
       case '/app/completed':
         setCurrentPageTitle('Completed');
         break;
+      case '/app/notification':
+        setCurrentPageTitle('Notifications');
+        break;
       default:
         setCurrentPageTitle('');
         break;
@@ -131,7 +134,7 @@ const Dashboard = () => {
           <div
             className={`flex-grow transition-all duration-300 ease-in-out ${
               isSidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
-            } p-4 mt-8 lg:mt-4 overflow-y-auto`}
+            } px-4 mt-8 lg:mt-4 overflow-y-auto`}
           >
             <Outlet />
           </div>

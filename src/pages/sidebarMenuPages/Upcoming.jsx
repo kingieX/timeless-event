@@ -71,7 +71,7 @@ const Upcoming = () => {
   };
 
   return (
-    <div className="w-full lg:p-10 py-6 lg:px-8 px-4">
+    <div className="w-full lg:py-10 py-1 lg:px-8 px-4">
       {/* Header Section */}
       <div className="">
         <div className="flex flex-row items-center gap-2 cursor-pointer mb-4">

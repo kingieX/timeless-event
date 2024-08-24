@@ -169,7 +169,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <Link to="notification">
+              <Link to="notification" onClick={handleLinkClick}>
                 <IoMdNotificationsOutline className="text-gray-500 mr-1 cursor-pointer w-6 h-6" />
               </Link>
               <PiSidebarSimpleThin
