@@ -22,12 +22,12 @@ const SignUp = () => {
         </Link>
       </div>
 
-      <div className="lg:px-48 px-8 py-8">
+      <div className="lg:px-36 px-8 py-8">
         <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
           Sign up to get started
         </h2>
 
-        <div className="flex justify-between items-center space-x-12">
+        <div className="flex flex-row-reverse justify-between items-center space-x-12">
           <div className="w-full">
             <button className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 py-2 px-4 w-full mb-4">
               <FcGoogle className="mr-2 w-8 h-8" />
@@ -39,6 +39,14 @@ const SignUp = () => {
               <span className="border-b w-1/4 lg:w-1/3"></span>
             </div>
             <form className="space-y-4">
+              <div>
+                <label className="block text-gray-700">Phone Number</label>
+                <input
+                  type="email"
+                  placeholder="Enter your phone number"
+                  className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+                />
+              </div>
               <div>
                 <label className="block text-gray-700">Email</label>
                 <input

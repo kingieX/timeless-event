@@ -1,17 +1,15 @@
-/* eslint-disable no-unused-vars */
-// import React from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '/image/logo.svg';
 import { useState } from 'react';
+import Logo from '/image/logo.svg';
+import PhoneInputForm from '../../components/PhoneInputForm';
+import EmailInputForm from '../../components/EmailInputForm';
 
 const rolesOptions = [
-  //   { value: '', label: 'Select an option', disabled: true },
   { value: 'admin', label: 'Admin' },
   { value: 'member', label: 'Member' },
 ];
 
 const inviteOptions = [
-  //   { value: '', label: 'Select an option', disabled: true },
   { value: 'email', label: 'Email address' },
   { value: 'sms', label: 'SMS' },
   { value: 'whatsapp', label: 'WhatsApp' },
@@ -22,9 +20,8 @@ const Onboard5 = () => {
   const [inviteLink, setInviteLink] = useState(
     'https://timelessevent.com/auth/join?invite_code=ksdfkm'
   );
-  //   const [role, setRole] = useState('');
   const [newPeopleRole, setNewPeopleRole] = useState('');
-  const [emailAddresses, setEmailAddresses] = useState('');
+  const [selectedInviteOption, setSelectedInviteOption] = useState(''); // Track the selected invite option
 
   const handleToggle = () => {
     setInviteLinkEnabled(!inviteLinkEnabled);
@@ -110,7 +107,6 @@ const Onboard5 = () => {
                       ? ' hover:bg-red-500 hover:text-white transition duration-300'
                       : 'opacity-50 cursor-not-allowed'
                   }`}
-                  // Add reset link functionality later
                   disabled={!inviteLinkEnabled}
                 >
                   Reset link
@@ -126,17 +122,29 @@ const Onboard5 = () => {
             </label>
             <select
               id="options"
+              value={selectedInviteOption} // Bind the selected option to state
+              onChange={e => setSelectedInviteOption(e.target.value)} // Update state on change
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
               <option value="" disabled>
                 Select invite option
               </option>
-              {inviteOptions.map(role => (
-                <option key={role.value} value={role.value}>
-                  {role.label}
+              {inviteOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Conditionally Render Forms Based on Selection */}
+          <div className="w-full mb-8">
+            {selectedInviteOption === 'sms' ||
+            selectedInviteOption === 'whatsapp' ? (
+              <PhoneInputForm />
+            ) : selectedInviteOption === 'email' ? (
+              <EmailInputForm />
+            ) : null}
           </div>
 
           {/* New People Role Selection */}
@@ -160,18 +168,7 @@ const Onboard5 = () => {
             </select>
           </div>
 
-          {/* Email Addresses Textarea */}
-          <div className="w-full mb-8">
-            <textarea
-              value={emailAddresses}
-              onChange={e => setEmailAddresses(e.target.value)}
-              placeholder="Separate multiple emails with commas"
-              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-              rows="4"
-            ></textarea>
-          </div>
-
-          {/* Buttons*/}
+          {/* Buttons */}
           <div className="lg:w-3/4 w-full flex justify-between gap-8">
             <button
               onClick={handleSkipClick}

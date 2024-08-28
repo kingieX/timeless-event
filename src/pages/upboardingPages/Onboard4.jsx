@@ -99,9 +99,9 @@ const Onboard4 = () => {
               id="options"
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
-              <option value="" disabled>
+              {/* <option value="" disabled>
                 Select role
-              </option>
+              </option> */}
               {industryOptions.map(role => (
                 <option key={role.value} value={role.value}>
                   {role.label}
@@ -119,9 +119,9 @@ const Onboard4 = () => {
               id="options"
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
-              <option value="" disabled>
+              {/* <option value="" disabled>
                 Select role
-              </option>
+              </option> */}
               {workOptions.map(role => (
                 <option key={role.value} value={role.value}>
                   {role.label}
@@ -139,29 +139,15 @@ const Onboard4 = () => {
               id="options"
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
-              <option value="" disabled>
+              {/* <option value="" disabled>
                 Select role
-              </option>
+              </option> */}
               {organizationSizeOptions.map(role => (
                 <option key={role.value} value={role.value}>
                   {role.label}
                 </option>
               ))}
             </select>
-            <div className="flex items-center space-x-4 py-6">
-              <label
-                htmlFor="sharedWorkspace"
-                className="lg:text-normal text-sm text-gray-700"
-              >
-                Set up shared workspace for team project or event alongside your
-                personal?
-              </label>
-              <input
-                id="sharedWorkspace"
-                type="checkbox"
-                className="mr-2 w-6 h-6"
-              />
-            </div>
           </div>
 
           <div className="lg:w-3/4 w-full flex justify-center">
