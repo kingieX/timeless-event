@@ -27,7 +27,7 @@ const SignUp = () => {
           Sign up to get started
         </h2>
 
-        <div className="flex flex-row-reverse justify-between items-center space-x-12">
+        <div className="flex flex-row justify-between items-center space-x-12">
           <div className="w-full">
             <button className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 py-2 px-4 w-full mb-4">
               <FcGoogle className="mr-2 w-8 h-8" />
