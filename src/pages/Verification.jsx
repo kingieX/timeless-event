@@ -88,7 +88,7 @@ const VerificationPage = () => {
       </div>
 
       <div className="flex justify-center items-center lg:min-h-screen">
-        <div className="bg-white py-8 lg:px-12 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
+        <div className="flex flex-col justify-center items-center bg-white py-8 lg:px-12 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center lg:mb-6 mb-2">
             {verificationMethod === 'email'
               ? 'Verify Using Your Email'
@@ -126,11 +126,11 @@ const VerificationPage = () => {
           </form>
 
           {/* Options */}
-          <div className="flex flex-row-reverse justify-between">
+          <div className="w-full flex flex-row-reverse justify-between lg:px-8">
             <div className="text-center mt-4">
               <button
                 onClick={handleResendCode}
-                className={`text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-lg ${
+                className={`text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-md ${
                   isResending || resendTimeout > 0
                     ? 'text-gray-400 cursor-not-allowed'
                     : ''
@@ -148,14 +148,14 @@ const VerificationPage = () => {
               {verificationMethod === 'email' ? (
                 <button
                   onClick={switchToPhoneVerification}
-                  className="text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-lg"
+                  className="text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-md"
                 >
                   Verify using phone number
                 </button>
               ) : (
                 <button
                   onClick={switchToEmailVerification}
-                  className="text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-lg"
+                  className="text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-md"
                 >
                   Verify using email
                 </button>
