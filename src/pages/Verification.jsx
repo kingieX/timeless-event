@@ -87,8 +87,8 @@ const VerificationPage = () => {
         </Link>
       </div>
 
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="bg-white py-8 lg:px-12 px-8 border m-8 border-gray shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl">
+      <div className="flex justify-center items-center lg:min-h-screen">
+        <div className="bg-white py-8 lg:px-12 px-8 lg:border m-8 border-gray shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center lg:mb-6 mb-2">
             {verificationMethod === 'email'
               ? 'Verify Using Your Email'
