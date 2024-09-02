@@ -118,7 +118,7 @@ const Onboard5 = () => {
           {/* Invite by Other Options */}
           <div className="w-full mb-4">
             <label className="block font-semibold text-gray-700 mb-2">
-              Invite by other options
+              Invite option
             </label>
             <select
               id="options"
@@ -138,7 +138,7 @@ const Onboard5 = () => {
           </div>
 
           {/* Conditionally Render Forms Based on Selection */}
-          <div className="w-full mb-8">
+          <div className="w-full mb-2">
             {selectedInviteOption === 'sms' ||
             selectedInviteOption === 'whatsapp' ? (
               <PhoneInputForm />
@@ -148,7 +148,7 @@ const Onboard5 = () => {
           </div>
 
           {/* New People Role Selection */}
-          <div className="w-full flex justify-start items-center space-x-4 mb-4">
+          <div className="w-full flex justify-start items-center space-x-4 mb-8">
             <label className="block text-gray-700 mb-2">
               New people will be added as
             </label>

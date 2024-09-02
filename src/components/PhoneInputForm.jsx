@@ -28,8 +28,8 @@ const PhoneInputForm = () => {
         <div key={phone.id} className="flex items-center space-x-2">
           <select className="p-2 border border-gray-300 focus:outline-none focus:border-primary">
             <option value="+1">+1</option>
-            <option value="+234">+1</option>
-            <option value="+234">+1</option>
+            <option value="+234">+234</option>
+            <option value="+233">+233</option>
             <option value="+44">+44</option>
             {/* Add more options as needed */}
           </select>
@@ -37,7 +37,7 @@ const PhoneInputForm = () => {
           <input
             type="text"
             value={phone.value}
-            placeholder="Phone"
+            placeholder="Enter phone number"
             onChange={e => handlePhoneChange(phone.id, e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
           />
