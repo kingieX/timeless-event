@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
 
@@ -117,8 +117,8 @@ const VerificationPage = () => {
             </div>
             <button
               type="submit"
-              className={`w-full bg-primary text-black font-semibold py-2 px-4 rounded transition duration-300 text-base md:text-lg lg:text-xl py-2 md:py-3 lg:py-4
-                ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'hover:bg-transparent hover:border hover:border-primary hover:text-primary'}`}
+              className={`w-full bg-primary text-black font-semibold py-2 px-4 rounded transition duration-300 text-base md:text-lg lg:text-xl md:py-3 lg:py-4
+                ${isSubmitting ? 'bg-gray cursor-not-allowed' : 'hover:bg-transparent hover:border hover:border-primary hover:text-primary'}`}
               disabled={isSubmitting} // Disable the button during submission
             >
               {isSubmitting ? 'Verifying...' : 'Verify'}
