@@ -56,6 +56,7 @@ import WhatsNew from './pages/userMenuPages/WhatsNew';
 import UpgradeTeam from './pages/userMenuPages/UpgradeTeam';
 import Sync from './pages/userMenuPages/Sync';
 import LogOut from './pages/userMenuPages/LogOut';
+import VerificationPage from './pages/Verification';
 
 const App = () => {
   return (
@@ -77,6 +78,7 @@ const App = () => {
         <Route path="/signup/create-team" element={<Onboard3 />} />
         <Route path="/signup/about-team" element={<Onboard4 />} />
         <Route path="/signup/invite" element={<Onboard5 />} />
+        <Route path="/verification" element={<VerificationPage />} />
 
         {/* Outlet route */}
         <Route path="/app/*" element={<Dashboard />}>

@@ -8,8 +8,9 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/signup/onboard');
+    navigate('/verification');
   };
+
   return (
     <div className="">
       <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
