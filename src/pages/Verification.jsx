@@ -87,9 +87,9 @@ const VerificationPage = () => {
         </Link>
       </div>
 
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="bg-white py-8 px-12 shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center mb-6">
+      <div className="flex justify-center items-center lg:min-h-screen">
+        <div className="bg-white py-8 lg:px-12 px-8 border m-8 border-gray shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center lg:mb-6 mb-2">
             {verificationMethod === 'email'
               ? 'Verify Using Your Email'
               : 'Verify Using Phone Number'}
@@ -100,7 +100,7 @@ const VerificationPage = () => {
               : 'Enter the 6-digit code sent to your phone number.'}
           </p>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex justify-between">
+            <div className="flex justify-between space-x-2">
               {code.map((digit, index) => (
                 <input
                   key={index}
