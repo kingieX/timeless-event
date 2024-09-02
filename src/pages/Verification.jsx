@@ -130,7 +130,7 @@ const VerificationPage = () => {
             <div className="text-center mt-4">
               <button
                 onClick={handleResendCode}
-                className={`text-primary hover:underline focus:outline-none text-sm font-semibold md:text-base lg:text-lg ${
+                className={`text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-lg ${
                   isResending || resendTimeout > 0
                     ? 'text-gray-400 cursor-not-allowed'
                     : ''
@@ -148,14 +148,14 @@ const VerificationPage = () => {
               {verificationMethod === 'email' ? (
                 <button
                   onClick={switchToPhoneVerification}
-                  className="text-primary hover:underline focus:outline-none text-sm font-semibold md:text-base lg:text-lg"
+                  className="text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-lg"
                 >
                   Verify using phone number
                 </button>
               ) : (
                 <button
                   onClick={switchToEmailVerification}
-                  className="text-primary hover:underline focus:outline-none text-sm font-semibold md:text-base lg:text-lg"
+                  className="text-primary hover:underline focus:outline-none text-xs font-semibold md:text-base lg:text-lg"
                 >
                   Verify using email
                 </button>
