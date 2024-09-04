@@ -16,7 +16,7 @@ const inviteOptions = [
 ];
 
 const Onboard5 = () => {
-  const [inviteLinkEnabled, setInviteLinkEnabled] = useState(true);
+  const [inviteLinkEnabled, setInviteLinkEnabled] = useState(false);
   const [inviteLink, setInviteLink] = useState(
     'https://timelessevent.com/auth/join?invite_code=ksdfkm'
   );
@@ -62,11 +62,11 @@ const Onboard5 = () => {
 
           {/* Invite Link Section */}
           <div className="w-full mb-4">
-            <label className="block font-semibold text-gray-700 mb-2">
+            {/* <label className="block font-semibold text-gray-700 mb-2">
               Invite by link
-            </label>
+            </label> */}
             <div className="flex items-center">
-              <span className="mr-2">Enable invite link</span>
+              <span className="mr-2 font-semibold">Enable invite link</span>
               <label className="switch">
                 <input
                   type="checkbox"
@@ -85,7 +85,7 @@ const Onboard5 = () => {
                 className={`w-full flex-grow px-4 py-2 border focus:outline-none ${
                   inviteLinkEnabled
                     ? 'border-gray-300 bg-white'
-                    : 'opacity-50 cursor-not-allowed'
+                    : 'hidden opacity-50 cursor-not-allowed'
                 }`}
                 disabled={!inviteLinkEnabled}
               />
@@ -94,7 +94,7 @@ const Onboard5 = () => {
                   className={`w-full lg:ml-2 px-4 py-2 border border-primary text-primary  ${
                     inviteLinkEnabled
                       ? ' hover:bg-primary hover:text-black transition duration-300'
-                      : 'opacity-50 cursor-not-allowed'
+                      : 'hidden opacity-50 cursor-not-allowed'
                   }`}
                   onClick={handleCopyLink}
                   disabled={!inviteLinkEnabled}
@@ -105,7 +105,7 @@ const Onboard5 = () => {
                   className={`w-full ml-2 px-4 py-2 border border-red-500 text-red-500  ${
                     inviteLinkEnabled
                       ? ' hover:bg-red-500 hover:text-white transition duration-300'
-                      : 'opacity-50 cursor-not-allowed'
+                      : 'hidden opacity-50 cursor-not-allowed'
                   }`}
                   disabled={!inviteLinkEnabled}
                 >
