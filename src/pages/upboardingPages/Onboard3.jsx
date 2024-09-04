@@ -29,18 +29,21 @@ const Onboard3 = () => {
       <div className="flex flex-col justify-center items-center mx-6">
         <div className="flex flex-col justify-center items-center lg:w-1/2 my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
-            Create a team
+            Create your team
           </h2>
           <div className="lg:w-3/4 w-full mb-12">
             {/* Replace regular input with FloatingLabelInput */}
-            <FloatingLabelInput label="Team Name" type="text" id="teamName" />
-            <div className="flex items-center space-x-4 py-4">
+            <FloatingLabelInput
+              label="Give your team a name"
+              type="text"
+              id="teamName"
+            />
+            <div className="flex items-center justify-between space-x-4 py-4">
               <label
                 htmlFor="sharedWorkspace"
                 className="lg:text-normal text-sm text-gray-700"
               >
-                Set up shared workspace for team project or event alongside your
-                personal?
+                Do you wish to share workspace with your team?
               </label>
               <input
                 id="sharedWorkspace"

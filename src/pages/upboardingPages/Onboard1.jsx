@@ -29,7 +29,7 @@ const Onboard1 = () => {
           </h2>
           <div className="lg:w-3/4 w-full mb-8">
             {/* Replace regular input with FloatingLabelInput */}
-            <FloatingLabelInput label="Name" type="text" id="name" />
+            <FloatingLabelInput label="Enter your name" type="text" id="name" />
           </div>
           <button
             onClick={handleButtonClick}

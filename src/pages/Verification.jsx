@@ -144,7 +144,7 @@ const VerificationPage = () => {
                     : 'Resend Code'}
               </button>
             </div>
-            <div className="text-center mt-4">
+            {/* <div className="text-center mt-4">
               {verificationMethod === 'email' ? (
                 <button
                   onClick={switchToPhoneVerification}
@@ -160,7 +160,7 @@ const VerificationPage = () => {
                   Verify using email
                 </button>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
