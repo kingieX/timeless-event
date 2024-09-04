@@ -126,9 +126,9 @@ const Onboard5 = () => {
               onChange={e => setSelectedInviteOption(e.target.value)} // Update state on change
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
-              <option value="" disabled>
+              {/* <option value="" disabled>
                 Select invite option
-              </option>
+              </option> */}
               {inviteOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -157,9 +157,6 @@ const Onboard5 = () => {
               onChange={e => setNewPeopleRole(e.target.value)}
               className="px-2 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
-              <option value="" disabled>
-                Select role
-              </option>
               {rolesOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}

@@ -23,9 +23,9 @@ const EmailInputForm = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {emails.map(email => (
-        <div key={email.id} className="flex items-center space-x-2">
+        <div key={email.id} className="flex items-center space-x-4">
           <input
             type="email"
             value={email.value}
@@ -46,11 +46,10 @@ const EmailInputForm = () => {
       ))}
 
       <button
-        className="mt-4 text-primary hover:text-primary flex items-center space-x-2"
+        className="mt- text-primary hover:underline flex items-center space-x-2"
         onClick={handleAddEmail}
       >
-        <span className="text-xl">+</span>
-        <span>Add email</span>
+        <span>+ Add email</span>
       </button>
     </div>
   );

@@ -23,7 +23,7 @@ const PhoneInputForm = () => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {phones.map(phone => (
         <div key={phone.id} className="flex items-center space-x-2">
           <select className="p-2 border border-gray-300 focus:outline-none focus:border-primary">
@@ -54,11 +54,10 @@ const PhoneInputForm = () => {
       ))}
 
       <button
-        className="mt-4 text-primary hover:text-primary flex items-center space-x-2"
+        className="mt- text-primary hover:underline flex items-center space-x-2"
         onClick={handleAddPhone}
       >
-        <span className="text-xl">+</span>
-        <span>Add phone</span>
+        <span>+ Add phone</span>
       </button>
     </div>
   );
