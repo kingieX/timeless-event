@@ -1,11 +1,21 @@
 /* eslint-disable react/no-unescaped-entities */
-// import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import loginImage from '/image/login.png';
 import Logo from '/image/logo.svg';
+import FloatingLabelInput from '../components/FloatingLabelInput';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate('/app');
+  };
+
+  const handleForgottenPassword = () => {
+    navigate('/reset-password');
+  };
+
   return (
     <div className="">
       <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
@@ -23,9 +33,9 @@ const Login = () => {
           Log in to Continue
         </h2>
 
-        <div className="flex justify-between items-center space-x-12">
+        <div className="flex flex-row-reverse justify-between items-center space-x-12">
           <div className="w-full">
-            <button className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 py-2 px-4 w-full mb-4">
+            <button className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 py-2 px-4 w-full mb-4 hover:text-lg">
               <FcGoogle className="mr-2 w-8 h-8" />
               Continue with Google
             </button>
@@ -34,27 +44,29 @@ const Login = () => {
               <span className="text-gray-500 px-2">Log in with</span>
               <span className="border-b w-1/4 lg:w-1/3"></span>
             </div>
-            <form className="">
+            <form className="space-y-6">
               <div className="mb-4">
-                <label className="block text-gray-700">Email</label>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-                />
+                {/* Replace Email input with FloatingLabelInput */}
+                <FloatingLabelInput label="Email" type="email" id="email" />
               </div>
               <div className="">
-                <label className="block text-gray-700">Password</label>
-                <input
+                {/* Replace Password input with FloatingLabelInput */}
+                <FloatingLabelInput
+                  label="Password"
                   type="password"
-                  placeholder="Enter your password"
-                  className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+                  id="password"
                 />
+                <p
+                  onClick={handleForgottenPassword}
+                  className="mb-4 mt-1 text-sm text-red-500 cursor-pointer ml-1 font-semibold"
+                >
+                  Forgotten password
+                </p>
               </div>
-              <div className="mb-4 mt-1 text-sm text-red-500 cursor-pointer ml-1 font-semibold">
-                <p>Forgotten password</p>
-              </div>
-              <button className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300">
+              <button
+                onClick={handleButtonClick}
+                className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              >
                 Log in
               </button>
             </form>

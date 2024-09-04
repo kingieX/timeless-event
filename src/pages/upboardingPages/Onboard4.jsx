@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
 
 const industryOptions = [
-  { value: '', label: 'Select your answer', disabled: true },
   { value: 'agriculture', label: 'Agriculture' },
   { value: 'arts-entertainment', label: 'Arts and Entertainment' },
   { value: 'automotive', label: 'Automotive' },
@@ -31,7 +30,6 @@ const industryOptions = [
 ];
 
 const workOptions = [
-  { value: '', label: 'Select your work', disabled: true },
   { value: 'administration', label: 'Administration' },
   { value: 'customer-service', label: 'Customer Service' },
   { value: 'engineering', label: 'Engineering' },
@@ -50,7 +48,6 @@ const workOptions = [
 ];
 
 const organizationSizeOptions = [
-  { value: '', label: 'Select your organization size', disabled: true },
   { value: '1', label: '1' },
   { value: '2-5', label: '2 to 5' },
   { value: '6-10', label: '6 to 10' },

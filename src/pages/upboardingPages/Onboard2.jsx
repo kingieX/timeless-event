@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
 
 const roleOptions = [
-  { value: '', label: 'Select your role', disabled: true },
   { value: 'owner', label: 'I own or run the company' },
   {
     value: 'leader',

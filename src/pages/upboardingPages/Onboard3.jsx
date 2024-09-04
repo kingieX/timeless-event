@@ -1,6 +1,7 @@
 // import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
+import FloatingLabelInput from '../../components/FloatingLabelInput'; // Import the FloatingLabelInput component
 
 const Onboard3 = () => {
   const navigate = useNavigate();
@@ -26,31 +27,14 @@ const Onboard3 = () => {
       </div>
 
       <div className="flex flex-col justify-center items-center mx-6">
-        <div className="flex flex-col justify-center items-center lg:w-1/2  my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
+        <div className="flex flex-col justify-center items-center lg:w-1/2 my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
             Create a team
           </h2>
           <div className="lg:w-3/4 w-full mb-12">
-            <label className="block text-gray-700">Team Name</label>
-            <input
-              type="text"
-              placeholder="Enter your team name"
-              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            />
-            {/* <select
-              id="options"
-              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            >
-              <option value="" disabled>
-                Select an option
-              </option>
-              <option value="option1">I own or run the company</option>
-              <option value="option2">
-                I lead a team within the company or organisation
-              </option>
-              <option value="option3">I’m a team member</option>
-            </select> */}
-            <div className="flex items-center space-x-4 py-6">
+            {/* Replace regular input with FloatingLabelInput */}
+            <FloatingLabelInput label="Team Name" type="text" id="teamName" />
+            <div className="flex items-center space-x-4 py-4">
               <label
                 htmlFor="sharedWorkspace"
                 className="lg:text-normal text-sm text-gray-700"
