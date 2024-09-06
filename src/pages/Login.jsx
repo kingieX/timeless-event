@@ -13,7 +13,7 @@ const Login = () => {
   };
 
   const handleForgottenPassword = () => {
-    navigate('/reset-password');
+    navigate('/forgot-password');
   };
 
   return (

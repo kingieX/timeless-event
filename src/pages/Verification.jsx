@@ -3,16 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import Logo from '/image/logo.svg';
+import CodeInput from '../components/CodeInput';
 
 const VerificationPage = () => {
   const [phoneNumber, setPhoneNumber] = useState(''); // Store the phone number
   const [codeSent, setCodeSent] = useState(false); // Track if code was sent
-  const [code, setCode] = useState(Array(6).fill('')); // Array to store each digit of the code
   const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
-  const [isResending, setIsResending] = useState(false); // Track resend state
-  const [resendTimeout, setResendTimeout] = useState(0); // Track resend timeout
   const [countdown, setCountdown] = useState(0); // Timer countdown for the resend code button
   const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
+  const [verificationCode, setVerificationCode] = useState(''); // Store the verification code
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,23 +23,6 @@ const VerificationPage = () => {
     }
   }, [countdown, codeSent]);
 
-  // Handle change in each input box
-  const handleChange = (e, index) => {
-    const { value } = e.target;
-    if (/^\d*$/.test(value)) {
-      // Allow only numbers
-      const newCode = [...code];
-      newCode[index] = value;
-      setCode(newCode);
-
-      if (value && index < 5) {
-        // Automatically focus on the next input if a digit is entered
-        document.getElementById(`code-input-${index + 1}`).focus();
-      }
-    }
-  };
-
-  // Handle sending the code
   const handleSendCode = () => {
     if (phoneNumber && phoneNumber.length >= 8) {
       // Simple validation for phone number
@@ -53,11 +35,9 @@ const VerificationPage = () => {
     }
   };
 
-  // Handle form submission
   const handleSubmit = e => {
     e.preventDefault();
     setIsSubmitting(true);
-    const verificationCode = code.join('');
 
     // Logic to verify the code
     setTimeout(() => {
@@ -89,7 +69,7 @@ const VerificationPage = () => {
           <form onSubmit={handleSubmit} className="w-full space-y-2">
             <div className="w-full flex justify-between items-center border border-gray p-2">
               <PhoneInput
-                country={'us'}
+                country={'ng'}
                 value={phoneNumber}
                 onChange={setPhoneNumber}
                 inputClass="text-xl w-full"
@@ -105,7 +85,6 @@ const VerificationPage = () => {
                 onClick={handleSendCode}
                 className={`pl-4 lg:text-lg text-sm whitespace-nowrap ${countdown > 0 ? 'text-black' : 'text-primary'}`}
                 disabled={countdown > 0}
-                style={{ minWidth: '' }} // Ensures the button has enough width to avoid text wrapping
               >
                 {countdown > 0 ? `${countdown}s` : 'Send Code'}
               </button>
@@ -116,21 +95,10 @@ const VerificationPage = () => {
 
             {codeSent && (
               <>
-                <div className="flex justify-between space-x-2 mt-4 py-4">
-                  {code.map((digit, index) => (
-                    <input
-                      key={index}
-                      id={`code-input-${index}`}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={e => handleChange(e, index)}
-                      className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-center text-xl md:text-2xl lg:text-3xl border border-gray-300 rounded-xl focus:outline-none focus:border-primary"
-                      required
-                    />
-                  ))}
-                </div>
+                <CodeInput
+                  codeLength={6}
+                  onCodeChange={setVerificationCode} // Update the verification code state
+                />
               </>
             )}
 

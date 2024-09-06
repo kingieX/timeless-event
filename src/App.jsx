@@ -11,6 +11,10 @@ import Resources from './pages/navigationPages/Resources';
 import Pricing from './pages/navigationPages/Pricing';
 import Upgrade from './pages/navigationPages/Upgrade';
 
+// Reset Password Logic
+import VerificationPage from './pages/Verification';
+import ForgottenPassword from './components/Reset-password-flow/ForgottenPassword';
+
 // Onboarding pages
 import Onboard1 from './pages/upboardingPages/Onboard1';
 import Onboard2 from './pages/upboardingPages/Onboard2';
@@ -56,7 +60,9 @@ import WhatsNew from './pages/userMenuPages/WhatsNew';
 import UpgradeTeam from './pages/userMenuPages/UpgradeTeam';
 import Sync from './pages/userMenuPages/Sync';
 import LogOut from './pages/userMenuPages/LogOut';
-import VerificationPage from './pages/Verification';
+import PasswordResetVerification from './components/Reset-password-flow/PasswordResetVerification';
+import ResetPassword from './components/Reset-password-flow/ResetPassword';
+import SuccessPage from './components/Reset-password-flow/SuccessPage';
 
 const App = () => {
   return (
@@ -79,6 +85,12 @@ const App = () => {
         <Route path="/signup/about-team" element={<Onboard4 />} />
         <Route path="/signup/invite" element={<Onboard5 />} />
         <Route path="/verification" element={<VerificationPage />} />
+
+        {/* Reset Password */}
+        <Route path="/forgot-password" element={<ForgottenPassword />} />
+        <Route path="/verify" element={<PasswordResetVerification />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/success" element={<SuccessPage />} />
 
         {/* Outlet route */}
         <Route path="/app/*" element={<Dashboard />}>
