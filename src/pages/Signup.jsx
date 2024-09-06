@@ -30,7 +30,10 @@ const SignUp = () => {
 
         <div className="flex flex-row-reverse justify-between items-center space-x-12">
           <div className="w-full">
-            <button className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 py-2 px-4 w-full mb-4 hover:text-lg">
+            <button
+              onClick={handleButtonClick}
+              className="flex items-center justify-center bg-white border border-gray-300 text-gray-700 py-2 px-4 w-full mb-4 hover:text-lg"
+            >
               <FcGoogle className="mr-2 w-8 h-8" />
               Continue with Google
             </button>
@@ -40,7 +43,7 @@ const SignUp = () => {
               <span className="border-b w-1/4 lg:w-1/3"></span>
             </div>
             <form className="space-y-6">
-              <FloatingLabelInput label="Phone number" type="text" id="phone" />
+              {/* <FloatingLabelInput label="Phone number" type="text" id="phone" /> */}
               <FloatingLabelInput label="Email" type="email" id="email" />
               <FloatingLabelInput
                 label="Password"
