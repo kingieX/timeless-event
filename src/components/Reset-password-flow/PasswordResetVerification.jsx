@@ -6,20 +6,25 @@ import CodeInput from '../CodeInput';
 const PasswordResetVerification = () => {
   const [code, setCode] = useState(Array(6).fill('')); // Initialize the code as an array of 6 empty strings
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
   const navigate = useNavigate();
 
   // Handle form submission and verification
   const handleVerification = e => {
     e.preventDefault();
-    // const verificationCode = code.join(''); // Convert the array of code digits to a single string
-    // if (verificationCode === '123456') {
-    // Replace with actual verification logic
-    navigate('/reset-password');
-    // } else {
-    setErrorMessage(
-      'Invalid code. Please try again. Code is 123456 for testing purposes'
-    );
-    // }
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      // const verificationCode = code.join(''); // Convert the array of code digits to a single string
+      // if (verificationCode === '123456') {
+      // Replace with actual verification logic
+      navigate('/reset-password');
+      // } else {
+      setErrorMessage(
+        'Invalid code. Please try again. Code is 123456 for testing purposes'
+      );
+      // }
+    }, 2000);
   };
 
   // Handle resending the code
@@ -54,9 +59,11 @@ const PasswordResetVerification = () => {
 
             <button
               type="submit"
-              className="bg-primary text-black font-semibold py-2 px-4 lg:mt-6 mt-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              className={`w-full bg-primary text-black font-semibold py-2 px-4 mt-4 transition duration-300 text-base md:text-lg lg:text-xl md:py-3 lg:py-4
+                ${isSubmitting ? 'bg-gray cursor-not-allowed' : 'hover:bg-transparent hover:border hover:border-primary hover:text-primary'}`}
+              disabled={isSubmitting} // Disable the button during submission
             >
-              Verify
+              {isSubmitting ? 'Verifying...' : 'Verify'}
             </button>
           </form>
           <p
