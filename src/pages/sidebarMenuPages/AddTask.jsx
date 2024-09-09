@@ -4,22 +4,35 @@ import { CiLocationOn } from 'react-icons/ci';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { FiTag } from 'react-icons/fi';
 import { CiAlarmOn } from 'react-icons/ci';
-
-import { TbCalendarTime } from 'react-icons/tb';
+import ReminderModal from '../../components/ReminderModal';
 import { MdOutlineLowPriority } from 'react-icons/md';
 
-import Datetime from 'react-datetime';
-import 'react-datetime/css/react-datetime.css';
+// Dynamic options for the modal
+const groupOptions = [
+  { value: 'Group 1', label: 'Group 1' },
+  { value: 'Group 2', label: 'Group 2' },
+  // Add more groups as needed
+];
+
+const deliveryMediumOptions = [
+  { value: 'sms', label: 'SMS' },
+  { value: 'whatsapp', label: 'WhatsApp' },
+  { value: 'email', label: 'Email' },
+  // Add more options as needed
+];
 
 const AddTask = () => {
   const [taskName, setTaskName] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [dueTime, setDueTime] = useState('');
   const [priority, setPriority] = useState('');
   const [labels, setLabels] = useState('');
   const [comment, setComment] = useState('');
-  const [reminders, setReminders] = useState('');
   const [location, setLocation] = useState('');
   const [priorityOpen, setPriorityOpen] = useState(false);
+
+  const [showReminderModal, setShowReminderModal] = useState(false); // Control modal visibility
+  const [reminderSettings, setReminderSettings] = useState(null); // Store reminder settings
   const navigate = useNavigate();
 
   const priorityOptions = [
@@ -49,9 +62,13 @@ const AddTask = () => {
     setDueDate(date);
   };
 
-  const handleRemindersChange = date => {
-    setReminders(date);
+  const handleDueTimeChange = e => {
+    setDueTime(e.target.value);
   };
+
+  // const handleRemindersChange = date => {
+  //   setReminders(date);
+  // };
 
   const handleCancel = () => {
     navigate('/dashboard'); // Redirects to the dashboard
@@ -72,8 +89,23 @@ const AddTask = () => {
     setPriorityOpen(false); // Close the dropdown after selection
   };
 
+  // Handle modal close
+  const handleReminderSave = settings => {
+    setReminderSettings(settings);
+  };
+
   return (
     <div className="flex justify-center items-center mt-4 mx-4">
+      {/* Reminder Modal */}
+      {showReminderModal && (
+        <ReminderModal
+          onClose={() => setShowReminderModal(false)}
+          onSave={handleReminderSave}
+          groupOptions={groupOptions}
+          deliveryMediumOptions={deliveryMediumOptions}
+        />
+      )}
+
       <div className="bg-white w-full max-w-xl py-4 lg:border border-gray rounded-lg lg:shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Add Task</h2>
         <hr className="hidden lg:block mb-4 border-gray" />
@@ -101,23 +133,37 @@ const AddTask = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="dueDate"
               >
-                Due Date
+                Date
               </label>
               <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
-                <TbCalendarTime className="text-slate-500 w-10 h-6" />
-                <Datetime
+                <input
+                  id="dueDate"
+                  type="date"
+                  className="w-full text-sm flex-grow outline-none pl-1"
                   value={dueDate}
                   onChange={handleDueDateChange}
-                  dateFormat="MM/DD/YYYY"
-                  timeFormat="hh:mm A"
-                  inputProps={{
-                    id: 'dueDate',
-                    className: 'w-full text-sm flex-grow outline-none pl-1',
-                    placeholder: 'Due date',
-                  }}
                 />
               </div>
             </div>
+
+            <div className="lg:w-1/3">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="dueTime"
+              >
+                Time
+              </label>
+              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
+                <input
+                  id="dueTime"
+                  type="time"
+                  className="w-full text-sm flex-grow outline-none pl-1"
+                  value={dueTime}
+                  onChange={handleDueTimeChange}
+                />
+              </div>
+            </div>
+
             <div className="lg:w-1/3 relative">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -150,25 +196,6 @@ const AddTask = () => {
                 </ul>
               )}
             </div>
-            <div className="lg:w-1/3">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="labels"
-              >
-                Labels
-              </label>
-              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
-                <FiTag className="text-slate-500 w-6 h-6" />
-                <input
-                  id="labels"
-                  type="text"
-                  className="w-full text-sm flex-grow outline-none pl-1"
-                  value={labels}
-                  onChange={e => setLabels(e.target.value)}
-                  placeholder="Enter labels"
-                />
-              </div>
-            </div>
           </div>
 
           <div className="w-full mb-4">
@@ -190,33 +217,25 @@ const AddTask = () => {
 
           <div className="w-full mb-4 flex lg:flex-row flex-col gap-4">
             <div className="lg:w-1/2">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="reminders"
-              >
-                Reminders
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                {/* Reminders */}
               </label>
-              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
+              <button
+                type="button"
+                className="w-full px-4 py-2 border border-gray text-left focus-within:border-primary flex items-center"
+                onClick={() => setShowReminderModal(true)} // This will open the modal
+              >
                 <CiAlarmOn className="text-slate-500 w-6 h-6" />
-                <Datetime
-                  value={reminders}
-                  onChange={handleRemindersChange}
-                  dateFormat="MM/DD/YYYY"
-                  timeFormat="hh:mm A"
-                  inputProps={{
-                    id: 'reminders',
-                    className: 'w-full text-sm flex-grow outline-none pl-1',
-                    placeholder: 'Set reminders',
-                  }}
-                />
-              </div>
+                <span className="ml-2 text-sm">Reminder</span>
+              </button>
             </div>
+
             <div className="lg:w-1/2">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="location"
               >
-                Location
+                {/* Location */}
               </label>
               <div className="flex items-center w-full px-4 py-2 border border-gray focus-within:border-primary">
                 <input
@@ -230,9 +249,29 @@ const AddTask = () => {
                 <CiLocationOn className="text-slate-500 w-6 h-6" />
               </div>
             </div>
+
+            <div className="lg:w-1/3">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="labels"
+              >
+                {/* Labels */}
+              </label>
+              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
+                <FiTag className="text-slate-500 w-6 h-6" />
+                <input
+                  id="labels"
+                  type="text"
+                  className="w-full text-sm flex-grow outline-none pl-1"
+                  value={labels}
+                  onChange={e => setLabels(e.target.value)}
+                  placeholder="Enter labels"
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="lg:w-3/4 w-full flex justify-center gap-8 mb-4">
+          <div className="lg:w-3/4 w-full flex justify-center gap-8 my-4">
             <button
               type="button"
               className="lg:w-1/2 w-full border border-red-400 text-red-400 font-semibold py-2 px-4 hover:bg-red-400 hover:text-white transition duration-300"

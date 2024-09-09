@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiLocationOn } from 'react-icons/ci';
-import { TbCalendarTime } from 'react-icons/tb';
-import Datetime from 'react-datetime';
-import 'react-datetime/css/react-datetime.css';
-// import moment from 'moment';
 
 const AddEvent = () => {
   const [eventName, setEventName] = useState('');
-  const [dateTime, setDateTime] = useState('');
-  // const [dateTime, setDateTime] = useState(moment());
+  const [dueDate, setDueDate] = useState('');
+  const [dueTime, setDueTime] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
 
-  // handle datetime change
-  const handleDateTimeChange = date => {
-    setDateTime(date);
+  const handleDueDateChange = date => {
+    setDueDate(date);
+  };
+
+  const handleDueTimeChange = e => {
+    setDueTime(e.target.value);
   };
 
   const handleCancel = () => {
@@ -53,32 +52,38 @@ const AddEvent = () => {
           </div>
 
           <div className="w-full mb-4 flex lg:flex-row flex-col gap-4">
-            <div className="lg:w-1/2">
+            <div className="lg:w-1/3">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="dateTime"
+                htmlFor="dueDate"
               >
-                Date & Time
+                Date
               </label>
               <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
-                {/* <input
-                id="dateTime"
-                type="datetime-local"
-                className="w-full px-2 py-2 border border-gray focus:outline-none focus:border-primary"
-                value={dateTime}
-                onChange={e => setDateTime(e.target.value)}
-              /> */}
-                <TbCalendarTime className="text-slate-500 w-10 h-6" />
-                <Datetime
-                  value={dateTime}
-                  onChange={handleDateTimeChange}
-                  dateFormat="MM/DD/YYYY"
-                  timeFormat="hh:mm A"
-                  inputProps={{
-                    id: 'dateTime',
-                    className: 'w-full text-sm flex-grow outline-none pl-1',
-                    placeholder: 'Date & Time',
-                  }}
+                <input
+                  id="dueDate"
+                  type="date"
+                  className="w-full text-sm flex-grow outline-none pl-1"
+                  value={dueDate}
+                  onChange={handleDueDateChange}
+                />
+              </div>
+            </div>
+
+            <div className="lg:w-1/3">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="dueTime"
+              >
+                Time
+              </label>
+              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
+                <input
+                  id="dueTime"
+                  type="time"
+                  className="w-full text-sm flex-grow outline-none pl-1"
+                  value={dueTime}
+                  onChange={handleDueTimeChange}
                 />
               </div>
             </div>
