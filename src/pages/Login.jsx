@@ -20,43 +20,28 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
-  // Regular expression for password validation (Capital letter, number, and symbol)
-  const passwordRegex =
-    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
-
   // Handle normal form submission
   const handleFormSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // Validate password strength
-    if (!passwordRegex.test(password)) {
-      setError(
-        'Password must contain at least 1 uppercase letter, 1 number, and 1 symbol.'
-      );
-      setLoading(false);
-      return;
-    }
-
-    const data = {
-      email: email,
-      phone_no: '',
-      is_active: true,
-      password: password,
-    };
+    // URL-encoded data
+    const data = new URLSearchParams();
+    data.append('email', email);
+    data.append('password', password);
 
     try {
       const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify(data),
+        body: data.toString(), // Send URL-encoded data as a string
       });
 
       if (response.ok) {
-        // Navigate to the verification page
+        // Navigate to the app page
         navigate('/app');
         console.log('Login successful');
       } else {
@@ -109,7 +94,7 @@ const Login = () => {
               <span className="text-gray-500 px-2">Log in with</span>
               <span className="border-b w-1/4 lg:w-1/3"></span>
             </div>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleFormSubmit}>
               <div className="mb-4">
                 {/* Replace Email input with FloatingLabelInput */}
                 <FloatingLabelInput
@@ -150,8 +135,9 @@ const Login = () => {
                 </p>
               </div>
               <button
-                onClick={handleFormSubmit}
+                type="submit"
                 className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+                disabled={loading}
               >
                 {loading ? 'Logging in...' : 'Log in'}
               </button>
