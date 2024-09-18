@@ -26,22 +26,28 @@ const Login = () => {
     setLoading(true);
     setError(null);
 
-    // URL-encoded data
-    const data = new URLSearchParams();
-    data.append('email', email);
-    data.append('password', password);
+    // Create a URL-encoded string from form data
+    const data = new URLSearchParams({
+      grant_type: 'password',
+      username: email,
+      password: password,
+      scope: '',
+      client_id: 'string', // Replace 'string' with actual client ID if necessary
+      client_secret: 'string', // Replace 'string' with actual client secret if necessary
+    });
 
     try {
       const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded', // Set the correct content type
+          Accept: 'application/json',
         },
-        body: data.toString(), // Send URL-encoded data as a string
+        body: data.toString(), // Send URL-encoded data
       });
 
       if (response.ok) {
-        // Navigate to the app page
+        // Navigate to the verification page
         navigate('/app');
         console.log('Login successful');
       } else {
