@@ -2,18 +2,83 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import loginImage from '/image/login.png';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import FloatingLabelInput from '../components/FloatingLabelInput';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useState } from 'react';
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    navigate('/app');
+  // Set your API base URL here
+  const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  // State to capture form inputs
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+
+  // Regular expression for password validation (Capital letter, number, and symbol)
+  const passwordRegex =
+    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+
+  // Handle normal form submission
+  const handleFormSubmit = async e => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    // Validate password strength
+    if (!passwordRegex.test(password)) {
+      setError(
+        'Password must contain at least 1 uppercase letter, 1 number, and 1 symbol.'
+      );
+      setLoading(false);
+      return;
+    }
+
+    const data = {
+      email: email,
+      phone_no: '',
+      is_active: true,
+      password: password,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        // Navigate to the verification page
+        navigate('/app');
+        console.log('Login successful');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Something went wrong, please try again');
+        console.error('Error details:', errorData);
+      }
+    } catch (err) {
+      setError('Network error, please try again later.');
+      console.error('An error occurred:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleForgottenPassword = () => {
     navigate('/forgot-password');
+  };
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevState => !prevState);
   };
 
   return (
@@ -47,15 +112,36 @@ const Login = () => {
             <form className="space-y-6">
               <div className="mb-4">
                 {/* Replace Email input with FloatingLabelInput */}
-                <FloatingLabelInput label="Email" type="email" id="email" />
+                <FloatingLabelInput
+                  label="Email"
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
               </div>
               <div className="">
-                {/* Replace Password input with FloatingLabelInput */}
-                <FloatingLabelInput
-                  label="Password"
-                  type="password"
-                  id="password"
-                />
+                <div className="relative">
+                  <FloatingLabelInput
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'} // Dynamically change input type
+                    id="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
+
+                  {/* Icon for toggling password visibility */}
+                  <span
+                    className="absolute right-3 top-4 cursor-pointer"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash size={20} className="text-slate-600" />
+                    ) : (
+                      <FaEye size={20} className="text-slate-600" />
+                    )}
+                  </span>
+                </div>
                 <p
                   onClick={handleForgottenPassword}
                   className="mb-4 mt-1 text-sm text-red-500 cursor-pointer ml-1 font-semibold"
@@ -64,12 +150,14 @@ const Login = () => {
                 </p>
               </div>
               <button
-                onClick={handleButtonClick}
+                onClick={handleFormSubmit}
                 className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
               >
-                Log in
+                {loading ? 'Logging in...' : 'Log in'}
               </button>
             </form>
+            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+
             <p className="lg:text-left text-center text-gray-700 mt-4">
               Don't have an account?{' '}
               <Link

@@ -16,6 +16,7 @@ const FloatingLabelInput = ({ label, type = 'text', id, value, onChange }) => {
         onFocus={() => setFocused(true)}
         onBlur={() => !value && setFocused(false)}
         className="w-full py-3 px-4 border border-gray-300 focus:outline-none focus:border-primary transition"
+        required
       />
       <label
         htmlFor={id}

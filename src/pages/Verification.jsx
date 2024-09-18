@@ -6,13 +6,15 @@ import Logo from '/image/logo.svg';
 import CodeInput from '../components/CodeInput';
 
 const VerificationPage = () => {
-  const [phoneNumber, setPhoneNumber] = useState(''); // Store the phone number
+  const [phone_number, setPhoneNumber] = useState(''); // Store the phone number
   const [codeSent, setCodeSent] = useState(false); // Track if code was sent
   const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
   const [countdown, setCountdown] = useState(0); // Timer countdown for the resend code button
   const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
   const [verificationCode, setVerificationCode] = useState(''); // Store the verification code
   const navigate = useNavigate();
+
+  const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
   useEffect(() => {
     if (countdown > 0) {
@@ -23,27 +25,87 @@ const VerificationPage = () => {
     }
   }, [countdown, codeSent]);
 
-  const handleSendCode = () => {
-    if (phoneNumber && phoneNumber.length >= 8) {
-      // Simple validation for phone number
-      setCodeSent(true);
-      setCountdown(60); // Start 60 seconds countdown
-      setShowVerificationMessage(true); // Show the message when code is sent
-      console.log(`Code sent to ${phoneNumber}`);
+  // Function to send OTP
+  const handleSendCode = async () => {
+    if (phone_number && phone_number.length >= 8) {
+      // setCodeSent(true);
+      // setShowVerificationMessage(true);
+      try {
+        const response = await fetch(`${BASE_URL}/user/send-otp`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ phone_no: phone_number }),
+        });
+        console.log(phone_number);
+
+        if (response.ok) {
+          setCodeSent(true);
+          setCountdown(60); // Start 60 seconds countdown
+          setShowVerificationMessage(true);
+          console.log(`Code sent to ${phone_number}`);
+        } else {
+          console.error('Failed to send OTP');
+        }
+      } catch (error) {
+        console.error('Error sending OTP:', error);
+      }
     } else {
       alert('Please enter a valid phone number.');
     }
   };
 
-  const handleSubmit = e => {
+  // Function to verify OTP
+  const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Logic to verify the code
-    setTimeout(() => {
-      navigate('/signup/onboard');
-      console.log(`Phone verification code submitted:`, verificationCode);
-    }, 2000);
+    try {
+      const response = await fetch(`${BASE_URL}/user/verify-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone_no: phone_number,
+          otp: verificationCode, // Pass the verification code
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Phone verified successfully');
+        navigate('/signup/onboard'); // Navigate to the onboard page
+      } else {
+        console.error('Failed to verify OTP');
+      }
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+    }
+
+    setIsSubmitting(false); // Reset submission state
+  };
+
+  // Function to refresh OTP (resend the code)
+  const handleRefreshCode = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/user/refresh`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phone_no: phone_number }),
+      });
+
+      if (response.ok) {
+        setCountdown(60); // Restart countdown after refresh
+        console.log('OTP refreshed');
+      } else {
+        console.error('Failed to refresh OTP');
+      }
+    } catch (error) {
+      console.error('Error refreshing OTP:', error);
+    }
   };
 
   return (
@@ -70,7 +132,7 @@ const VerificationPage = () => {
             <div className="w-full flex justify-between items-center border border-gray p-2">
               <PhoneInput
                 country={'ng'}
-                value={phoneNumber}
+                value={phone_number}
                 onChange={setPhoneNumber}
                 inputClass="text-xl w-full"
                 buttonClass=""
@@ -99,6 +161,14 @@ const VerificationPage = () => {
                   codeLength={6}
                   onCodeChange={setVerificationCode} // Update the verification code state
                 />
+                <button
+                  type="button"
+                  onClick={handleRefreshCode}
+                  className="text-primary text-sm mt-2 hover:underline"
+                  disabled={countdown > 0} // Disable refresh until countdown is over
+                >
+                  Resend OTP
+                </button>
               </>
             )}
 
