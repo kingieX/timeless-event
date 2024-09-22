@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '/image/logo.svg';
-import CodeInput from '../CodeInput';
+import 'react-phone-input-2/lib/style.css';
 import Cookies from 'js-cookie'; // Assuming you're using js-cookie for cookie handling
+import Logo from '/image/logo.svg';
+import CodeInput from '../components/CodeInput';
 
-const PasswordResetVerification = () => {
-  // const [code, setCode] = useState(Array(6).fill('')); // Initialize the code as an array of 6 empty strings
+const VerifyOTP = () => {
   const [codeSent, setCodeSent] = useState(false); // Track if code was sent
-  // const [errorMessage, setErrorMessage] = useState('');
-  const [error, setError] = useState(null); // Error handling for resend OTP
   const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
   const [countdown, setCountdown] = useState(0); // Timer countdown for the resend code button
   const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
   const [verificationCode, setVerificationCode] = useState(''); // Store the verification code
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // Error handling for resend OTP
   const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
@@ -44,7 +44,7 @@ const PasswordResetVerification = () => {
       );
 
       if (otpResponse.ok) {
-        // setLoading(true);
+        setLoading(true);
         setCountdown(60); // Start 60 seconds countdown
         setCodeSent(true);
         setShowVerificationMessage(true); // Show verification message
@@ -60,7 +60,7 @@ const PasswordResetVerification = () => {
   };
 
   // Function to verify OTP using query parameters
-  const handleVerification = async e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -78,7 +78,7 @@ const PasswordResetVerification = () => {
 
       if (response.ok) {
         console.log('Phone verified successfully');
-        navigate('/reset-password');
+        navigate('/signup/onboard'); // Navigate to the onboard page
       } else {
         console.error('Failed to verify OTP');
       }
@@ -94,32 +94,9 @@ const PasswordResetVerification = () => {
     handleSendOtp(); // Call the resend OTP function using userId and phone_no from cookies
   };
 
-  // Handle form submission and verification
-  // const handleVerification = e => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-
-  //   setTimeout(() => {
-  //     // const verificationCode = code.join(''); // Convert the array of code digits to a single string
-  //     // if (verificationCode === '123456') {
-  //     // Replace with actual verification logic
-  //     navigate('/reset-password');
-  //     // } else {
-  //     setErrorMessage(
-  //       'Invalid code. Please try again. Code is 123456 for testing purposes'
-  //     );
-  //     // }
-  //   }, 2000);
-  // };
-
-  // // Handle resending the code
-  // const resendCode = () => {
-  //   alert('Code resent to your email.');
-  // };
-
   return (
-    <div className="w-full">
-      <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
+    <>
+      <div className="flex items-center shadow-md py-4 lg:px-8 px-4">
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
@@ -129,24 +106,41 @@ const PasswordResetVerification = () => {
         </Link>
       </div>
 
-      <div className="lg:min-h-screen flex items-center justify-center">
-        <div className="flex flex-col justify-center items- bg-white py-0 lg:py-10 lg:px-16 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
+      <div className="flex justify-center items-center lg:min-h-screen">
+        <div className="flex flex-col justify-center items-center bg-white py-8 lg:px-12 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center lg:mb-2 mb-2">
-            Verify Your Identity
+            Verify Your Account
           </h2>
-          <p className="text-slate-600 text-center mb-6 text-base md:text-lg lg:text-xl">
-            Enter the code sent to your phone number to verify your identity.
+          <p className="text-gray-600 text-center mb-6 text-base md:text-lg lg:text-xl">
+            Enter the 6-digit verification code sent to your phone number.
           </p>
-          <form onSubmit={handleVerification}>
-            {/* Use the reusable CodeInput component */}
-            <CodeInput
-              codeLength={6}
-              onCodeChange={setVerificationCode} // Update the verification code state
-            />
+          <form onSubmit={handleSubmit} className="w-full space-y-2">
+            {/* {showVerificationMessage && (
+              <p className="text-primary mt-1">
+                Verification code sent to {phone_no}
+              </p>
+            )} */}
+
+            {/* {codeSent && ( */}
+            <>
+              <CodeInput
+                codeLength={6}
+                onCodeChange={setVerificationCode} // Update the verification code state
+              />
+              <button
+                type="button"
+                onClick={handleRefreshCode}
+                className="text-primary text-sm mt-2 hover:underline"
+                disabled={countdown > 0} // Disable refresh until countdown is over
+              >
+                {countdown > 0 ? `${countdown}s` : 'Resend OTP'}
+              </button>
+            </>
+            {/* )} */}
 
             <button
               type="submit"
-              className={`w-full bg-primary text-black font-semibold py-2 px-4 mt-4 transition duration-300 text-base md:text-lg lg:text-xl md:py-3 lg:py-4
+              className={`w-full bg-primary text-black font-semibold py-2 px-4 transition duration-300 text-base md:text-lg lg:text-xl md:py-3 lg:py-4
                 ${isSubmitting ? 'bg-gray cursor-not-allowed' : 'hover:bg-transparent hover:border hover:border-primary hover:text-primary'}`}
               disabled={isSubmitting} // Disable the button during submission
             >
@@ -158,17 +152,10 @@ const PasswordResetVerification = () => {
               </p>
             )}
           </form>
-          <p
-            className="mt-2 text-primary hover:underline cursor-pointer"
-            onClick={handleRefreshCode}
-          >
-            Resend Code
-          </p>
-          {error && <p className="mt-4 text-red-600">{error}</p>}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default PasswordResetVerification;
+export default VerifyOTP;

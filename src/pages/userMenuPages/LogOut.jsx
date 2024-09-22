@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutImage from '/image/logout.svg';
 
+const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
 // Reusable Modal Component
 const Modal = ({ show, onClose, onConfirm }) => {
   if (!show) return null;
@@ -52,10 +54,25 @@ const Logout = () => {
     navigate('/dashboard'); // Redirect to the dashboard or any other page
   };
 
-  const handleConfirm = () => {
-    // Implement the logout logic here
-    console.log('User logged out');
-    navigate('/');
+  const handleConfirm = async () => {
+    try {
+      // Send POST request to logout route
+      const response = await fetch(`${API_BASE_URL}/user/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (response.ok) {
+        // Successfully logged out
+        console.log('User logged out');
+        navigate('/'); // Navigate to home or login page after logout
+      } else {
+        const errorData = await response.json();
+        console.error('Logout failed:', errorData.message);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   return (

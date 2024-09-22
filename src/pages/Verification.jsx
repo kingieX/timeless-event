@@ -1,110 +1,155 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import Logo from '/image/logo.svg';
-import CodeInput from '../components/CodeInput';
+import Cookies from 'js-cookie';
 
 const VerificationPage = () => {
   const [phone_number, setPhoneNumber] = useState(''); // Store the phone number
-  const [codeSent, setCodeSent] = useState(false); // Track if code was sent
-  const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
-  const [countdown, setCountdown] = useState(0); // Timer countdown for the resend code button
+  const [loading, setLoading] = useState(false); // Track loading state
   const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
-  const [verificationCode, setVerificationCode] = useState(''); // Store the verification code
+  const [error, setError] = useState(null); // Handle errors
   const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (codeSent) {
-      setShowVerificationMessage(false); // Hide the message when the countdown ends
+  // Retrieve email and password from cookies
+  const email = Cookies.get('email');
+  const password = Cookies.get('password');
+
+  // Function to handle the complete POST request to register the user
+  const handleRegisterUser = async () => {
+    try {
+      setLoading(true);
+
+      const requestBody = {
+        fullname: '', // Fill this as needed
+        role: 'user',
+        reason_for_use: 'work', // Fill this as needed
+        email: email,
+        phone_no: phone_number,
+        is_active: false,
+        provider: '', // Fill this as needed
+        provider_id: '', // Fill this as needed
+        avatar_url: '', // Fill this as needed
+        password: password,
+      };
+
+      console.log('Request Body:', requestBody);
+
+      // Make POST request to register the user
+      const response = await fetch(`${BASE_URL}/user/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const responseData = await response.json(); // Parse the response
+      console.log('Server Response:', responseData); // Log the server's response
+
+      if (response.ok) {
+        // If the registration is successful, fetch the user ID using the email
+        await handlePostRegistration();
+      } else {
+        // If registration fails due to email duplication or another error
+        setError(
+          'phone number already exist, please input a new phone number.'
+        );
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      setError('An error occurred during registration.');
+    } finally {
+      setLoading(false); // Stop loading
     }
-  }, [countdown, codeSent]);
+  };
+
+  // Function to handle post-registration tasks
+  const handlePostRegistration = async () => {
+    try {
+      // Send GET request to retrieve user data by email
+      const userResponse = await fetch(
+        `${BASE_URL}/user/email?email=${email}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        console.log('Full User Response Data:', userData); // Log the response for debugging
+
+        // Extract the user_id from the response
+        const userId = userData?.user_id; // Adjust based on the response structure
+
+        // Check if user_id exists
+        if (!userId) {
+          console.error('User ID not found in the response.');
+          setError('User ID not found in the response.');
+          return; // Stop further execution if user_id is missing
+        }
+
+        // Store userId and phone_number in cookies
+        Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
+        Cookies.set('phone_no', phone_number, {
+          secure: true,
+          sameSite: 'Strict',
+        });
+
+        // Send OTP to phone number using the userId
+        await handleSendOtp(userId, phone_number);
+
+        // Navigate to the OTP verification page
+        navigate('/otp-verification');
+      } else {
+        setError('Failed to retrieve user after registration.');
+      }
+    } catch (error) {
+      console.error('Error fetching user data after registration:', error);
+      setError('An error occurred after registration.');
+    }
+  };
 
   // Function to send OTP
-  const handleSendCode = async () => {
-    if (phone_number && phone_number.length >= 8) {
-      // setCodeSent(true);
-      // setShowVerificationMessage(true);
-      try {
-        const response = await fetch(`${BASE_URL}/user/send-otp`, {
+  const handleSendOtp = async (userId, phone_no) => {
+    try {
+      const otpResponse = await fetch(
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${phone_no}&otp_type=sms`,
+        {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ phone_no: phone_number }),
-        });
-        console.log(phone_number);
-
-        if (response.ok) {
-          setCodeSent(true);
-          setCountdown(60); // Start 60 seconds countdown
-          setShowVerificationMessage(true);
-          console.log(`Code sent to ${phone_number}`);
-        } else {
-          console.error('Failed to send OTP');
         }
-      } catch (error) {
-        console.error('Error sending OTP:', error);
+      );
+
+      if (otpResponse.ok) {
+        setLoading(true);
+        setShowVerificationMessage(true); // Show verification message
+      } else {
+        setError('Failed to send OTP.');
       }
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      setError('An error occurred while sending OTP.');
+    }
+  };
+
+  // Handle form submission
+  const handleFormSubmit = async e => {
+    e.preventDefault();
+
+    if (phone_number && phone_number.length >= 8) {
+      // Make a POST request to register user and then send OTP
+      await handleRegisterUser();
     } else {
       alert('Please enter a valid phone number.');
-    }
-  };
-
-  // Function to verify OTP
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch(`${BASE_URL}/user/verify-otp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          phone_no: phone_number,
-          otp: verificationCode, // Pass the verification code
-        }),
-      });
-
-      if (response.ok) {
-        console.log('Phone verified successfully');
-        navigate('/signup/onboard'); // Navigate to the onboard page
-      } else {
-        console.error('Failed to verify OTP');
-      }
-    } catch (error) {
-      console.error('Error verifying OTP:', error);
-    }
-
-    setIsSubmitting(false); // Reset submission state
-  };
-
-  // Function to refresh OTP (resend the code)
-  const handleRefreshCode = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/user/refresh`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ phone_no: phone_number }),
-      });
-
-      if (response.ok) {
-        setCountdown(60); // Restart countdown after refresh
-        console.log('OTP refreshed');
-      } else {
-        console.error('Failed to refresh OTP');
-      }
-    } catch (error) {
-      console.error('Error refreshing OTP:', error);
     }
   };
 
@@ -128,7 +173,7 @@ const VerificationPage = () => {
           <p className="text-gray-600 text-center mb-6 text-base md:text-lg lg:text-xl">
             Enter your phone number to receive a 6-digit verification code.
           </p>
-          <form onSubmit={handleSubmit} className="w-full space-y-2">
+          <form className="w-full space-y-2" onSubmit={handleFormSubmit}>
             <div className="w-full flex justify-between items-center border border-gray p-2">
               <PhoneInput
                 country={'ng'}
@@ -142,45 +187,29 @@ const VerificationPage = () => {
                   paddingLeft: '58px',
                 }} // Removed border, padded for the flag and code
               />
-              <button
-                type="button"
-                onClick={handleSendCode}
-                className={`pl-4 lg:text-lg text-sm whitespace-nowrap ${countdown > 0 ? 'text-black' : 'text-primary'}`}
-                disabled={countdown > 0}
-              >
-                {countdown > 0 ? `${countdown}s` : 'Send Code'}
-              </button>
             </div>
-            {showVerificationMessage && (
-              <p className="text-primary mt-1">Verification code sent</p>
-            )}
-
-            {codeSent && (
-              <>
-                <CodeInput
-                  codeLength={6}
-                  onCodeChange={setVerificationCode} // Update the verification code state
-                />
-                <button
-                  type="button"
-                  onClick={handleRefreshCode}
-                  className="text-primary text-sm mt-2 hover:underline"
-                  disabled={countdown > 0} // Disable refresh until countdown is over
-                >
-                  Resend OTP
-                </button>
-              </>
-            )}
 
             <button
               type="submit"
-              className={`w-full bg-primary text-black font-semibold py-2 px-4 transition duration-300 text-base md:text-lg lg:text-xl md:py-3 lg:py-4
-                ${isSubmitting ? 'bg-gray cursor-not-allowed' : 'hover:bg-transparent hover:border hover:border-primary hover:text-primary'}`}
-              disabled={isSubmitting} // Disable the button during submission
+              className="bg-primary text-black font-semibold py-2 px-4 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              disabled={loading}
             >
-              {isSubmitting ? 'Verifying...' : 'Verify'}
+              {loading ? 'Sending Code...' : 'Send Code'}
             </button>
+            {showVerificationMessage && (
+              <p className="text-primary mt-1">Verification code sent</p>
+            )}
+            {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           </form>
+          <p className="lg:text-left text-center text-gray-700 mt-4">
+            Already signed up?{' '}
+            <Link
+              to="/login"
+              className="text-primary font-semibold hover:underline"
+            >
+              Go to login
+            </Link>
+          </p>
         </div>
       </div>
     </>

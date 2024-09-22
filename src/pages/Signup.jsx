@@ -5,6 +5,7 @@ import Logo from '/image/logo.png';
 import FloatingLabelInput from '../components/FloatingLabelInput';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Cookies from 'js-cookie';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -23,6 +24,26 @@ const SignUp = () => {
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
+  // Function to check if email exists
+  const checkEmailExists = async email => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/user/email?email=${email}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      if (response.status === 200) {
+        return true; // Email already exists
+      }
+      return false; // Email doesn't exist
+    } catch (error) {
+      setError('There was an issue checking your email. Please try again.');
+      return true; // Assuming true to prevent proceeding with invalid state
+    }
+  };
+
   // Handle normal form submission
   const handleFormSubmit = async e => {
     e.preventDefault();
@@ -38,43 +59,24 @@ const SignUp = () => {
       return;
     }
 
-    const data = {
-      fullname: '',
-      role: '',
-      reason_for_use: '',
-      email: email,
-      phone_no: '',
-      is_active: true,
-      provider: '',
-      provider_id: '',
-      avatar_url: '',
-      password: password,
-    };
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/user/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        // Navigate to the verification page
-        navigate('/verification');
-        console.log('User registered successfully');
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Something went wrong, please try again');
-        console.error('Error details:', errorData);
-      }
-    } catch (err) {
-      setError('Network error, please try again later.');
-      console.error('An error occurred:', err);
-    } finally {
+    // Check if email already exists
+    const emailExists = await checkEmailExists(email);
+    if (emailExists) {
+      setError('Email already exists.');
       setLoading(false);
+      return;
     }
+
+    // Store email and password in secure cookies
+    Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
+    Cookies.set('password', password, { secure: true, sameSite: 'Strict' });
+
+    // Log the values
+    console.log('Email from cookies:', email);
+    console.log('Password from cookies:', password);
+
+    // Navigate to next page to complete other details
+    navigate('/verification');
   };
 
   // Handle Google sign-up

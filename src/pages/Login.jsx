@@ -9,51 +9,71 @@ import { useState } from 'react';
 
 const Login = () => {
   const navigate = useNavigate();
-
-  // Set your API base URL here
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
-  // State to capture form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Handle normal form submission
+  // Handle form submission
   const handleFormSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // Create a URL-encoded string from form data
-    const data = new URLSearchParams({
-      grant_type: 'password',
-      username: email,
-      password: password,
-      scope: '',
-      client_id: 'string', // Replace 'string' with actual client ID if necessary
-      client_secret: 'string', // Replace 'string' with actual client secret if necessary
-    });
-
     try {
-      const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded', // Set the correct content type
-          Accept: 'application/json',
-        },
-        body: data.toString(), // Send URL-encoded data
-      });
+      // Fetch user details by email
+      const userResponse = await fetch(
+        `${API_BASE_URL}/user/email?email=${email}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
 
-      if (response.ok) {
-        // Navigate to the verification page
-        navigate('/app');
-        console.log('Login successful');
+      if (!userResponse.ok) {
+        throw new Error('Failed to retrieve user details');
+      }
+
+      const userData = await userResponse.json();
+      console.log('User Data:', userData);
+
+      if (userData.is_active === false) {
+        // Redirect to the verification page if user is not active
+        navigate('/verification');
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Something went wrong, please try again');
-        console.error('Error details:', errorData);
+        // Proceed to authenticate the user
+        const data = new URLSearchParams({
+          grant_type: 'password',
+          username: email,
+          password: password,
+          scope: '',
+          client_id: 'string', // Replace with actual client ID
+          client_secret: 'string', // Replace with actual client secret
+        });
+
+        const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json',
+          },
+          body: data.toString(),
+        });
+
+        const postData = await response.json();
+        console.log('Server Response:', postData);
+
+        if (response.ok) {
+          // Navigate to the app page if login is successful
+          navigate('/app');
+        } else {
+          const errorMessage =
+            postData?.message || 'Incorrect email or password.';
+          setError(errorMessage);
+        }
       }
     } catch (err) {
       setError('Network error, please try again later.');
@@ -67,15 +87,13 @@ const Login = () => {
     navigate('/forgot-password');
   };
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(prevState => !prevState);
   };
 
   return (
-    <div className="">
+    <div>
       <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
-        {/* Logo and Name */}
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
           <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
@@ -102,7 +120,6 @@ const Login = () => {
             </div>
             <form className="space-y-6" onSubmit={handleFormSubmit}>
               <div className="mb-4">
-                {/* Replace Email input with FloatingLabelInput */}
                 <FloatingLabelInput
                   label="Email"
                   type="email"
@@ -115,13 +132,12 @@ const Login = () => {
                 <div className="relative">
                   <FloatingLabelInput
                     label="Password"
-                    type={showPassword ? 'text' : 'password'} // Dynamically change input type
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                   />
 
-                  {/* Icon for toggling password visibility */}
                   <span
                     className="absolute right-3 top-4 cursor-pointer"
                     onClick={togglePasswordVisibility}

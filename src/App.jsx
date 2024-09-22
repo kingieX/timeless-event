@@ -63,6 +63,7 @@ import LogOut from './pages/userMenuPages/LogOut';
 import PasswordResetVerification from './components/Reset-password-flow/PasswordResetVerification';
 import ResetPassword from './components/Reset-password-flow/ResetPassword';
 import SuccessPage from './components/Reset-password-flow/SuccessPage';
+import VerifyOTP from './pages/VerifyOTP';
 
 const App = () => {
   return (
@@ -88,6 +89,7 @@ const App = () => {
 
         {/* Reset Password */}
         <Route path="/forgot-password" element={<ForgottenPassword />} />
+        <Route path="/otp-verification" element={<VerifyOTP />} />
         <Route path="/verify" element={<PasswordResetVerification />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/success" element={<SuccessPage />} />

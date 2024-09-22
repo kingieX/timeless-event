@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
 import FloatingLabelInput from '../FloatingLabelInput';
+import Cookies from 'js-cookie'; // Assuming you're using js-cookie for cookie handling
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -9,12 +10,47 @@ const ResetPassword = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleResetPassword = e => {
+  const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  // Handle the password reset form submission
+  const handleResetPassword = async e => {
     e.preventDefault();
-    if (newPassword === confirmPassword) {
-      navigate('/success');
-    } else {
+
+    // Retrieve email from cookies
+    const email = Cookies.get('email');
+    if (!email) {
+      setErrorMessage('Email not found in cookies.');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
       setErrorMessage('Passwords do not match.');
+      return;
+    }
+
+    try {
+      const requestBody = {
+        email: email,
+        password: newPassword,
+      };
+
+      // POST request to reset the password
+      const response = await fetch(`${API_BASE_URL}/user/change-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
+        // Navigate to success page if the password was successfully reset
+        navigate('/success');
+      } else {
+        const responseData = await response.json();
+        setErrorMessage(responseData?.message || 'Failed to reset password.');
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred. Please try again.');
+      console.error(error);
     }
   };
 
@@ -31,7 +67,7 @@ const ResetPassword = () => {
       </div>
 
       <div className="lg:min-h-screen flex items-center justify-center">
-        <div className="flex flex-col justify-center items- bg-white py-0 lg:py-10 lg:px-16 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
+        <div className="flex flex-col justify-center bg-white py-0 lg:py-10 lg:px-16 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center lg:mb-8 mb-6">
             Reset Your Password
           </h2>
