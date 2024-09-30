@@ -13,6 +13,7 @@ import Upgrade from './pages/navigationPages/Upgrade';
 
 // Reset Password Logic
 import VerificationPage from './pages/Verification';
+import LoginVerificationPage from './pages/LoginVerification';
 import ForgottenPassword from './components/Reset-password-flow/ForgottenPassword';
 
 // Onboarding pages
@@ -73,7 +74,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
+        {/* login process */}
         <Route path="/login" element={<Login />} />
+        <Route path="/loginverification" element={<LoginVerificationPage />} />
+
         <Route path="/features" element={<Features />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/pricing" element={<Pricing />} />

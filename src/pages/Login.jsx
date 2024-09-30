@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import loginImage from '/image/login.png';
@@ -6,6 +5,7 @@ import Logo from '/image/logo.png';
 import FloatingLabelInput from '../components/FloatingLabelInput';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,59 +24,53 @@ const Login = () => {
     setError(null);
 
     try {
-      // Fetch user details by email
-      const userResponse = await fetch(
-        `${API_BASE_URL}/user/email?email=${email}`,
-        {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
+      const data = new URLSearchParams({
+        grant_type: 'password',
+        username: email,
+        password: password,
+        scope: '',
+        client_id: 'string', // Replace with actual client ID
+        client_secret: 'string', // Replace with actual client secret
+      });
+
+      // Authenticate the user
+      const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: data.toString(),
+      });
+
+      const postData = await response.json();
+      console.log('Server Response:', postData);
+
+      if (response.ok) {
+        // Extract the userId from the server response
+        const userId = postData?.user_id || postData?.id; // Assuming the response has a field like 'userId' or 'id'
+
+        if (!userId) {
+          throw new Error('User ID is missing in the server response.');
         }
-      );
 
-      if (!userResponse.ok) {
-        throw new Error('Failed to retrieve user details');
-      }
+        // Store email and userId in secure cookies
+        Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
+        Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
 
-      const userData = await userResponse.json();
-      console.log('User Data:', userData);
-
-      if (userData.is_active === false) {
-        // Redirect to the verification page if user is not active
-        navigate('/verification');
-      } else {
-        // Proceed to authenticate the user
-        const data = new URLSearchParams({
-          grant_type: 'password',
-          username: email,
-          password: password,
-          scope: '',
-          client_id: 'string', // Replace with actual client ID
-          client_secret: 'string', // Replace with actual client secret
-        });
-
-        const response = await fetch(`${API_BASE_URL}/user/authenticate`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
-          },
-          body: data.toString(),
-        });
-
-        const postData = await response.json();
-        console.log('Server Response:', postData);
-
-        if (response.ok) {
-          // Navigate to the app page if login is successful
+        // Check if the user is active
+        if (postData.is_active) {
           navigate('/app');
         } else {
-          const errorMessage =
-            postData?.message || 'Incorrect email or password.';
-          setError(errorMessage);
+          navigate('/loginverification');
         }
+      } else {
+        const errorMessage =
+          postData?.message || 'Incorrect email or password.';
+        setError(errorMessage);
       }
     } catch (err) {
-      setError('Network error, please try again later.');
+      setError('An error occurred.');
       console.error('An error occurred:', err);
     } finally {
       setLoading(false);
