@@ -19,7 +19,7 @@ const ForgottenPassword = () => {
     try {
       // Send GET request to retrieve user data by email
       const userResponse = await fetch(
-        `${BASE_URL}/user/phone_no?phone_no=${phone_number}`,
+        `${BASE_URL}/user/check_user?phone_no=${phone_number}`,
         {
           method: 'GET',
           headers: {
@@ -27,6 +27,8 @@ const ForgottenPassword = () => {
           },
         }
       );
+
+      console.log(phone_number);
 
       if (userResponse.ok) {
         const userData = await userResponse.json();
@@ -71,9 +73,17 @@ const ForgottenPassword = () => {
 
   // Function to send OTP
   const handleSendOtp = async (userId, phone_no) => {
+    setLoading(true);
+
     try {
+      let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
+      // Check if the phone number already includes a '+', if not, add it
+      if (!formattedPhoneNo.startsWith('+')) {
+        formattedPhoneNo = `+${formattedPhoneNo}`;
+      }
+
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${phone_no}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${formattedPhoneNo}&otp_type=sms`,
         {
           method: 'POST',
           headers: {
@@ -81,6 +91,8 @@ const ForgottenPassword = () => {
           },
         }
       );
+
+      console.log('Phone gotten for ForgottenPassword', formattedPhoneNo);
 
       if (otpResponse.ok) {
         setLoading(true);
@@ -91,6 +103,8 @@ const ForgottenPassword = () => {
     } catch (error) {
       console.error('Error sending OTP:', error);
       setMessage('An error occurred while sending OTP.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 

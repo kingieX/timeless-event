@@ -147,8 +147,8 @@ const VerifyOTP = () => {
               {isSubmitting ? 'Verifying...' : 'Verify'}
             </button>
             {showVerificationMessage && (
-              <p className="text-primary mt-1">
-                Verification code sent to {phone_no}
+              <p className="text-green-500 mt-1">
+                Verification code sent to +{phone_no}
               </p>
             )}
           </form>

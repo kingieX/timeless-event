@@ -13,12 +13,12 @@ import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { FaRegCalendarCheck } from 'react-icons/fa6';
 import { TiFolder } from 'react-icons/ti';
 import { MdWorkOutline } from 'react-icons/md';
-import { SlHome } from 'react-icons/sl';
 import {
   IoMdArrowDropdown,
   IoMdArrowDropup,
   IoMdNotificationsOutline,
 } from 'react-icons/io';
+import { CgProfile } from 'react-icons/cg';
 
 const menuItems = [
   {
@@ -78,37 +78,20 @@ const menuItems = [
     icon: FaRegCalendarCheck,
     link: '/app/completed',
   },
-  {
-    name: 'My Projects',
-    icon: TiFolder,
-    link: '#',
-    subMenu: [
-      {
-        name: 'My work',
-        icon: MdWorkOutline,
-        link: '/app/my-project/my-work',
-      },
-      {
-        name: 'My home',
-        icon: SlHome,
-        link: '/app/my-project/my-home',
-      },
-    ],
-  },
 ];
 
-const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
+const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  // State to control the modal visibility
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // State to control the visibility of different modals
+  const [isUserMenuModalOpen, setIsUserMenuModalOpen] = useState(false);
 
   // State to manage which submenu is open
   const [openSubMenus, setOpenSubMenus] = useState({});
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const toggleUserMenuModal = () => {
+    setIsUserMenuModalOpen(!isUserMenuModalOpen);
   };
 
   const toggleSubMenu = index => {
@@ -147,7 +130,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 />
               ) : (
                 <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                  {userData.username.charAt(0).toUpperCase()}
+                  <CgProfile className="w-6 h-6 text-black" />
                 </div>
               )}
 
@@ -155,14 +138,14 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 <h4 className="font-semibold">{userData.username}</h4>
                 <button
                   className="text-gray-500 flex items-center"
-                  onClick={toggleModal}
+                  onClick={toggleUserMenuModal}
                 >
                   <IoMdArrowDropdown className="cursor-pointer w-6 h-6" />
                 </button>
 
-                {isModalOpen && (
+                {isUserMenuModalOpen && (
                   <UserMenuModal
-                    toggleModal={toggleModal}
+                    toggleModal={toggleUserMenuModal}
                     onToggleSidebar={onToggleSidebar}
                   />
                 )}
@@ -257,6 +240,30 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen }) => {
                 )}
               </div>
             ))}
+
+            {/* Workspace Section */}
+            <div className="border-t border-gray mt-4">
+              <Link
+                to="/app/workspace"
+                className="flex items-center px-4 py-3 hover:bg-blue-50 cursor-pointer"
+              >
+                <MdWorkOutline className="w-6 h-6 mr-4" />
+                <span>Workspace</span>
+                <IoAddCircleOutline className="w-6 h-6 ml-auto" />
+              </Link>
+
+              {/* Render dynamic workspaces */}
+              {workspaces.map((workspace, index) => (
+                <Link
+                  key={index}
+                  to={`/app/workspace/${workspace.id}`}
+                  className="flex items-center pl-10 px-4 py-2 hover:bg-blue-50 cursor-pointer"
+                >
+                  <TiFolder className="w-6 h-6 mr-4" />
+                  <span>{workspace.name}</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </>
       )}

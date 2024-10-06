@@ -1,6 +1,10 @@
 // import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '/image/logo.svg';
+import Cookies from 'js-cookie';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useState } from 'react';
 
 const industryOptions = [
   { value: 'agriculture', label: 'Agriculture' },
@@ -58,14 +62,68 @@ const organizationSizeOptions = [
 
 const Onboard4 = () => {
   const navigate = useNavigate();
+  // State to store error message
+  const [errorMessage, setErrorMessage] = useState('');
 
-  // const handleSkipClick = () => {
-  //   navigate('/dashboard');
-  // };
+  const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
+
+  // Retrieve team_space_id from cookies
+  const teamSpaceId = Cookies.get('team_space_id');
+
+  // Formik for form handling
+  const formik = useFormik({
+    initialValues: {
+      workIndustry: '',
+      workType: '',
+      organizationSize: '',
+      allowTeamDiscovery: true,
+    },
+    validationSchema: Yup.object({
+      workIndustry: Yup.string().required('Industry is required'),
+      workType: Yup.string().required('Work type is required'),
+      organizationSize: Yup.string().required('Organization size is required'),
+    }),
+    onSubmit: async values => {
+      try {
+        const body = {
+          team_name: 'Placeholder Team Name', // Use actual team name or fetch it if needed
+          work_industry: values.workIndustry,
+          user_work_type: values.workType,
+          organization_size: values.organizationSize,
+          allow_team_discovery: values.allowTeamDiscovery,
+        };
+
+        const response = await fetch(
+          `${BASE_URL}/team/?team_space_id=${teamSpaceId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token_id}`, // Pass token_id in the header
+            },
+            body: JSON.stringify(body),
+          }
+        );
+
+        if (response.ok) {
+          // Navigate to the next page on success
+          navigate('/signup/invite');
+        } else {
+          const errorData = await response.json();
+          console.error('Failed to submit data:', errorData);
+          setErrorMessage('Failed to submit the form. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        setErrorMessage('An error occurred. Please try again.');
+      }
+    },
+  });
 
   const handleButtonClick = () => {
     navigate('/signup/invite');
   };
+
   return (
     <div>
       <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
@@ -87,80 +145,106 @@ const Onboard4 = () => {
             Your answer will help us tailor your overall experience.
           </p>
 
-          {/* Industry option */}
-          <div className="lg:w-3/4 w-full mb-6">
-            <label className="block text-gray-700">
-              What industry do you work in?
-            </label>
-            <select
-              id="options"
-              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            >
-              {/* <option value="" disabled>
-                Select role
-              </option> */}
-              {industryOptions.map(role => (
-                <option key={role.value} value={role.value}>
-                  {role.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <form onSubmit={formik.handleSubmit} className="lg:w-3/4 w-full">
+            {/* Error display */}
+            {errorMessage && (
+              <div className="lg:w-3/4 w-full mb-4 p-2 bg-red-100 text-red-500 border border-red-400 rounded-md">
+                {errorMessage}
+              </div>
+            )}
 
-          {/* work options */}
-          <div className="lg:w-3/4 w-full mb-6">
-            <label className="block text-gray-700">
-              What industry do you work in?
-            </label>
-            <select
-              id="options"
-              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            >
-              {/* <option value="" disabled>
-                Select role
-              </option> */}
-              {workOptions.map(role => (
-                <option key={role.value} value={role.value}>
-                  {role.label}
+            {/* Industry option */}
+            <div className="mb-6">
+              <label className="block text-gray-700">
+                What industry do you work in?
+              </label>
+              <select
+                id="workIndustry"
+                name="workIndustry"
+                className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+                value={formik.values.workIndustry}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              >
+                <option value="" disabled>
+                  Select industry
                 </option>
-              ))}
-            </select>
-          </div>
+                {industryOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {formik.touched.workIndustry && formik.errors.workIndustry ? (
+                <div className="text-red-500">{formik.errors.workIndustry}</div>
+              ) : null}
+            </div>
 
-          {/* Organization size options */}
-          <div className="lg:w-3/4 w-full mb-8">
-            <label className="block text-gray-700">
-              How big is your Organisation?
-            </label>
-            <select
-              id="options"
-              className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
-            >
-              {/* <option value="" disabled>
-                Select role
-              </option> */}
-              {organizationSizeOptions.map(role => (
-                <option key={role.value} value={role.value}>
-                  {role.label}
+            {/* Work type option */}
+            <div className="mb-6">
+              <label className="block text-gray-700">What is your role?</label>
+              <select
+                id="workType"
+                name="workType"
+                className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+                value={formik.values.workType}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              >
+                <option value="" disabled>
+                  Select role
                 </option>
-              ))}
-            </select>
-          </div>
+                {workOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {formik.touched.workType && formik.errors.workType ? (
+                <div className="text-red-500">{formik.errors.workType}</div>
+              ) : null}
+            </div>
 
-          <div className="lg:w-3/4 w-full flex justify-center">
-            <button
-              onClick={handleButtonClick}
-              className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
-            >
-              Continue
-            </button>
-            {/* <button
-              onClick={handleSkipClick}
-              className="lg:w-1/2 w-full border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
-            >
-              Skip
-            </button> */}
-          </div>
+            {/* Organization size option */}
+            <div className="mb-8">
+              <label className="block text-gray-700">
+                How big is your Organization?
+              </label>
+              <select
+                id="organizationSize"
+                name="organizationSize"
+                className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+                value={formik.values.organizationSize}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              >
+                <option value="" disabled>
+                  Select organization size
+                </option>
+                {organizationSizeOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {formik.touched.organizationSize &&
+              formik.errors.organizationSize ? (
+                <div className="text-red-500">
+                  {formik.errors.organizationSize}
+                </div>
+              ) : null}
+            </div>
+
+            {/* Continue Button */}
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              >
+                Continue
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

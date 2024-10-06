@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
 import { Outlet, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
+const fullname = Cookies.get('fullname');
 const userData = {
-  username: 'Kingsley',
+  username: fullname || 'Username',
   profileImage: '',
 };
 
@@ -13,6 +15,18 @@ const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [currentPageTitle, setCurrentPageTitle] = useState('');
+  const [workspaces, setWorkspaces] = useState([]);
+
+  const fetchWorkspaces = async () => {
+    // Replace with actual API call
+    const workspaceData = await fetch('/api/workspaces');
+    const data = await workspaceData.json();
+    setWorkspaces(data.workspaces);
+  };
+
+  useEffect(() => {
+    fetchWorkspaces();
+  }, []);
 
   const headerRef = useRef(null);
   const stickyHeaderRef = useRef(null);
@@ -106,6 +120,7 @@ const Dashboard = () => {
             userData={userData}
             onToggleSidebar={handleToggleSidebar}
             isSidebarOpen={isSidebarOpen}
+            workspaces={workspaces}
           />
         </div>
 

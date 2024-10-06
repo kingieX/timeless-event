@@ -47,22 +47,72 @@ const Login = () => {
       console.log('Server Response:', postData);
 
       if (response.ok) {
-        // Extract the userId from the server response
-        const userId = postData?.user_id || postData?.id; // Assuming the response has a field like 'userId' or 'id'
+        // Extract tokens and userId from the server response
+        const token_id = postData?.token_id;
+        const refresh_token = postData?.refresh_token;
+        const userId = postData?.user_id || postData?.id;
 
-        if (!userId) {
-          throw new Error('User ID is missing in the server response.');
+        if (!userId || !token_id || !refresh_token) {
+          throw new Error('Missing user ID or tokens in the server response.');
         }
 
-        // Store email and userId in secure cookies
+        // Store tokens and userId in secure cookies
         Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
         Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
+        Cookies.set('token_id', token_id, { secure: true, sameSite: 'Strict' });
+        Cookies.set('refresh_token', refresh_token, {
+          secure: true,
+          sameSite: 'Strict',
+        });
 
-        // Check if the user is active
-        if (postData.is_active) {
-          navigate('/app');
+        // Fetch user details using the userId
+        const userResponse = await fetch(`${API_BASE_URL}/user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: `Bearer ${token_id}`, // Pass token_id in the header
+          },
+        });
+
+        const userDetails = await userResponse.json();
+        console.log('User Details:', userDetails);
+
+        if (userResponse.ok) {
+          // Store all user details in cookies
+          Cookies.set('fullname', userDetails.fullname, {
+            secure: true,
+            sameSite: 'Strict',
+          });
+          Cookies.set('role', userDetails.role, {
+            secure: true,
+            sameSite: 'Strict',
+          });
+          Cookies.set('reason_for_use', userDetails.reason_for_use, {
+            secure: true,
+            sameSite: 'Strict',
+          });
+          Cookies.set('phone_no', userDetails.phone_no, {
+            secure: true,
+            sameSite: 'Strict',
+          });
+          Cookies.set('is_active', userDetails.is_active, {
+            secure: true,
+            sameSite: 'Strict',
+          });
+          Cookies.set('avatar_url', userDetails.avatar_url, {
+            secure: true,
+            sameSite: 'Strict',
+          });
+
+          // Check if the user is active
+          if (userDetails.is_active === true) {
+            navigate('/app');
+          } else {
+            navigate('/loginverification');
+          }
         } else {
-          navigate('/loginverification');
+          throw new Error('Failed to fetch user details.');
         }
       } else {
         const errorMessage =

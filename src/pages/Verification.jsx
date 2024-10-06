@@ -23,12 +23,18 @@ const VerificationPage = () => {
     try {
       setLoading(true);
 
+      // Ensure the phone number starts with a '+'
+      let formattedPhoneNo = phone_number.trim();
+      if (!formattedPhoneNo.startsWith('+')) {
+        formattedPhoneNo = `+${formattedPhoneNo}`;
+      }
+
       const requestBody = {
         fullname: '', // Fill this as needed
         role: 'user',
         reason_for_use: 'work', // Fill this as needed
         email: email,
-        phone_no: phone_number,
+        phone_no: formattedPhoneNo,
         is_active: false,
         provider: '', // Fill this as needed
         provider_id: '', // Fill this as needed
@@ -43,6 +49,7 @@ const VerificationPage = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          // Authorization: `Bearer ${token_id}`, // Pass token_id in the header
         },
         body: JSON.stringify(requestBody),
       });
@@ -119,8 +126,14 @@ const VerificationPage = () => {
   // Function to send OTP
   const handleSendOtp = async (userId, phone_no) => {
     try {
+      let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
+      // Check if the phone number already includes a '+', if not, add it
+      if (!formattedPhoneNo.startsWith('+')) {
+        formattedPhoneNo = `+${formattedPhoneNo}`;
+      }
+
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${phone_no}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${formattedPhoneNo}&otp_type=sms`,
         {
           method: 'POST',
           headers: {
@@ -128,6 +141,8 @@ const VerificationPage = () => {
           },
         }
       );
+
+      console.log('For sign up verification', formattedPhoneNo);
 
       if (otpResponse.ok) {
         setLoading(true);

@@ -38,8 +38,8 @@ import VendorMessage from './pages/sidebarMenuPages/inbox/VendorMessage';
 import RsvpTracking from './pages/sidebarMenuPages/inbox/RsvpTracking';
 import Today from './pages/sidebarMenuPages/Today';
 import Upcoming from './pages/sidebarMenuPages/Upcoming';
-import MyWork from './pages/sidebarMenuPages/myProject/MyWork';
-import MyHome from './pages/sidebarMenuPages/myProject/MyHome';
+import MyWork from './pages/sidebarMenuPages/workspace/MyWork';
+import MyHome from './pages/sidebarMenuPages/workspace/MyHome';
 import Completed from './pages/sidebarMenuPages/Completed';
 import Notification from './pages/Notification';
 
@@ -65,6 +65,7 @@ import PasswordResetVerification from './components/Reset-password-flow/Password
 import ResetPassword from './components/Reset-password-flow/ResetPassword';
 import SuccessPage from './components/Reset-password-flow/SuccessPage';
 import VerifyOTP from './pages/VerifyOTP';
+import WorkspacePage from './pages/sidebarMenuPages/workspace/WorkspacePage';
 
 const App = () => {
   return (
@@ -117,8 +118,11 @@ const App = () => {
           <Route path="inbox/rsvp-tracking" element={<RsvpTracking />} />
           <Route path="today" element={<Today />} />
           <Route path="upcoming" element={<Upcoming />} />
-          <Route path="my-project/my-work" element={<MyWork />} />
-          <Route path="my-project/my-home" element={<MyHome />} />
+
+          {/* Workspace route */}
+          <Route path="workspace" element={<WorkspacePage />} />
+          <Route path="workspace/my-work" element={<MyWork />} />
+          <Route path="workspace/my-home" element={<MyHome />} />
 
           {/* userMenu routes */}
           <Route path="tasks" element={<Task />} />

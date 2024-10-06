@@ -22,6 +22,7 @@ const Onboard2 = () => {
   // Function to handle form submission
   const handleButtonClick = async () => {
     // Retrieve stored data from cookies
+    const userId = Cookies.get('userId');
     const email = Cookies.get('email');
     const password = Cookies.get('password');
     const fullName = Cookies.get('fullName');
@@ -46,14 +47,14 @@ const Onboard2 = () => {
 
     // Prepare the data to send in the POST request
     const postData = {
-      email: email,
-      password: password,
+      // email: email,
+      // password: password,
       fullname: fullName,
-      phone_no: phoneNo,
-      is_active: true,
       role: role,
-      provider: '',
+      phone_no: phoneNo,
       reason_for_use: 'work',
+      is_active: true,
+      provider: '',
       provider_id: '',
       avatar_url: '',
     };
@@ -62,10 +63,11 @@ const Onboard2 = () => {
 
     try {
       // Send a POST request to the register route
-      const response = await fetch(`${BASE_URL}/user/register`, {
-        method: 'POST',
+      const response = await fetch(`${BASE_URL}/user/${userId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token_id}`, // Pass token_id in the header
         },
         body: JSON.stringify(postData),
       });

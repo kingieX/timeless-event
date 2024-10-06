@@ -24,15 +24,24 @@ const LoginVerificationPage = () => {
     try {
       setLoading(true);
 
+      let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
+      // Check if the phone number already includes a '+', if not, add it
+      if (!formattedPhoneNo.startsWith('+')) {
+        formattedPhoneNo = `+${formattedPhoneNo}`;
+      }
+
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${phone_no}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${formattedPhoneNo}&otp_type=sms`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            // Authorization: `Bearer ${token_id}`, // Pass token_id in the header
           },
         }
       );
+
+      console.log('For login verification', formattedPhoneNo);
 
       if (otpResponse.ok) {
         setShowVerificationMessage(true); // Show verification message
