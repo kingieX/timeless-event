@@ -114,6 +114,9 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
     return menu.link === currentPath;
   };
 
+  // Username display length
+  const maxLength = 10;
+
   return (
     <div
       className={`lg:bg-sidebar lg:bg-opacity-10 bg-white h-screen z-50 ${isSidebarOpen ? 'w-fit' : 'w-0'} transition-width duration-300`}
@@ -135,7 +138,11 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
               )}
 
               <div className="flex ml-3 relative">
-                <h4 className="font-semibold">{userData.username}</h4>
+                <h4 className="font-semibold">
+                  {userData.username.length > maxLength
+                    ? `${userData.username.slice(0, maxLength)}...`
+                    : userData.username}
+                </h4>
                 <button
                   className="text-gray-500 flex items-center"
                   onClick={toggleUserMenuModal}

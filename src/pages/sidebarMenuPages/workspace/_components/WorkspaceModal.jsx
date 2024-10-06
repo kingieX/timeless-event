@@ -3,9 +3,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useState } from 'react';
 
 const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
 
   // Formik configuration with validation schema
   const formik = useFormik({
@@ -37,6 +39,8 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
       };
 
       try {
+        setIsSubmitting(true);
+
         const response = await axios.post(
           `${API_BASE_URL}/teamspace`,
           newWorkspace,
@@ -63,6 +67,9 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
             'An error occurred. Please try again.'
           );
         }
+      } finally {
+        // Set loading state back to false
+        setIsSubmitting(false);
       }
     },
   });
@@ -121,7 +128,7 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
               type="submit"
               className="bg-primary text-black font-semibold py-2 px-4 w- hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
-              Create
+              {isSubmitting ? 'Creating...' : 'Create'}
             </button>
           </div>
         </form>
