@@ -53,6 +53,7 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
 
         if (response.status === 201) {
           onCreateWorkspace(response.data); // Pass the created workspace data to the parent
+          console.log(response.data);
           onClose(); // Close the modal after successful creation
         }
       } catch (error) {
