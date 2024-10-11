@@ -21,7 +21,7 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
         .min(3, 'Workspace Name must be at least 3 characters'),
     }),
     onSubmit: async values => {
-      const token = Cookies.get('token_id'); // Retrieve token from cookies
+      const token = Cookies.get('access_token'); // Retrieve token from cookies
       const userId = Cookies.get('userId');
 
       if (!token) {
@@ -50,6 +50,8 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
             },
           }
         );
+
+        console.log();
 
         if (response.status === 201) {
           onCreateWorkspace(response.data); // Pass the created workspace data to the parent

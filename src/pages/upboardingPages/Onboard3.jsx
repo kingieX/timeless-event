@@ -12,6 +12,11 @@ const Onboard3 = () => {
 
   // Access userId from Cookies
   const userId = Cookies.get('userId');
+  // const access_token = Cookies.get('access_token'); // Get the access token from cookies
+
+  // if (!access_token) {
+  //   throw errorMessage('You do not have an access_token');
+  // }
 
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
@@ -37,7 +42,7 @@ const Onboard3 = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token_id}`, // Pass token_id in the header
+            // Authorization: `Bearer ${access_token}`, // Pass token_id in the header
           },
           body: JSON.stringify(body),
         });
@@ -47,7 +52,7 @@ const Onboard3 = () => {
           Cookies.set('team_space_id', data.team_space_id);
 
           // Handle successful team creation
-          navigate('/signup/about-team');
+          navigate('/signup/create-team');
         } else {
           // Handle non-successful response
           const errorData = await response.json();
@@ -76,7 +81,7 @@ const Onboard3 = () => {
       <div className="flex flex-col justify-center items-center mx-6">
         <div className="flex flex-col justify-center items-center lg:w-1/2 my-8 py-8 lg:pb-28 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
-            Create your team
+            Create your workspace
           </h2>
           {/* Display error message if it exists */}
           {errorMessage && (
@@ -87,7 +92,7 @@ const Onboard3 = () => {
           <div className="lg:w-3/4 w-full mb-12">
             {/* Replace regular input with FloatingLabelInput */}
             <FloatingLabelInput
-              label="Give your team a name"
+              label="Give your workspace a name"
               type="text"
               id="teamName"
               value={formik.values.teamName}

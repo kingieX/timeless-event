@@ -69,16 +69,23 @@ const Onboard4 = () => {
 
   // Retrieve team_space_id from cookies
   const teamSpaceId = Cookies.get('team_space_id');
+  // const access_token = Cookies.get('access_token'); // Get the access token from cookies
+
+  // if (!access_token) {
+  //   throw errorMessage('You do not have an access_token');
+  // }
 
   // Formik for form handling
   const formik = useFormik({
     initialValues: {
+      team_name: '',
       workIndustry: '',
       workType: '',
       organizationSize: '',
       allowTeamDiscovery: true,
     },
     validationSchema: Yup.object({
+      team_name: Yup.string().required('Team name is required'),
       workIndustry: Yup.string().required('Industry is required'),
       workType: Yup.string().required('Work type is required'),
       organizationSize: Yup.string().required('Organization size is required'),
@@ -86,7 +93,7 @@ const Onboard4 = () => {
     onSubmit: async values => {
       try {
         const body = {
-          team_name: 'Placeholder Team Name', // Use actual team name or fetch it if needed
+          team_name: values.team_name, // Use actual team name or fetch it if needed
           work_industry: values.workIndustry,
           user_work_type: values.workType,
           organization_size: values.organizationSize,
@@ -99,7 +106,7 @@ const Onboard4 = () => {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token_id}`, // Pass token_id in the header
+              // Authorization: `Bearer ${access_token}`, // Pass token_id in the header
             },
             body: JSON.stringify(body),
           }
@@ -107,7 +114,7 @@ const Onboard4 = () => {
 
         if (response.ok) {
           // Navigate to the next page on success
-          navigate('/signup/invite');
+          navigate('/signup/team-invite');
         } else {
           const errorData = await response.json();
           console.error('Failed to submit data:', errorData);
@@ -152,6 +159,26 @@ const Onboard4 = () => {
                 {errorMessage}
               </div>
             )}
+
+            {/* Team name */}
+            <div className="mb-6">
+              <label className="block text-gray-700">
+                What is the name of your team?
+              </label>
+              <input
+                id="team_name"
+                name="team_name"
+                type="text"
+                className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
+                // placeholder="Enter team name"
+                value={formik.values.team_name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.team_name && formik.errors.team_name ? (
+                <div className="text-red-500">{formik.errors.team_name}</div>
+              ) : null}
+            </div>
 
             {/* Industry option */}
             <div className="mb-6">

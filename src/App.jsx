@@ -87,9 +87,9 @@ const App = () => {
         {/* Onborading routes */}
         <Route path="/signup/onboard" element={<Onboard1 />} />
         <Route path="/signup/customize-experience" element={<Onboard2 />} />
-        <Route path="/signup/create-team" element={<Onboard3 />} />
-        <Route path="/signup/about-team" element={<Onboard4 />} />
-        <Route path="/signup/invite" element={<Onboard5 />} />
+        <Route path="/signup/create-workspace" element={<Onboard3 />} />
+        <Route path="/signup/create-team" element={<Onboard4 />} />
+        <Route path="/signup/team-invite" element={<Onboard5 />} />
         <Route path="/verification" element={<VerificationPage />} />
 
         {/* Reset Password */}

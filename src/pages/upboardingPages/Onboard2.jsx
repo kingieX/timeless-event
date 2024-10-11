@@ -67,7 +67,7 @@ const Onboard2 = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token_id}`, // Pass token_id in the header
+          // Authorization: `Bearer ${access_token}`, // Pass token_id in the header
         },
         body: JSON.stringify(postData),
       });
@@ -77,7 +77,7 @@ const Onboard2 = () => {
 
       if (response.ok) {
         // If successful, navigate to the next page
-        navigate('/signup/create-team');
+        navigate('/signup/create-workspace');
         console.log('successfully updated the user data');
       } else {
         console.error('Error in registration:', await response.text());

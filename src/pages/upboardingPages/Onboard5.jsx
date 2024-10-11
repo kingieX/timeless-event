@@ -21,7 +21,7 @@ const Onboard5 = () => {
     'https://timelessevent.com/auth/join?invite_code=ksdfkm'
   );
   const [newPeopleRole, setNewPeopleRole] = useState('');
-  const [selectedInviteOption, setSelectedInviteOption] = useState(''); // Track the selected invite option
+  const [selectedInviteOption, setSelectedInviteOption] = useState('email'); // Track the selected invite option
 
   const handleToggle = () => {
     setInviteLinkEnabled(!inviteLinkEnabled);

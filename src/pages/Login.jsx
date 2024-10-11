@@ -48,17 +48,22 @@ const Login = () => {
 
       if (response.ok) {
         // Extract tokens and userId from the server response
+        const access_token = postData?.access_token;
         const token_id = postData?.token_id;
         const refresh_token = postData?.refresh_token;
         const userId = postData?.user_id || postData?.id;
 
-        if (!userId || !token_id || !refresh_token) {
+        if (!userId || !access_token || !token_id || !refresh_token) {
           throw new Error('Missing user ID or tokens in the server response.');
         }
 
         // Store tokens and userId in secure cookies
         Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
         Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
+        Cookies.set('access_token', access_token, {
+          secure: true,
+          sameSite: 'Strict',
+        });
         Cookies.set('token_id', token_id, { secure: true, sameSite: 'Strict' });
         Cookies.set('refresh_token', refresh_token, {
           secure: true,
@@ -71,7 +76,7 @@ const Login = () => {
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
-            Authorization: `Bearer ${token_id}`, // Pass token_id in the header
+            // Authorization: `Bearer ${access_token}`, // Pass token_id in the header
           },
         });
 
