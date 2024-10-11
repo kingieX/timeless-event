@@ -5,8 +5,12 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 const fullname = Cookies.get('fullname');
+const user_id = Cookies.get('user_id'); // Assuming you have user_id stored in cookies
+const access_token = Cookies.get('access_token'); // Assuming access_token is stored in cookies
+// console.log('details', access_token);
+
 const userData = {
-  username: fullname || 'Username',
+  username: fullname,
   profileImage: '',
 };
 
@@ -15,17 +19,36 @@ const Dashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [currentPageTitle, setCurrentPageTitle] = useState('');
-  const [workspaces, setWorkspaces] = useState([]);
+  const [workspaces, setWorkspaces] = useState([]); // Workspaces state
 
+  // Fetch workspaces linked to the user
   const fetchWorkspaces = async () => {
-    // Replace with actual API call
-    const workspaceData = await fetch('/api/workspaces');
-    const data = await workspaceData.json();
-    setWorkspaces(data.workspaces);
+    try {
+      const API_BASE_URL = import.meta.env.VITE_BASE_URL; // Update with your base URL from environment variables
+      const response = await fetch(
+        `${API_BASE_URL}/teamspace/creator?user_id=${user_id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${access_token}`, // Pass access_token in headers
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch workspaces');
+      }
+
+      const data = await response.json(); // Parse JSON response
+      console.log('Fetched data:', data);
+      setWorkspaces(data); // Set the workspaces from API
+    } catch (error) {
+      console.error('Error fetching workspaces:', error);
+    }
   };
 
   useEffect(() => {
-    fetchWorkspaces();
+    fetchWorkspaces(); // Fetch workspaces when the component mounts
   }, []);
 
   const headerRef = useRef(null);
@@ -51,7 +74,6 @@ const Dashboard = () => {
     };
   }, []);
 
-  // Intersection Observer to detect when the header is out of view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -71,7 +93,6 @@ const Dashboard = () => {
     };
   }, []);
 
-  // Update the page title dynamically based on the route
   useEffect(() => {
     switch (location.pathname) {
       case '/app/upcoming':
@@ -116,36 +137,31 @@ const Dashboard = () => {
             isSidebarOpen ? 'translate-x-0' : ''
           } sidebar md:translate-x-0 fixed inset-y-0 left-0 z-30`}
         >
+          {/* Pass the fetched workspaces to the Sidebar */}
           <Sidebar
             userData={userData}
             onToggleSidebar={handleToggleSidebar}
             isSidebarOpen={isSidebarOpen}
-            workspaces={workspaces}
+            workspaces={workspaces} // Dynamically render workspaces here
           />
         </div>
 
         <div className="flex flex-col flex-grow overflow-hidden">
-          {/* Sticky Header */}
           <div
             ref={stickyHeaderRef}
             className={`fixed bg-white w-full h-16 shadow-sm z-10 p-4 transition-transform duration-300 ${
               isHeaderSticky ? 'translate-y-0' : '-translate-y-full'
             }`}
           >
-            {/* Render dynamic title */}
             <h1 className="text-2xl text-center font-bold">
               {currentPageTitle}
             </h1>
           </div>
 
-          {/* Actual Header that triggers sticky behavior */}
           <div ref={headerRef} className="p-4 mt-8 lg:mt-0">
-            <h1 className="text-2xl text-center font-bold">
-              {/* {currentPageTitle} */}
-            </h1>
+            <h1 className="text-2xl text-center font-bold"></h1>
           </div>
 
-          {/* All Pages Content Outlets */}
           <div
             className={`flex-grow transition-all duration-300 ease-in-out ${
               isSidebarOpen ? 'lg:ml-64' : 'lg:ml-0'

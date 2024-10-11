@@ -5,9 +5,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useState } from 'react';
 
-const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
+const WorkspaceModal = ({ onClose, onWorkspaceCreated }) => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [message, setMessage] = useState(''); // Message state for feedback
 
   // Formik configuration with validation schema
   const formik = useFormik({
@@ -21,58 +22,42 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
         .min(3, 'Workspace Name must be at least 3 characters'),
     }),
     onSubmit: async values => {
-      const token = Cookies.get('access_token'); // Retrieve token from cookies
       const userId = Cookies.get('userId');
-
-      if (!token) {
-        formik.setFieldError(
-          'general',
-          'Authentication token is missing. Please log in again.'
-        );
-        return;
-      }
-
       const newWorkspace = {
         team_space_name: values.workspaceName,
         share_space: values.isShared,
-        user_id: userId, // Use actual user ID
       };
 
       try {
         setIsSubmitting(true);
+        setMessage(''); // Clear any previous messages
 
         const response = await axios.post(
-          `${API_BASE_URL}/teamspace`,
+          `${API_BASE_URL}/teamspace/?user_id=${userId}`,
           newWorkspace,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Include token in Authorization header
+              // Authorization: `Bearer ${token}`, // Include token in Authorization header if needed
             },
           }
         );
 
-        console.log();
-
-        if (response.status === 201) {
-          onCreateWorkspace(response.data); // Pass the created workspace data to the parent
-          console.log(response.data);
-          onClose(); // Close the modal after successful creation
+        if (response.status === 200) {
+          const data = response.data; // Workspace data from the response
+          onWorkspaceCreated(data.team_space_id); // Pass the ID of the workspace to parent for navigation
+          setMessage('Workspace created successfully!'); // Success message
+        } else {
+          setMessage('Failed to create workspace.');
         }
       } catch (error) {
         // Backend error handling
         if (error.response && error.response.data) {
-          // Assuming backend sends an error message in `error.response.data.message`
-          formik.setFieldError('general', error.response.data.message);
+          setMessage(`Error: ${error.response.data.message}`);
         } else {
-          // Generic error message if no specific message from the backend
-          formik.setFieldError(
-            'general',
-            'An error occurred. Please try again.'
-          );
+          setMessage('An error occurred. Please try again.');
         }
       } finally {
-        // Set loading state back to false
-        setIsSubmitting(false);
+        setIsSubmitting(false); // Stop loading state
       }
     },
   });
@@ -111,10 +96,12 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
             </label>
           </div>
 
-          {/* General Error Display */}
-          {formik.errors.general && (
-            <p className="w-full mb-4 p-2 bg-red-100 text-red-500 border border-red-400 rounded-md">
-              {formik.errors.general}
+          {/* Message display for success/error */}
+          {message && (
+            <p
+              className={`w-full mb-4 p-2 rounded-md ${message.includes('Error') ? 'bg-red-100 text-red-500 border border-red-400' : 'bg-green-100 text-green-700 border border-green-400'}`}
+            >
+              {message}
             </p>
           )}
 
@@ -130,6 +117,7 @@ const WorkspaceModal = ({ onClose, onCreateWorkspace }) => {
             <button
               type="submit"
               className="bg-primary text-black font-semibold py-2 px-4 w- hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              disabled={isSubmitting}
             >
               {isSubmitting ? 'Creating...' : 'Create'}
             </button>

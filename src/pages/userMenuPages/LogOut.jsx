@@ -2,11 +2,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutImage from '/image/logout.svg';
+import Cookies from 'js-cookie';
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Reusable Modal Component
-const Modal = ({ show, onClose, onConfirm }) => {
+const Modal = ({ show, onClose, onConfirm, isLoading }) => {
   if (!show) return null;
 
   return (
@@ -30,8 +31,9 @@ const Modal = ({ show, onClose, onConfirm }) => {
           <button
             className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             onClick={onConfirm}
+            disabled={isLoading}
           >
-            Confirm
+            {isLoading ? 'Logging out...' : 'Confirm'}
           </button>
         </div>
       </div>
@@ -42,7 +44,11 @@ const Modal = ({ show, onClose, onConfirm }) => {
 // Logout Page Component
 const Logout = () => {
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
+
   const navigate = useNavigate();
+
+  const token = Cookies.get('access_token');
 
   useEffect(() => {
     // Show the modal when the component mounts
@@ -55,11 +61,14 @@ const Logout = () => {
   };
 
   const handleConfirm = async () => {
+    setIsLoading(true); // Start loading
     try {
       // Send POST request to logout route
       const response = await fetch(`${API_BASE_URL}/user/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          Authorization: `Bearer ${token}`, // Include token in Authorization header
+        },
       });
 
       if (response.ok) {
@@ -72,6 +81,13 @@ const Logout = () => {
       }
     } catch (error) {
       console.error('Error during logout:', error);
+    } finally {
+      setIsLoading(false); // Hide loading state after logout
+      Cookies.remove('access_token'); // Remove access token from cookies
+      Cookies.remove('token_id'); // Remove token ID from cookies
+      Cookies.remove('refresh_token'); // Remove refresh token from cookies
+      Cookies.remove('email'); // Remove email from cookies
+      Cookies.remove('userId'); // Remove user ID from cookies
     }
   };
 
@@ -81,6 +97,7 @@ const Logout = () => {
         show={showModal}
         onClose={handleCancel}
         onConfirm={handleConfirm}
+        isLoading={isLoading} // Pass loading state to modal
       />
     </div>
   );

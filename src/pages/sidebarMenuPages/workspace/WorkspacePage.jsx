@@ -14,10 +14,10 @@ const WorkspacePage = () => {
     setIsWorkspaceModalOpen(false);
   };
 
-  const handleWorkspaceCreated = workspaceName => {
+  const handleWorkspaceCreated = workspaceId => {
     // Logic to create the workspace and redirect to the new workspace page
     closeWorkspaceModal();
-    navigate(`/app/workspace/${workspaceName}`);
+    navigate(`/app/workspace/${workspaceId}`);
   };
 
   return (

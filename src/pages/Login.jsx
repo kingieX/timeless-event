@@ -58,8 +58,6 @@ const Login = () => {
         }
 
         // Store tokens and userId in secure cookies
-        Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
-        Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
         Cookies.set('access_token', access_token, {
           secure: true,
           sameSite: 'Strict',
@@ -85,6 +83,7 @@ const Login = () => {
 
         if (userResponse.ok) {
           // Store all user details in cookies
+          Cookies.set('user_id', userDetails.user_id);
           Cookies.set('fullname', userDetails.fullname, {
             secure: true,
             sameSite: 'Strict',
