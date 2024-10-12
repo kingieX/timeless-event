@@ -3,13 +3,48 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
   const [message, setMessage] = useState(''); // Feedback message state
 
+  const navigate = useNavigate();
+
   const access_token = Cookies.get('access_token');
+
+  //   Delete workspace
+  const handleDeleteWorkspace = async () => {
+    if (window.confirm('Are you sure you want to delete this workspace?')) {
+      try {
+        setIsSubmitting(true);
+        setMessage('');
+
+        const response = await axios.delete(
+          `${API_BASE_URL}/teamspace/${workspaceData.team_space_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          onClose(); // Close the modal
+          setMessage('Workspace deleted successfully!');
+          navigate('/app/workspace');
+        } else {
+          setMessage('Failed to delete workspace.');
+        }
+      } catch (error) {
+        console.error('Error deleting workspace:', error);
+        setMessage('Failed to delete workspace.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
 
   // Formik setup with initial values from `workspaceData`
   const formik = useFormik({
@@ -60,22 +95,36 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white w-full max-w-xl lg:px-10 p-6 rounded-lg m-4">
-        <h2 className="text-xl font-semibold mb-4">Edit Workspace</h2>
+        <h2 className="text-xl font-semibold mb-4">Settings</h2>
 
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} className="">
+          <div className="flex flex-col mb-4">
+            <p className="font-semibold mb-1 text-sm">Logo</p>
+            <div className="w-16 h-16 flex justify-center items-center text-4xl font-semibold bg-primary rounded">
+              <p>{workspaceData.team_space_name.slice(0, 1)}</p>
+            </div>
+          </div>
           {/* Workspace Name Input */}
-          <input
-            type="text"
-            id="workspaceName"
-            placeholder="Workspace Name"
-            value={formik.values.workspaceName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="border p-2 w-full mb-2"
-          />
-          {formik.touched.workspaceName && formik.errors.workspaceName ? (
-            <p className="text-red-500">{formik.errors.workspaceName}</p>
-          ) : null}
+          <div className="mb-4">
+            <label
+              htmlFor="workspaceName"
+              className="text-sm font-semibold mb-1"
+            >
+              Team name
+            </label>
+            <input
+              type="text"
+              id="workspaceName"
+              placeholder="Workspace Name"
+              value={formik.values.workspaceName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="border p-2 w-full mb-2"
+            />
+            {formik.touched.workspaceName && formik.errors.workspaceName ? (
+              <p className="text-red-500">{formik.errors.workspaceName}</p>
+            ) : null}
+          </div>
 
           {/* Shared Workspace Checkbox */}
           <div className="mb-4">
@@ -93,6 +142,45 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
 
           {/* Feedback message */}
           {message && <p>{message}</p>}
+
+          {/* Danger action */}
+          <div>
+            <h2 className="text-lg font-semibold mb-2">Danger action</h2>
+
+            {/* leave team */}
+            <div className="mb-4">
+              <p className="text-sm font-semibold">Leave workspace</p>
+              <p className="text-xs text-slate-700 mb-2">
+                By leaving, you’ll immediately lose access to all{' '}
+                <span className="font-semibold">
+                  {workspaceData.team_space_name}
+                </span>{' '}
+                projects. You’ll need to be re-invited to join again.
+              </p>
+              <button className="border border-red-500 text-red-500 font-semibold text-sm px-4 py-2 hover:border-red-800 hover:text-red-800">
+                Leave team
+              </button>
+            </div>
+
+            {/* delete workspace */}
+            <div className="mb-4">
+              <p className="text-sm font-semibold">Delete Workspace</p>
+              <p className="text-xs text-slate-700 mb-2">
+                This will immediately and permanently delete the{' '}
+                <span className="font-semibold">
+                  {workspaceData.team_space_name}
+                </span>{' '}
+                workspace and its data for everyone – including all projects and
+                tasks. This cannot be undone.
+              </p>
+              <button
+                onClick={handleDeleteWorkspace}
+                className="border border-red-500 text-red-500 font-semibold text-sm px-4 py-2 hover:border-red-800 hover:text-red-800"
+              >
+                Leave team
+              </button>
+            </div>
+          </div>
 
           {/* Buttons */}
           <div className="flex justify-end gap-4">

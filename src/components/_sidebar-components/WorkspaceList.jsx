@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MdWorkOutline } from 'react-icons/md';
 import { GoPlus } from 'react-icons/go';
-import { TiFolder } from 'react-icons/ti';
-import { IoAddCircleOutline } from 'react-icons/io5';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import { MdWorkspacesOutline } from 'react-icons/md';
 

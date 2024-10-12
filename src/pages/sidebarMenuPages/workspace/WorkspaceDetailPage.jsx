@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { FiEdit } from 'react-icons/fi';
+import { RiGroupLine } from 'react-icons/ri';
+import { CiSettings } from 'react-icons/ci';
 import axios from 'axios'; // For making PUT requests
 import EditWorkspaceModal from './_components/EditWorkspaceModal';
 
@@ -66,67 +68,86 @@ const WorkspaceDetailPage = () => {
   }
 
   return (
-    <div className="lg:py-4 py-1 px-4 lg:px-24">
-      {workspaceData ? (
-        <>
-          <div className="flex flex-col space-y-2">
-            <div className="flex space-x-2 justify-start items-center">
-              <p className="py-0.5 px-2 font-semibold bg-primary rounded">
-                {workspaceData.team_space_name.slice(0, 1)}
-              </p>
-              <h1 className="lg:text-2xl text-lg font-bold">
-                {workspaceData.team_space_name}
-              </h1>
-              <FiEdit
-                className="w-4 h-4 cursor-pointer hover:text-slate-500"
-                onClick={openEditModal}
-              />
+    <>
+      <div className="flex gap-4 justify-end px-4">
+        {/* invite member */}
+        <div className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer">
+          <RiGroupLine className="w-5 h-5" />
+          <p className="text-sm font-semibold lg:block hidden">
+            Invite members
+          </p>
+        </div>
+        {/* settings */}
+        <div
+          onClick={openEditModal}
+          className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+        >
+          <CiSettings className="w-5 h-5" />
+          <p className="text-sm font-semibold lg:block hidden">settings</p>
+        </div>
+      </div>
+      <div className="lg:py-4 py-1 px-4 lg:px-24">
+        {workspaceData ? (
+          <>
+            <div className="flex flex-col space-y-2">
+              <div className="flex space-x-2 justify-start items-center">
+                <p className="py-0.5 px-2 font-semibold bg-primary rounded">
+                  {workspaceData.team_space_name.slice(0, 1)}
+                </p>
+                <h1 className="lg:text-2xl text-lg font-bold">
+                  {workspaceData.team_space_name}
+                </h1>
+                {/* <FiEdit
+                  className="w-4 h-4 cursor-pointer hover:text-slate-500"
+                  onClick={openEditModal}
+                /> */}
+              </div>
+              <div className="flex lg:flex-row flex-col lg:items-center items-start lg:gap-2 text-sm text-slate-700">
+                <p>
+                  <span className="font-semibold">Shared: </span>
+                  {workspaceData.share_space ? 'Yes' : 'No'}
+                </p>
+                <p className="lg:block hidden"> • </p>
+                <p>
+                  <span className="font-semibold">Created on: </span>
+                  {new Date(workspaceData.created_at).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                  })}
+                </p>
+                <p className="lg:block hidden"> • </p>
+                <p>
+                  <span className="font-semibold">Last updated: </span>
+                  {new Date(workspaceData.updated_at).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                  })}
+                </p>
+              </div>
             </div>
-            <div className="flex lg:flex-row flex-col lg:items-center items-start lg:gap-2 text-sm text-slate-700">
-              <p>
-                <span className="font-semibold">Shared: </span>
-                {workspaceData.share_space ? 'Yes' : 'No'}
-              </p>
-              <p className="lg:block hidden"> • </p>
-              <p>
-                <span className="font-semibold">Created on: </span>
-                {new Date(workspaceData.created_at).toLocaleString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  hour12: true,
-                })}
-              </p>
-              <p className="lg:block hidden"> • </p>
-              <p>
-                <span className="font-semibold">Last updated: </span>
-                {new Date(workspaceData.updated_at).toLocaleString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  hour12: true,
-                })}
-              </p>
-            </div>
-          </div>
-        </>
-      ) : (
-        <p>No workspace data found.</p>
-      )}
+          </>
+        ) : (
+          <p>No workspace data found.</p>
+        )}
 
-      {/* Render Edit Modal if it's open */}
-      {isEditModalOpen && (
-        <EditWorkspaceModal
-          workspaceData={workspaceData}
-          onClose={closeEditModal}
-          onWorkspaceUpdated={handleWorkspaceUpdate}
-        />
-      )}
-    </div>
+        {/* Render Edit Modal if it's open */}
+        {isEditModalOpen && (
+          <EditWorkspaceModal
+            workspaceData={workspaceData}
+            onClose={closeEditModal}
+            onWorkspaceUpdated={handleWorkspaceUpdate}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
