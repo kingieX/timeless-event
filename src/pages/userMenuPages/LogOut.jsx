@@ -74,7 +74,15 @@ const Logout = () => {
       if (response.ok) {
         // Successfully logged out
         console.log('User logged out');
+        Cookies.remove('access_token'); // Remove access token from cookies
+        Cookies.remove('token_id'); // Remove token ID from cookies
+        Cookies.remove('refresh_token'); // Remove refresh token from cookies
+        Cookies.remove('email'); // Remove email from cookies
+        Cookies.remove('userId'); // Remove user ID from cookies
+        Cookies.remove('fullname'); // Remove full name from cookies
+        Cookies.remove('phone_no'); // Remove phone number from cookies
         navigate('/'); // Navigate to home or login page after logout
+        window.location.reload(); // Reload the page
       } else {
         const errorData = await response.json();
         console.error('Logout failed:', errorData.message);

@@ -23,11 +23,11 @@ const Onboard3 = () => {
   // Formik for form handling
   const formik = useFormik({
     initialValues: {
-      teamName: '',
+      workspaceName: '',
       sharedWorkspace: false,
     },
     validationSchema: Yup.object({
-      teamName: Yup.string().required('Team name is required'),
+      workspaceName: Yup.string().required('workspace name is required'),
     }),
     onSubmit: async values => {
       setErrorMessage(null); // Reset error message before submission
@@ -56,7 +56,7 @@ const Onboard3 = () => {
         } else {
           // Handle non-successful response
           const errorData = await response.json();
-          setErrorMessage(errorData.message || 'Failed to create the team');
+          setErrorMessage(errorData.message || 'Failed to create workspace');
         }
       } catch (error) {
         // Handle fetch error
@@ -94,13 +94,13 @@ const Onboard3 = () => {
             <FloatingLabelInput
               label="Give your workspace a name"
               type="text"
-              id="teamName"
-              value={formik.values.teamName}
+              id="workspaceName"
+              value={formik.values.workspaceName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur} // Track input blur for validation
             />
-            {formik.touched.teamName && formik.errors.teamName ? (
-              <div className="text-red-500">{formik.errors.teamName}</div>
+            {formik.touched.workspaceName && formik.errors.workspaceName ? (
+              <div className="text-red-500">{formik.errors.workspaceName}</div>
             ) : null}
             <div className="flex items-center justify-between space-x-4 py-4">
               <label

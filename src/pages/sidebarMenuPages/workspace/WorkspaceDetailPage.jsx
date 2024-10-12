@@ -7,6 +7,8 @@ import { CiSettings } from 'react-icons/ci';
 import axios from 'axios'; // For making PUT requests
 import EditWorkspaceModal from './_components/EditWorkspaceModal';
 import { AiOutlineSearch } from 'react-icons/ai';
+import AddTeamModal from '../../create-team/_components/TeamCreationModal';
+import { GoPlus } from 'react-icons/go';
 
 const WorkspaceDetailPage = () => {
   const { workspaceId } = useParams(); // Get workspaceId from URL
@@ -14,6 +16,7 @@ const WorkspaceDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal state
+  const [isTeamCreationModal, setIsTeamCreationModal] = useState(false);
 
   const access_token = Cookies.get('access_token');
 
@@ -54,10 +57,22 @@ const WorkspaceDetailPage = () => {
   // Function to close the modal
   const closeEditModal = () => setIsEditModalOpen(false);
 
+  // Function to open team creation modal
+  const openTeamModal = () => setIsTeamCreationModal(true);
+
+  // Function to close the team creation modal
+  const closeTeamModal = () => setIsTeamCreationModal(false);
+
   // Function to handle updates to workspace details (after PUT request)
   const handleWorkspaceUpdate = updatedData => {
     setWorkspaceData(updatedData); // Update state with new workspace data
     closeEditModal(); // Close modal after update
+  };
+
+  // Function to handle update to workspace
+  const handleTeamCreationUpdate = updatedData => {
+    setWorkspaceData(updatedData);
+    closeTeamModal();
   };
 
   if (loading) {
@@ -72,11 +87,12 @@ const WorkspaceDetailPage = () => {
     <>
       <div className="flex gap-4 justify-end px-4">
         {/* invite member */}
-        <div className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer">
+        <div
+          onClick={openTeamModal}
+          className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+        >
           <RiGroupLine className="w-5 h-5" />
-          <p className="text-sm font-semibold lg:block hidden">
-            Invite members
-          </p>
+          <p className="text-sm font-semibold lg:block hidden">Create a team</p>
         </div>
         {/* settings */}
         <div
@@ -143,13 +159,19 @@ const WorkspaceDetailPage = () => {
       {/*  */}
       <div className="px-4 lg:px-24">
         {/* Search Input */}
-        <div className="flex my-2 items-center px-4 py-2 border-2 border-gray border-opacity-20 mb-4">
+        <div className="flex my-2 items-center px-4 py-2 border-2 border-gray border-opacity-20 mb-2">
           <AiOutlineSearch className="w-6 h-6 text-gray" />
           <input
             type="text"
             placeholder="Search projects..."
             className="flex-grow outline-none text-sm px-2"
           />
+        </div>
+        <div className="flex justify-end">
+          <button className="flex space-x-1 bg-blue-50 py-1 px-2 hover:bg-blue-100">
+            <GoPlus className="w-6 h-6" />
+            Add
+          </button>
         </div>
       </div>
 
@@ -159,6 +181,15 @@ const WorkspaceDetailPage = () => {
           workspaceData={workspaceData}
           onClose={closeEditModal}
           onWorkspaceUpdated={handleWorkspaceUpdate}
+        />
+      )}
+
+      {/* Render TeamCreation Modal if it's open */}
+      {isTeamCreationModal && (
+        <AddTeamModal
+          workspaceData={workspaceData}
+          onClose={closeTeamModal}
+          onWorkspaceUpdated={handleTeamCreationUpdate}
         />
       )}
     </>

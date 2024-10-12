@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Redirect from './components/Redirect';
 
@@ -16,6 +16,7 @@ const userData = {
 };
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
@@ -24,7 +25,7 @@ const Dashboard = () => {
 
   if (!access_token) {
     // Redirect to login page if access token is not available
-    return <Redirect />;
+    // navigate('/');
   }
 
   // Fetch workspaces linked to the user
@@ -52,9 +53,11 @@ const Dashboard = () => {
         return;
       }
 
-      const data = await response.json(); // Parse JSON response
-      console.log('Fetched data:', data);
-      setWorkspaces(data); // Set the workspaces from API
+      if (response.ok) {
+        const data = await response.json(); // Parse JSON response
+        console.log('Fetched data:', data);
+        setWorkspaces(data); // Set the workspaces from API
+      }
 
       // save workspace id in cookies
       // `workspaces` is an array of objects containing `team_space_id`

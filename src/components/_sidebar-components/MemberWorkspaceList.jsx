@@ -25,13 +25,14 @@ const MemberWorkspaceList = () => {
           }
         );
         setWorkspaces(response.data);
+        console.log('Added to workspace:', response.data);
 
-        if ((response.status = 404)) {
-          // Handle 404 status when no workspaces are found
-          console.log('No workspaces found');
-          setWorkspaces([]);
-          return;
-        }
+        // if ((response.status = 404)) {
+        //   // Handle 404 status when no workspaces are found
+        //   console.log('No workspaces found');
+        //   setWorkspaces([]);
+        //   return;
+        // }
       } catch (error) {
         console.error('Error fetching member workspaces:', error);
       }
