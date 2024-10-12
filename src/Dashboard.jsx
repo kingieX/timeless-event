@@ -46,8 +46,18 @@ const Dashboard = () => {
       }
 
       const data = await response.json(); // Parse JSON response
-      // console.log('Fetched data:', data);
+      console.log('Fetched data:', data);
       setWorkspaces(data); // Set the workspaces from API
+
+      // save workspace id in cookies
+      // `workspaces` is an array of objects containing `team_space_id`
+      const workspaceIds = workspaces.map(workspace => workspace.team_space_id);
+      // Save the array as a JSON string in the cookies
+      const workspace_ids = Cookies.set(
+        'workspace_ids',
+        JSON.stringify(workspaceIds)
+      );
+      console.log('workspace id:', workspace_ids);
     } catch (error) {
       console.error('Error fetching workspaces:', error);
       setWorkspaces([]); // Fallback in case of error

@@ -88,6 +88,8 @@ const Logout = () => {
       Cookies.remove('refresh_token'); // Remove refresh token from cookies
       Cookies.remove('email'); // Remove email from cookies
       Cookies.remove('userId'); // Remove user ID from cookies
+      Cookies.remove('fullname'); // Remove full name from cookies
+      Cookies.remove('phone_no'); // Remove phone number from cookies
     }
   };
 
