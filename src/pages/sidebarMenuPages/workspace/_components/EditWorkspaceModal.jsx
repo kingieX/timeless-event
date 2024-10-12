@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { IoMdClose } from 'react-icons/io';
 
 const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -94,10 +95,17 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white w-full max-w-xl lg:px-10 p-6 rounded-lg m-4">
-        <h2 className="text-xl font-semibold mb-4">Settings</h2>
+      <div className="bg-white w-full max-w-xl lg:px-10 p-6 rounded-lg m-4 max-h-[90vh] overflow-hidden">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold ">Settings</h2>
+          <IoMdClose size={25} onClick={onClose} />
+        </div>
 
-        <form onSubmit={formik.handleSubmit} className="">
+        {/* Scrollable form */}
+        <form
+          onSubmit={formik.handleSubmit}
+          className="overflow-y-auto max-h-[60vh] px-4"
+        >
           <div className="flex flex-col mb-4">
             <p className="font-semibold mb-1 text-sm">Logo</p>
             <div className="w-16 h-16 flex justify-center items-center text-4xl font-semibold bg-primary rounded">
@@ -158,7 +166,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
                 projects. You’ll need to be re-invited to join again.
               </p>
               <button className="border border-red-500 text-red-500 font-semibold text-sm px-4 py-2 hover:border-red-800 hover:text-red-800">
-                Leave team
+                Leave workspace
               </button>
             </div>
 
@@ -177,7 +185,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
                 onClick={handleDeleteWorkspace}
                 className="border border-red-500 text-red-500 font-semibold text-sm px-4 py-2 hover:border-red-800 hover:text-red-800"
               >
-                Leave team
+                Delete Workspace
               </button>
             </div>
           </div>
