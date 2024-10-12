@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
 import { Outlet, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Redirect from './components/Redirect';
 
 const fullname = Cookies.get('fullname');
 const user_id = Cookies.get('user_id'); // Assuming you have user_id stored in cookies
@@ -20,6 +21,11 @@ const Dashboard = () => {
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [currentPageTitle, setCurrentPageTitle] = useState('');
   const [workspaces, setWorkspaces] = useState([]); // Workspaces state
+
+  if (!access_token) {
+    // Redirect to login page if access token is not available
+    return <Redirect />;
+  }
 
   // Fetch workspaces linked to the user
   const fetchWorkspaces = async () => {
@@ -40,10 +46,11 @@ const Dashboard = () => {
       }
 
       const data = await response.json(); // Parse JSON response
-      console.log('Fetched data:', data);
+      // console.log('Fetched data:', data);
       setWorkspaces(data); // Set the workspaces from API
     } catch (error) {
       console.error('Error fetching workspaces:', error);
+      setWorkspaces([]); // Fallback in case of error
     }
   };
 

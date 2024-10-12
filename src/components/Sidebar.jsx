@@ -3,8 +3,9 @@ import { IoMdNotificationsOutline, IoMdArrowDropdown } from 'react-icons/io';
 import { PiSidebarSimpleThin } from 'react-icons/pi';
 import UserInfo from './_sidebar-components/UserInfo';
 import MenuItem from './_sidebar-components/MenuItem';
-import WorkspaceList from './_sidebar-components/WorkspaceList';
+import MyWorkspaceList from './_sidebar-components/WorkspaceList';
 import menuItems from './_sidebar-components/menuItems';
+import MemberWorkspaceList from './_sidebar-components/MemberWorkspaceList';
 
 const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
   const [isUserMenuModalOpen, setIsUserMenuModalOpen] = useState(false);
@@ -43,7 +44,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
           </div>
 
           {/* Make this section scrollable */}
-          <div className="overflow-y-auto max-h-full px-4 py-2 pb-12">
+          <div className="overflow-y-auto max-h-full px- py-2 pb-12">
             {menuItems.map((menu, index) => (
               <MenuItem
                 key={index}
@@ -56,7 +57,8 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
               />
             ))}
 
-            <WorkspaceList workspaces={workspaces} />
+            <MyWorkspaceList workspaces={workspaces} />
+            <MemberWorkspaceList />
           </div>
         </>
       )}

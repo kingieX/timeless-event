@@ -1,14 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { MdWorkOutline } from 'react-icons/md';
-import { TiFolder } from 'react-icons/ti';
+import { GrGroup } from 'react-icons/gr';
+import { MdWorkOutline, MdWorkspacesOutline } from 'react-icons/md';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
-import { MdWorkspacesOutline } from 'react-icons/md';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-const MyWorkspaceList = ({ workspaces }) => {
-  const location = useLocation();
+const MemberWorkspaceList = () => {
+  const [workspaces, setWorkspaces] = useState([]);
   const [isWorkspaceMenuOpen, setIsWorkspaceMenuOpen] = useState(false); // State to toggle workspace list
+  const location = useLocation();
+  const access_token = Cookies.get('access_token'); // Assuming access_token is stored in cookies
+
+  // Fetch workspaces the user is a member of
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const API_BASE_URL = import.meta.env.VITE_BASE_URL; // Update with your base URL from environment variables
+        const response = await axios.get(
+          `${API_BASE_URL}/teamspace/user-linked-team-space`,
+          {
+            headers: { Authorization: `Bearer ${access_token}` },
+          }
+        );
+        setWorkspaces(response.data);
+      } catch (error) {
+        console.error('Error fetching member workspaces:', error);
+      }
+    };
+
+    fetchWorkspaces();
+  }, [access_token]);
 
   // Toggle workspace menu open/close
   const toggleWorkspaceMenu = () => setIsWorkspaceMenuOpen(prev => !prev);
@@ -18,19 +41,14 @@ const MyWorkspaceList = ({ workspaces }) => {
     location.pathname.includes(workspace.team_space_id);
 
   return (
-    <div className="border-t border-gray mt-4">
+    <div className=" border-gray mb-10">
       <div className="flex justify-between items-center px-4 py-2 hover:bg-blue-50 cursor-pointer">
         <div className="flex items-center">
-          <MdWorkOutline className="w-6 h-6 mr-4" />
-          <span>My workspace</span>
+          <GrGroup className="w-6 h-6 mr-4" />
+          <span>Team Workspace</span>
         </div>
 
         <div className="flex items-center">
-          {/* Add workspace link */}
-          <Link to="/app/workspace" className="hover:bg-blue-100 py-1 px-2">
-            <IoAddCircleOutline className="w-6 h-6" />
-          </Link>
-
           {/* Toggle button for showing/hiding workspaces */}
           <span className="ml-2 cursor-pointer" onClick={toggleWorkspaceMenu}>
             {isWorkspaceMenuOpen ? (
@@ -75,4 +93,4 @@ const MyWorkspaceList = ({ workspaces }) => {
   );
 };
 
-export default MyWorkspaceList;
+export default MemberWorkspaceList;

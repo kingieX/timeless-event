@@ -21,10 +21,14 @@ const WorkspacePage = () => {
   };
 
   return (
-    <div className="flex flex-col items-start lg:px-4 px-8 lg:py-1">
-      <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-10 mb-8 lg:text-left text-center">
+    <div className="flex flex-col items-start lg:px-12 px-8 lg:py-1">
+      <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-4 mb-4 lg:text-left text-center">
         WorkSpace
       </h2>
+      <p className="mb-8 lg:text-xl text-slate-700">
+        Create a new workspace that handles your personal team, projects, tasks
+        and events.
+      </p>
       <button
         onClick={openWorkspaceModal}
         className="bg-primary text-black font-semibold py-2 px-4 w- hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
