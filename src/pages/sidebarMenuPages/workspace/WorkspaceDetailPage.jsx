@@ -6,6 +6,7 @@ import { RiGroupLine } from 'react-icons/ri';
 import { CiSettings } from 'react-icons/ci';
 import axios from 'axios'; // For making PUT requests
 import EditWorkspaceModal from './_components/EditWorkspaceModal';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const WorkspaceDetailPage = () => {
   const { workspaceId } = useParams(); // Get workspaceId from URL
@@ -137,16 +138,29 @@ const WorkspaceDetailPage = () => {
         ) : (
           <p>No workspace data found.</p>
         )}
-
-        {/* Render Edit Modal if it's open */}
-        {isEditModalOpen && (
-          <EditWorkspaceModal
-            workspaceData={workspaceData}
-            onClose={closeEditModal}
-            onWorkspaceUpdated={handleWorkspaceUpdate}
-          />
-        )}
       </div>
+
+      {/*  */}
+      <div className="px-4 lg:px-24">
+        {/* Search Input */}
+        <div className="flex my-2 items-center px-4 py-2 border-2 border-gray border-opacity-20 mb-4">
+          <AiOutlineSearch className="w-6 h-6 text-gray" />
+          <input
+            type="text"
+            placeholder="Search projects..."
+            className="flex-grow outline-none text-sm px-2"
+          />
+        </div>
+      </div>
+
+      {/* Render Edit Modal if it's open */}
+      {isEditModalOpen && (
+        <EditWorkspaceModal
+          workspaceData={workspaceData}
+          onClose={closeEditModal}
+          onWorkspaceUpdated={handleWorkspaceUpdate}
+        />
+      )}
     </>
   );
 };

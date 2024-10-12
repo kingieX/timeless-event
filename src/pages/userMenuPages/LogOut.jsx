@@ -57,7 +57,7 @@ const Logout = () => {
 
   const handleCancel = () => {
     setShowModal(false);
-    navigate('/dashboard'); // Redirect to the dashboard or any other page
+    navigate('/app'); // Redirect to the dashboard or any other page
   };
 
   const handleConfirm = async () => {

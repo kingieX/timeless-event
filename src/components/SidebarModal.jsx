@@ -94,7 +94,7 @@ const menuGroups = [
   ],
 ];
 
-const Modal = ({ toggleModal, onToggleSidebar }) => {
+const UserMenuModal = ({ toggleModal, onToggleSidebar }) => {
   const [openMenus, setOpenMenus] = useState({});
   const [activeMenu, setActiveMenu] = useState(null);
   const navigate = useNavigate();
@@ -123,16 +123,22 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
   const handleMenuClick = (menuName, link) => {
     setActiveMenu(menuName);
     toggleModal(); // Close the modal
-    if (window.innerWidth < 768) {
-      onToggleSidebar(); // Close the sidebar on mobile view
+
+    // Use the `onToggleSidebar` correctly
+    if (window.innerWidth < 768 && onToggleSidebar) {
+      onToggleSidebar(); // Safely call the function if it's defined
     }
 
     if (link === 'print') {
       printPage(); // Call the printPage function if "Print" is clicked
     } else {
-      navigate(link); // Navigate to the page without reloading for other links
+      navigate(link); // Navigate to the page for other links
     }
   };
+
+  if (onToggleSidebar) {
+    onToggleSidebar();
+  }
 
   return (
     <>
@@ -229,4 +235,4 @@ const Modal = ({ toggleModal, onToggleSidebar }) => {
   );
 };
 
-export default Modal;
+export default UserMenuModal;

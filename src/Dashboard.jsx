@@ -45,6 +45,13 @@ const Dashboard = () => {
         throw new Error('Failed to fetch workspaces');
       }
 
+      if (!response.ok) {
+        // Handle 404 status when no workspaces are found
+        console.log('No workspaces found');
+        setWorkspaces([]);
+        return;
+      }
+
       const data = await response.json(); // Parse JSON response
       console.log('Fetched data:', data);
       setWorkspaces(data); // Set the workspaces from API

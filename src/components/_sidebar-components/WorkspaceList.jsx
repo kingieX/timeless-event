@@ -5,7 +5,7 @@ import { GoPlus } from 'react-icons/go';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import { MdWorkspacesOutline } from 'react-icons/md';
 
-const MyWorkspaceList = ({ workspaces }) => {
+const MyWorkspaceList = ({ workspaces, handleLinkClick }) => {
   const location = useLocation();
   const [isWorkspaceMenuOpen, setIsWorkspaceMenuOpen] = useState(false); // State to toggle workspace list
 
@@ -26,7 +26,11 @@ const MyWorkspaceList = ({ workspaces }) => {
 
         <div className="flex items-center">
           {/* Add workspace link */}
-          <Link to="/app/workspace" className="hover:bg-blue-100 py-1 px-2">
+          <Link
+            to="/app/workspace"
+            onClick={handleLinkClick}
+            className="hover:bg-blue-100 py-1 px-2"
+          >
             <GoPlus className="w-6 h-6" />
           </Link>
 
@@ -48,6 +52,7 @@ const MyWorkspaceList = ({ workspaces }) => {
             workspaces.map((workspace, index) => (
               <Link
                 key={index}
+                onClick={handleLinkClick}
                 to={`/app/workspace/${workspace.team_space_id}`}
                 className={`flex items-center px-4 py-1 hover:bg-blue-50 cursor-pointer ${
                   isWorkspaceActive(workspace)

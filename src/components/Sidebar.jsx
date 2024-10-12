@@ -57,8 +57,11 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
               />
             ))}
 
-            <MyWorkspaceList workspaces={workspaces} />
-            <MemberWorkspaceList />
+            <MyWorkspaceList
+              workspaces={workspaces}
+              handleLinkClick={handleLinkClick}
+            />
+            <MemberWorkspaceList handleLinkClick={handleLinkClick} />
           </div>
         </>
       )}
