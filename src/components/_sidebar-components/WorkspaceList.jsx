@@ -70,8 +70,8 @@ const MyWorkspaceList = ({ workspaces }) => {
               </Link>
             ))
           ) : (
-            <div className="flex items-center px-4 py-1 italic">
-              <span>No workspace available</span>
+            <div className="flex items-center text-sm max-w-56 text-center px-4 py-2 italic">
+              <span>No workspace available, create a workspace</span>
             </div>
           )}
         </div>

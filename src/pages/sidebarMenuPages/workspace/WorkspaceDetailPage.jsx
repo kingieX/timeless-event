@@ -58,11 +58,11 @@ const WorkspaceDetailPage = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className="lg:py-4 py-1 px-4 lg:px-24">Loading...</p>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className="lg:py-4 py-1 px-4 lg:px-24">{error}</p>;
   }
 
   return (
@@ -82,12 +82,12 @@ const WorkspaceDetailPage = () => {
                 onClick={openEditModal}
               />
             </div>
-            <div className="flex items-center space-x-2 text-sm text-slate-700">
+            <div className="flex lg:flex-row flex-col lg:items-center items-start lg:gap-2 text-sm text-slate-700">
               <p>
                 <span className="font-semibold">Shared: </span>
                 {workspaceData.share_space ? 'Yes' : 'No'}
               </p>
-              <p> • </p>
+              <p className="lg:block hidden"> • </p>
               <p>
                 <span className="font-semibold">Created on: </span>
                 {new Date(workspaceData.created_at).toLocaleString('en-US', {
@@ -99,7 +99,7 @@ const WorkspaceDetailPage = () => {
                   hour12: true,
                 })}
               </p>
-              <p> • </p>
+              <p className="lg:block hidden"> • </p>
               <p>
                 <span className="font-semibold">Last updated: </span>
                 {new Date(workspaceData.updated_at).toLocaleString('en-US', {
