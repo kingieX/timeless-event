@@ -92,7 +92,6 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
         setErrorMessage('An error occurred. Please try again.');
       } finally {
         setIsSubmitting(false);
-        onClose(); // Close modal first
       }
     },
   });
