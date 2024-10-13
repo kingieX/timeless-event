@@ -19,7 +19,7 @@ const MyWorkspaceList = ({ workspaces, handleLinkClick }) => {
   return (
     <div className="border-t border-gray mt-4">
       <div className="flex justify-between items-center px-4 py-2 hover:bg-blue-50 cursor-pointer">
-        <div className="flex items-center">
+        <div className="flex items-center" onClick={toggleWorkspaceMenu}>
           <MdWorkOutline className="w-6 h-6 mr-2" />
           <span>My workspace</span>
         </div>

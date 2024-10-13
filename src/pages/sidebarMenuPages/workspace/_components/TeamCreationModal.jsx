@@ -7,11 +7,13 @@ import {
   industryOptions,
   workOptions,
   organizationSizeOptions,
-} from '../../upboardingPages/_components/TeamSelectionData';
-import FormInput from '../../upboardingPages/_components/FormInput';
-import SelectInput from '../../upboardingPages/_components/SelectInput';
+} from '../../../upboardingPages/_components/TeamSelectionData';
+import FormInput from '../../../upboardingPages/_components/FormInput';
+import SelectInput from '../../../upboardingPages/_components/SelectInput';
+import AddMemberModal from '../../../create-team/AddMemberModal';
 
 const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
+  const [data, setData] = useState(null); // State to store the API response
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
@@ -19,6 +21,13 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
   const [message, setMessage] = useState('');
   const [teamName, setTeamName] = useState(''); // New state for team name
   const [isTeamNameValid, setIsTeamNameValid] = useState(false); // Validation for team name
+
+  // AddMember Modal
+  const [isAddMemberModal, setIsAddMemberModal] = useState(false);
+  // Function to open AddMember modal
+  const openAddMemberModal = () => setIsAddMemberModal(true);
+  // Function to close AddMember modal
+  const closeAddMemberModal = () => setIsAddMemberModal(false);
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -65,15 +74,15 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
 
         // Handle response
         if (response.ok) {
-          const data = await response.json();
+          const TeamData = await response.json();
+          setData(TeamData);
+          setIsAddMemberModal(true); // Show the AddMemberModal
 
           setMessage('Team created successfully');
           //   onWorkspaceUpdated(data);
-          console.log('response', data);
-          onClose(); // Close modal first
-          alert('successfully Created');
-          window.location.reload(); // Reload the page
-          //   navigate('/signup/team-invite'); // Navigate to the invite page
+          console.log('response', TeamData);
+          // onClose(); // Close modal first
+          // window.location.reload(); // Reload the page
         } else {
           const errorData = await response.json();
           console.log(errorData);
@@ -213,6 +222,7 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
 
               {/* Submit button */}
               <button
+                onClick={openAddMemberModal}
                 type="submit"
                 className="bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
               >
@@ -235,6 +245,14 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
           </div>
         )}
       </div>
+      {/* Render AddMemberModal if it's open */}
+      {isAddMemberModal && data && (
+        <AddMemberModal
+          onClose={closeAddMemberModal}
+          teamId={data.team_id}
+          teamName={data.team_name}
+        />
+      )}
     </div>
   );
 };

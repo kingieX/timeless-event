@@ -5,16 +5,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Redirect from './components/Redirect';
 
-const fullname = Cookies.get('fullname');
-const user_id = Cookies.get('user_id'); // Assuming you have user_id stored in cookies
-const access_token = Cookies.get('access_token'); // Assuming access_token is stored in cookies
-// console.log('details', access_token);
-
-const userData = {
-  username: fullname,
-  profileImage: '',
-};
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -23,14 +13,23 @@ const Dashboard = () => {
   const [currentPageTitle, setCurrentPageTitle] = useState('');
   const [workspaces, setWorkspaces] = useState([]); // Workspaces state
 
-  if (!access_token) {
-    // Redirect to login page if access token is not available
-    // navigate('/');
-  }
+  const fullname = Cookies.get('fullname');
+  const user_id = Cookies.get('user_id'); // Assuming you have user_id stored in cookies
+  const access_token = Cookies.get('access_token'); // Assuming access_token is stored in cookies
+
+  const userData = {
+    username: fullname,
+    profileImage: '',
+  };
 
   // Fetch workspaces linked to the user
   const fetchWorkspaces = async () => {
     try {
+      if (!access_token) {
+        // Redirect to login page if access token is not available
+        navigate('/');
+      }
+
       const API_BASE_URL = import.meta.env.VITE_BASE_URL; // Update with your base URL from environment variables
       const response = await fetch(
         `${API_BASE_URL}/teamspace/creator?user_id=${user_id}`,
@@ -55,7 +54,7 @@ const Dashboard = () => {
 
       if (response.ok) {
         const data = await response.json(); // Parse JSON response
-        console.log('Fetched data:', data);
+        // console.log('Fetched data:', data);
         setWorkspaces(data); // Set the workspaces from API
       }
 
@@ -67,7 +66,7 @@ const Dashboard = () => {
         'workspace_ids',
         JSON.stringify(workspaceIds)
       );
-      console.log('workspace id:', workspace_ids);
+      // console.log('workspace id:', workspace_ids);
     } catch (error) {
       console.error('Error fetching workspaces:', error);
       setWorkspaces([]); // Fallback in case of error

@@ -7,7 +7,7 @@ import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const MemberWorkspaceList = () => {
+const MemberWorkspaceList = ({ handleLinkClick }) => {
   const [workspaces, setWorkspaces] = useState([]);
   const [isWorkspaceMenuOpen, setIsWorkspaceMenuOpen] = useState(false); // State to toggle workspace list
   const location = useLocation();
@@ -25,7 +25,7 @@ const MemberWorkspaceList = () => {
           }
         );
         setWorkspaces(response.data);
-        console.log('Added to workspace:', response.data);
+        // console.log('Added to workspace:', response.data);
 
         // if ((response.status = 404)) {
         //   // Handle 404 status when no workspaces are found
@@ -50,7 +50,10 @@ const MemberWorkspaceList = () => {
 
   return (
     <div className=" border-gray mb-10">
-      <div className="flex justify-between items-center px-4 py-1 hover:bg-blue-50 cursor-pointer">
+      <div
+        onClick={toggleWorkspaceMenu}
+        className="flex justify-between items-center px-4 py-1 hover:bg-blue-50 cursor-pointer"
+      >
         <div className="flex items-center">
           <GrGroup className="w-6 h-6 mr-2 text-slate-800" />
           <span>Team Workspace</span>
@@ -75,6 +78,7 @@ const MemberWorkspaceList = () => {
             workspaces.map((workspace, index) => (
               <Link
                 key={index}
+                onClick={handleLinkClick}
                 to={`/app/workspace/${workspace.team_space_id}`}
                 className={`flex items-center px-4 py-1 hover:bg-blue-50 cursor-pointer ${
                   isWorkspaceActive(workspace)
