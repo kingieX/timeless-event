@@ -92,6 +92,7 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
         setErrorMessage('An error occurred. Please try again.');
       } finally {
         setIsSubmitting(false);
+        onClose(); // Close modal first
       }
     },
   });
@@ -220,14 +221,23 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
                 </label>
               </div>
 
-              {/* Submit button */}
-              <button
-                onClick={openAddMemberModal}
-                type="submit"
-                className="bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
-              >
-                {isSubmitting ? 'Creating...' : 'Create team'}
-              </button>
+              {/* Buttons */}
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  className="border border-red-400 text-red-400 font-semibold py-2 px-4 hover:bg-red-400 hover:text-white transition duration-300"
+                  onClick={onClose}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={openAddMemberModal}
+                  type="submit"
+                  className="bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+                >
+                  {isSubmitting ? 'Creating...' : 'Create team'}
+                </button>
+              </div>
 
               {/* Display error message */}
               {errorMessage && (

@@ -24,10 +24,6 @@ const TeamOptionsMenu = ({ teamId, team, teamName, onTeamUpdated }) => {
 
   //   console.log('Team id for deletion', teamId);
 
-  const handleCloseModal = () => {
-    setShowConfirmationDialog(true);
-  };
-
   const handleDeleteTeam = () => {
     setIsLoading(true);
     // Send DELETE request to backend
@@ -108,7 +104,7 @@ const TeamOptionsMenu = ({ teamId, team, teamName, onTeamUpdated }) => {
       {showConfirmationDialog && (
         <ConfirmationDialog
           isLoading={isLoading}
-          onClose={handleCloseModal}
+          onClose={() => setShowConfirmationDialog(false)}
           onConfirm={handleDeleteTeam}
           message={`Are you sure you want to delete ${teamName}?`}
         />
