@@ -240,13 +240,13 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
 
               {/* Display error message */}
               {errorMessage && (
-                <div className="lg:w-3/4 w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded mt-4">
+                <div className="text-center w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded mt-4">
                   {errorMessage}
                 </div>
               )}
               {/* Display success message */}
               {message && (
-                <div className="lg:w-3/4 w-full p-2 bg-green-100 text-green-500 border border-green-400 rounded mt-4">
+                <div className="text-center w-full p-2 bg-green-100 text-green-500 border border-green-400 rounded mt-4">
                   {message}
                 </div>
               )}
