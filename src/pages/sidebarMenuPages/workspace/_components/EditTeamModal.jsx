@@ -18,6 +18,7 @@ const EditTeamModal = ({ onClose, teamId, team, onTeamUpdated }) => {
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const access_token = Cookies.get('access_token');
+  // console.log(access_token);
   if (!access_token) {
     setErrorMessage('Authorization failed. Please log in again.');
     return;

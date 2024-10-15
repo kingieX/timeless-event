@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const PhoneInputForm = () => {
-  // State to hold multiple phone inputs
-  const [phones, setPhones] = useState([{ id: 1, value: '' }]);
+const PhoneInputForm = ({ onContactsChange }) => {
+  // State to hold multiple phone inputs with unique ids
+  const [phones, setPhones] = useState([{ id: Date.now(), value: '' }]);
 
-  // Function to handle phone input change
+  // Update parent component with the concatenated phone numbers
+  useEffect(() => {
+    const phoneNumbers = phones
+      .map(phone => phone.value)
+      .filter(phone => phone !== '')
+      .join(',');
+    onContactsChange(phoneNumbers);
+  }, [phones, onContactsChange]);
+
   const handlePhoneChange = (id, value) => {
     const updatedPhones = phones.map(phone =>
       phone.id === id ? { ...phone, value } : phone
@@ -12,12 +20,10 @@ const PhoneInputForm = () => {
     setPhones(updatedPhones);
   };
 
-  // Function to add a new phone input
   const handleAddPhone = () => {
-    setPhones([...phones, { id: phones.length + 1, value: '' }]);
+    setPhones([...phones, { id: Date.now(), value: '' }]); // Generate unique id using Date.now()
   };
 
-  // Function to remove a phone input
   const handleRemovePhone = id => {
     setPhones(phones.filter(phone => phone.id !== id));
   };
@@ -26,14 +32,6 @@ const PhoneInputForm = () => {
     <div className="space-y-2">
       {phones.map(phone => (
         <div key={phone.id} className="flex items-center space-x-2">
-          <select className="p-2 border border-gray-300 focus:outline-none focus:border-primary">
-            <option value="+1">+1</option>
-            <option value="+234">+234</option>
-            <option value="+233">+233</option>
-            <option value="+44">+44</option>
-            {/* Add more options as needed */}
-          </select>
-
           <input
             type="text"
             value={phone.value}

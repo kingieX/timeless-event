@@ -10,8 +10,8 @@ const rolesOptions = [
 ];
 
 const inviteOptions = [
-  { value: 'email', label: 'Email address' },
   { value: 'sms', label: 'SMS' },
+  { value: 'email', label: 'Email address' },
   { value: 'whatsapp', label: 'WhatsApp' },
 ];
 

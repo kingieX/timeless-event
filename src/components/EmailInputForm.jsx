@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const EmailInputForm = () => {
-  // State to hold multiple email inputs
-  const [emails, setEmails] = useState([{ id: 1, value: '' }]);
+const EmailInputForm = ({ onContactsChange }) => {
+  const [emails, setEmails] = useState([{ id: Date.now(), value: '' }]);
 
-  // Function to handle email input change
+  // Update parent component with the concatenated email addresses
+  useEffect(() => {
+    const emailAddresses = emails
+      .map(email => email.value)
+      .filter(email => email !== '')
+      .join(',');
+    onContactsChange(emailAddresses);
+  }, [emails, onContactsChange]);
+
   const handleEmailChange = (id, value) => {
     const updatedEmails = emails.map(email =>
       email.id === id ? { ...email, value } : email
@@ -12,12 +19,10 @@ const EmailInputForm = () => {
     setEmails(updatedEmails);
   };
 
-  // Function to add a new email input
   const handleAddEmail = () => {
-    setEmails([...emails, { id: emails.length + 1, value: '' }]);
+    setEmails([...emails, { id: Date.now(), value: '' }]); // Generate unique id using Date.now()
   };
 
-  // Function to remove an email input
   const handleRemoveEmail = id => {
     setEmails(emails.filter(email => email.id !== id));
   };

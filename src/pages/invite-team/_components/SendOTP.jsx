@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import 'react-phone-input-2/lib/style.css';
-import Cookies from 'js-cookie'; // Assuming you're using js-cookie for cookie handling
+import Cookies from 'js-cookie';
 import Logo from '/image/logo.png';
-import CodeInput from '../components/CodeInput';
+import CodeInput from '../../../components/CodeInput';
 
-const VerifyOTP = () => {
+const SendOTP = () => {
   const [codeSent, setCodeSent] = useState(false); // Track if code was sent
   const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
   const [countdown, setCountdown] = useState(0); // Timer countdown for the resend code button
@@ -15,7 +14,7 @@ const VerifyOTP = () => {
   const [error, setError] = useState(null); // Error handling for resend OTP
   const navigate = useNavigate();
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Extract userId and phone_no from cookies
   const userId = Cookies.get('userId');
@@ -59,13 +58,13 @@ const VerifyOTP = () => {
     }
   };
 
-  // Function to verify OTP using query parameters
+  // Function to verify OTP and then update user data
   const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Make a request using query parameters for OTP verification
+      // Step 1: Verify OTP
       const response = await fetch(
         `${BASE_URL}/user/verify-otp?user_id=${userId}&otp_code=${verificationCode}&otp_type=sms`,
         {
@@ -77,13 +76,31 @@ const VerifyOTP = () => {
       );
 
       if (response.ok) {
-        console.log('Phone verified successfully');
-        navigate('/signup/onboard'); // Navigate to the onboard page
+        console.log('OTP verified successfully');
+
+        // Step 2: Update user data to set is_active to true
+        const postData = { is_active: true };
+
+        const updateResponse = await fetch(`${BASE_URL}/user/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(postData),
+        });
+
+        if (updateResponse.ok) {
+          console.log('User updated successfully');
+          // Step 3: Navigate to the success page
+          navigate('/team/success-page');
+        } else {
+          console.error('Failed to update user');
+        }
       } else {
         console.error('Failed to verify OTP');
       }
     } catch (error) {
-      console.error('Error verifying OTP:', error);
+      console.error('Error during verification or updating:', error);
     }
 
     setIsSubmitting(false); // Reset submission state
@@ -96,8 +113,7 @@ const VerifyOTP = () => {
 
   return (
     <>
-      <div className="flex items-center shadow-md py-4 lg:px-8 px-4">
-        {/* Logo and Name */}
+      <div className="fixed z-20 w-full bg-white flex items-center shadow-md py-4 lg:px-8 px-4">
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
           <span className="ml-2 lg:text-xl text-sm lg:font-bold text-gray-800">
@@ -115,13 +131,6 @@ const VerifyOTP = () => {
             Enter the 6-digit verification code sent to your phone number.
           </p>
           <form onSubmit={handleSubmit} className="w-full space-y-2">
-            {/* {showVerificationMessage && (
-              <p className="text-primary mt-1">
-                Verification code sent to {phone_no}
-              </p>
-            )} */}
-
-            {/* {codeSent && ( */}
             <>
               <CodeInput
                 codeLength={6}
@@ -136,8 +145,6 @@ const VerifyOTP = () => {
                 {countdown > 0 ? `${countdown}s` : 'Resend OTP'}
               </button>
             </>
-            {/* )} */}
-
             <button
               type="submit"
               className={`w-full bg-primary text-black font-semibold py-2 px-4 transition duration-300 text-base md:text-lg lg:text-xl md:py-3 lg:py-4
@@ -158,4 +165,4 @@ const VerifyOTP = () => {
   );
 };
 
-export default VerifyOTP;
+export default SendOTP;

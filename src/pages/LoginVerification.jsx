@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import Cookies from 'js-cookie';
 
 const LoginVerificationPage = () => {

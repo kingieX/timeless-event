@@ -69,6 +69,11 @@ import WorkspacePage from './pages/sidebarMenuPages/workspace/WorkspacePage';
 // import MyWork from './pages/sidebarMenuPages/workspace/MyWork';
 // import MyHome from './pages/sidebarMenuPages/workspace/MyHome';
 import WorkspaceDetailPage from './pages/sidebarMenuPages/workspace/WorkspaceDetailPage';
+import InvitePage from './pages/invite-team/InvitePage';
+import RegistrationPage from './pages/invite-team/RegistrationPage';
+import UserVerification from './pages/invite-team/UserVerification';
+import SendOTP from './pages/invite-team/_components/SendOTP';
+import TeamSuccessPage from './pages/invite-team/_components/SuccessPage';
 
 const App = () => {
   return (
@@ -101,6 +106,13 @@ const App = () => {
         <Route path="/verify" element={<PasswordResetVerification />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/success" element={<SuccessPage />} />
+
+        {/* onvite page */}
+        <Route path="/invite/:team_id/:invite_id" element={<InvitePage />} />
+        <Route path="/team/user-register" element={<RegistrationPage />} />
+        <Route path="/team/user-verification" element={<UserVerification />} />
+        <Route path="/team/send-otp" element={<SendOTP />} />
+        <Route path="/team/success-page" element={<TeamSuccessPage />} />
 
         {/* Outlet route */}
         <Route path="/app/*" element={<Dashboard />}>
