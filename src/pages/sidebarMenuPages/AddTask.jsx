@@ -97,14 +97,14 @@ const AddTask = () => {
   return (
     <div className="flex justify-center items-center mt-4 mx-4">
       {/* Reminder Modal */}
-      {showReminderModal && (
+      {/* {showReminderModal && (
         <ReminderModal
           onClose={() => setShowReminderModal(false)}
           onSave={handleReminderSave}
           groupOptions={groupOptions}
           deliveryMediumOptions={deliveryMediumOptions}
         />
-      )}
+      )} */}
 
       <div className="bg-white w-full max-w-xl py-4 lg:border border-gray rounded-lg lg:shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Add Task</h2>
