@@ -4,7 +4,7 @@ import { CiLocationOn } from 'react-icons/ci';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { FiTag } from 'react-icons/fi';
 import { CiAlarmOn } from 'react-icons/ci';
-import ReminderModal from '../../components/ReminderModal';
+// import ReminderModal from '../../components/ReminderModal';
 import { MdOutlineLowPriority } from 'react-icons/md';
 
 // Dynamic options for the modal

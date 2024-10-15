@@ -54,6 +54,13 @@ const Onboard4 = () => {
         );
 
         if (response.ok) {
+          const TeamData = await response.json();
+
+          const team_id = TeamData.team_id;
+          console.log('Team id:', team_id);
+
+          Cookies.set('team_space_id', data.team_id);
+
           navigate('/signup/team-invite');
         } else {
           const errorData = await response.json();

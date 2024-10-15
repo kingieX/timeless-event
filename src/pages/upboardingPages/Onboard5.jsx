@@ -1,9 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import PhoneInputForm from '../../components/PhoneInputForm';
 import EmailInputForm from '../../components/EmailInputForm';
+import Cookies from 'js-cookie';
 
 const rolesOptions = [
   { value: 'admin', label: 'Admin' },
@@ -27,6 +28,7 @@ const Onboard5 = () => {
   const navigate = useNavigate();
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+  const teamId = Cookies.get('team_id');
 
   const handleToggle = () => {
     setInviteLinkEnabled(!inviteLinkEnabled);
@@ -81,7 +83,7 @@ const Onboard5 = () => {
 
   return (
     <div>
-      <div className="mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
+      <div className="fixed w-full z-50 bg-white mb-6 flex items-center shadow-md py-4 lg:px-8 px-4">
         {/* Logo and Name */}
         <Link className="flex items-center" to="/">
           <img src={Logo} alt="Logo" className="h-8 w-8" />
@@ -91,7 +93,7 @@ const Onboard5 = () => {
         </Link>
       </div>
 
-      <div className="flex flex-col justify-center items-center mx-6">
+      <div className="flex flex-col justify-center items-center lg:pt-16 pt-12 mx-6">
         <div className="flex flex-col justify-center items-center lg:w-1/2 my-8 py-8 lg:pb-12 lg:px-12 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
             Invite people to your team
@@ -152,9 +154,9 @@ const Onboard5 = () => {
           <div className="w-full mb-2">
             {selectedInviteOption === 'sms' ||
             selectedInviteOption === 'whatsapp' ? (
-              <PhoneInputForm />
+              <PhoneInputForm onContactsChange={setContacts} />
             ) : selectedInviteOption === 'email' ? (
-              <EmailInputForm />
+              <EmailInputForm onContactsChange={setContacts} />
             ) : null}
           </div>
 
