@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 import Logo from '/image/logo.svg';
 import PhoneInputForm from '../../components/PhoneInputForm';
 import EmailInputForm from '../../components/EmailInputForm';
@@ -16,12 +17,16 @@ const inviteOptions = [
 ];
 
 const Onboard5 = () => {
-  const [inviteLinkEnabled, setInviteLinkEnabled] = useState(false);
-  const [inviteLink, setInviteLink] = useState(
-    'https://timelessevent.com/auth/join?invite_code=ksdfkm'
-  );
+  const [inviteLinkEnabled, setInviteLinkEnabled] = useState(true);
+  const [selectedInviteOption, setSelectedInviteOption] = useState('email');
+  const [contacts, setContacts] = useState('');
+  const [inviteLink, setInviteLink] = useState('');
   const [newPeopleRole, setNewPeopleRole] = useState('');
-  const [selectedInviteOption, setSelectedInviteOption] = useState('email'); // Track the selected invite option
+  const [isInviteSent, setIsInviteSent] = useState(false); // Track whether invites are sent
+
+  const navigate = useNavigate();
+
+  const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const handleToggle = () => {
     setInviteLinkEnabled(!inviteLinkEnabled);
@@ -32,13 +37,45 @@ const Onboard5 = () => {
     alert('Invite link copied to clipboard!');
   };
 
-  const navigate = useNavigate();
+  const handleSendInvites = async () => {
+    // Check for valid contacts before sending
+    if (!contacts || contacts.length === 0) {
+      setErrorMessage('Please provide at least one contact.');
+      setIsLoading(false);
+      return;
+    }
 
-  const handleSkipClick = () => {
-    navigate('/app');
+    // Create the request body
+    const requestBody = {
+      invite_type: activeInviteOption,
+      enable_link: inviteLinkEnabled,
+      contacts: contacts,
+      invite_status: 'success',
+    };
+
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/teamMember/${teamId}`,
+        requestBody,
+        {
+          headers: {
+            // Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Assuming the invite link is in the response
+        const inviteLink = response.data.link_address;
+        setInviteLink(inviteLink);
+        setIsInviteSent(true); // Mark invite as sent
+      }
+    } catch (error) {
+      console.error('Error sending invite:', error);
+    }
   };
 
-  const handleButtonClick = () => {
+  const handleNext = () => {
     navigate('/app');
   };
 
@@ -55,16 +92,13 @@ const Onboard5 = () => {
       </div>
 
       <div className="flex flex-col justify-center items-center mx-6">
-        <div className="flex flex-col justify-center items-center lg:w-1/2  my-8 py-8 lg:pb-12 lg:px-12 lg:shadow-md lg:border lg:border-gray rounded-md">
+        <div className="flex flex-col justify-center items-center lg:w-1/2 my-8 py-8 lg:pb-12 lg:px-12 lg:shadow-md lg:border lg:border-gray rounded-md">
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
             Invite people to your team
           </h2>
 
           {/* Invite Link Section */}
           <div className="w-full mb-4">
-            {/* <label className="block font-semibold text-gray-700 mb-2">
-              Invite by link
-            </label> */}
             <div className="flex items-center">
               <span className="mr-2 font-semibold">Enable invite link</span>
               <label className="switch">
@@ -77,42 +111,22 @@ const Onboard5 = () => {
               </label>
             </div>
 
-            <div className="w-full flex lg:flex-row flex-col lg:gap-0 gap-4 items-center mt-2">
-              <input
-                type="text"
-                value={inviteLink}
-                readOnly
-                className={`w-full flex-grow px-4 py-2 border focus:outline-none ${
-                  inviteLinkEnabled
-                    ? 'border-gray-300 bg-white'
-                    : 'hidden opacity-50 cursor-not-allowed'
-                }`}
-                disabled={!inviteLinkEnabled}
-              />
-              <div className="w-full flex justify-center">
+            {inviteLinkEnabled && inviteLink && (
+              <div className="w-full flex lg:flex-row flex-col lg:gap-0 gap-4 items-center mt-2">
+                <input
+                  type="text"
+                  value={inviteLink}
+                  readOnly
+                  className="w-full flex-grow px-4 py-2 border focus:outline-none border-gray-300 bg-white"
+                />
                 <button
-                  className={`w-full lg:ml-2 px-4 py-2 border border-primary text-primary  ${
-                    inviteLinkEnabled
-                      ? ' hover:bg-primary hover:text-black transition duration-300'
-                      : 'hidden opacity-50 cursor-not-allowed'
-                  }`}
+                  className="w-full lg:ml-2 px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-black transition duration-300"
                   onClick={handleCopyLink}
-                  disabled={!inviteLinkEnabled}
                 >
                   Copy link
                 </button>
-                <button
-                  className={`w-full ml-2 px-4 py-2 border border-red-500 text-red-500  ${
-                    inviteLinkEnabled
-                      ? ' hover:bg-red-500 hover:text-white transition duration-300'
-                      : 'hidden opacity-50 cursor-not-allowed'
-                  }`}
-                  disabled={!inviteLinkEnabled}
-                >
-                  Reset link
-                </button>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Invite by Other Options */}
@@ -122,13 +136,10 @@ const Onboard5 = () => {
             </label>
             <select
               id="options"
-              value={selectedInviteOption} // Bind the selected option to state
-              onChange={e => setSelectedInviteOption(e.target.value)} // Update state on change
+              value={selectedInviteOption}
+              onChange={e => setSelectedInviteOption(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 focus:outline-none focus:border-primary"
             >
-              {/* <option value="" disabled>
-                Select invite option
-              </option> */}
               {inviteOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
@@ -168,16 +179,16 @@ const Onboard5 = () => {
           {/* Buttons */}
           <div className="lg:w-3/4 w-full flex justify-between gap-8">
             <button
-              onClick={handleSkipClick}
+              // onClick={handleSkipClick}
               className="lg:w-1/2 w-full border border-primary text-primary font-semibold py-2 px-4 hover:bg-primary hover:text-black transition duration-300"
             >
               Skip
             </button>
             <button
-              onClick={handleButtonClick}
+              onClick={isInviteSent ? handleNext : handleSendInvites}
               className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
-              Send invites
+              {isInviteSent ? 'Next' : 'Send invites'}
             </button>
           </div>
         </div>
