@@ -217,7 +217,7 @@ const WorkspaceDetailPage = () => {
           <AiOutlineSearch className="w-6 h-6 text-gray" />
           <input
             type="text"
-            placeholder="Search projects..."
+            placeholder="Search teams, projects..."
             className="flex-grow outline-none text-sm px-2"
           />
         </div>
