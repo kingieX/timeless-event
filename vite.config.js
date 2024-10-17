@@ -9,12 +9,5 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 2000,
-    // Ensures only the necessary code is included in the build
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Optional: Remove console logs to reduce bundle size
-      },
-    },
   },
 });
