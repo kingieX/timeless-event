@@ -65,10 +65,9 @@ import SuccessPage from './components/Reset-password-flow/SuccessPage';
 import VerifyOTP from './pages/VerifyOTP';
 
 // Workspace routes imports
-import WorkspacePage from './pages/sidebarMenuPages/workspace/WorkspacePage';
-// import MyWork from './pages/sidebarMenuPages/workspace/MyWork';
-// import MyHome from './pages/sidebarMenuPages/workspace/MyHome';
+import WorkspacePage from './pages/sidebarMenuPages/workspace/AddWorkspacePage';
 import WorkspaceDetailPage from './pages/sidebarMenuPages/workspace/WorkspaceDetailPage';
+
 import InvitePage from './pages/invite-team/InvitePage';
 import RegistrationPage from './pages/invite-team/RegistrationPage';
 import UserVerification from './pages/invite-team/UserVerification';
@@ -134,16 +133,12 @@ const App = () => {
           <Route path="today" element={<Today />} />
           <Route path="upcoming" element={<Upcoming />} />
 
-          {/* Workspace route */}
           {/* Workspace routes */}
           <Route path="workspace" element={<WorkspacePage />} />
           <Route
             path="workspace/:workspaceId"
             element={<WorkspaceDetailPage />}
           />
-
-          {/* <Route path="workspace/my-work" element={<MyWork />} /> */}
-          {/* <Route path="workspace/my-home" element={<MyHome />} /> */}
 
           {/* userMenu routes */}
           <Route path="tasks" element={<Task />} />
