@@ -51,7 +51,7 @@ const MemberWorkspaceList = ({ handleLinkClick }) => {
   return (
     <div className=" border-gray mb-10">
       <div
-        // onClick={toggleWorkspaceMenu}
+        onClick={toggleWorkspaceMenu}
         className="flex justify-between items-center px-4 py-1 hover:bg-blue-50 cursor-pointer"
       >
         <div className="flex items-center" onClick={toggleWorkspaceMenu}>
