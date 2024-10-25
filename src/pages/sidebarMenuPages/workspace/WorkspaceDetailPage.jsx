@@ -241,36 +241,13 @@ const WorkspaceDetailPage = () => {
           />
         </div>
 
+        {/* All Teams in the workspace */}
         <div className="flex justify-between items-center py-2 px-1">
           <h1 className="font-bold text-xl">Teams</h1>
-          <div className="relative">
-            <div className="relative">
-              <button
-                className="flex items-center text-primary text-sm font-semibold"
-                onClick={toggleDropdown}
-              >
-                Add <GoPlus className="ml-2" />
-              </button>
-              {/* Dropdown menu */}
-              {isDropdownOpen && (
-                <ul
-                  ref={menuRef} // Single ref used for both modal and dropdown
-                  className="absolute top-8 right-2 w-[10rem] rounded-lg shadow-lg bg-white"
-                >
-                  <li
-                    className="px-4 py-2 hover:bg-primary hover:text-white rounded-t-lg"
-                    onClick={openFolderModal}
-                  >
-                    Add folder
-                  </li>
-                  {/* Add more dropdown items as needed */}
-                </ul>
-              )}
-            </div>
-          </div>
         </div>
 
-        <div className="py-2 grid lg:grid-cols-2 grid-cols-1 gap-4">
+        {/* Map teams goes here... */}
+        <div className="py-2 mb-4 grid lg:grid-cols-2 grid-cols-1 gap-4">
           {teamsLoading ? (
             <p>Loading teams...</p>
           ) : teamsError ? (
@@ -302,6 +279,36 @@ const WorkspaceDetailPage = () => {
             ))
           )}
         </div>
+
+        {/* All Folders in the workspace */}
+        <div className="flex justify-between items-center py-2 px-1">
+          <h1 className="font-bold text-xl">My folders</h1>
+          <div className="relative">
+            <div className="relative">
+              <button
+                className="flex items-center text-primary text-sm font-semibold"
+                onClick={toggleDropdown}
+              >
+                Add <GoPlus className="ml-2" />
+              </button>
+              {/* Dropdown menu */}
+              {isDropdownOpen && (
+                <ul
+                  ref={menuRef} // Single ref used for both modal and dropdown
+                  className="absolute top-8 right-2 w-[10rem] rounded-lg shadow-lg bg-white"
+                >
+                  <li
+                    className="px-4 py-2 hover:bg-primary hover:text-white rounded-t-lg"
+                    onClick={openFolderModal}
+                  >
+                    Add folder
+                  </li>
+                  {/* Add more dropdown items as needed */}
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Modals */}
@@ -325,6 +332,7 @@ const WorkspaceDetailPage = () => {
       {isFolderModalOpen && (
         <FolderModal
           workspaceId={workspaceId}
+          workspaceData={workspaceData}
           onClose={closeFolderModal}
           // Add any additional props needed for FolderModal
         />

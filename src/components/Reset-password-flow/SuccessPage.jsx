@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import { Checkmark } from 'react-checkmark';
 
 const SuccessPage = () => {

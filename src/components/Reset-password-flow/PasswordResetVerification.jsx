@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import CodeInput from '../CodeInput';
 import Cookies from 'js-cookie'; // Assuming you're using js-cookie for cookie handling
 
@@ -67,7 +67,7 @@ const PasswordResetVerification = () => {
     try {
       // Make a request using query parameters for OTP verification
       const response = await fetch(
-        `${BASE_URL}/user/verify-otp?user_id=${userId}&otp_code=${verificationCode}&otp_type=sms`,
+        `${BASE_URL}/user/verify-otp?email=${email}&otp_code=${verificationCode}&otp_type=email`,
         {
           method: 'POST',
           headers: {

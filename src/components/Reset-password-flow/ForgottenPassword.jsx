@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import Cookies from 'js-cookie';
@@ -10,6 +10,7 @@ const ForgottenPassword = () => {
   const [phone_number, setPhoneNumber] = useState(''); // Store the phone number
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); // Track loading state
   // const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const ForgottenPassword = () => {
         // Check if user_id exists
         if (!userId) {
           console.error('User ID not found in the response.');
-          setMessage('User ID not found in the response.');
+          setError('User ID not found in the response.');
           return; // Stop further execution if user_id is missing
         }
 
@@ -62,13 +63,13 @@ const ForgottenPassword = () => {
           navigate('/verify');
         }, 2000);
       } else {
-        setMessage(
+        setError(
           'Failed to validate user, is this phone number registered to an account?'
         );
       }
     } catch (error) {
       console.error('Error fetching user data after validation:', error);
-      setMessage('An error occurred after validation.');
+      setError('An error occurred after validation.');
     }
   };
 
@@ -93,11 +94,11 @@ const ForgottenPassword = () => {
         setLoading(true);
         setMessage('A verification code has been sent to your email.');
       } else {
-        setMessage('Failed to send OTP, Please enter a valid email.');
+        setError('Failed to send OTP, Please enter a valid email.');
       }
     } catch (error) {
       console.error('Error sending OTP:', error);
-      setMessage('An error occurred while sending OTP.');
+      setError('An error occurred while sending OTP.');
     } finally {
       setLoading(false); // Stop loading
     }
@@ -109,12 +110,6 @@ const ForgottenPassword = () => {
 
     await handleUserValidation();
   };
-
-  // Determine message color based on content
-  const messageClass =
-    message === 'A verification code has been sent to your phone number.'
-      ? 'text-green-600 text-center'
-      : 'text-red-600 text-center';
 
   return (
     <div className="w-full">
@@ -178,7 +173,10 @@ const ForgottenPassword = () => {
               login
             </Link>
           </p>
-          {message && <p className={`mt-4 ${messageClass}`}>{message}</p>}
+          {message && (
+            <p className="mt-4 text-center text-green-600">{message}</p>
+          )}
+          {error && <p className="mt-4 text-center text-red-600">{error}</p>}
         </div>
       </div>
     </div>

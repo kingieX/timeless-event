@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import FloatingLabelInput from '../FloatingLabelInput';
 import Cookies from 'js-cookie'; // Assuming you're using js-cookie for cookie handling
 
@@ -8,6 +8,8 @@ const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -15,6 +17,8 @@ const ResetPassword = () => {
   // Handle the password reset form submission
   const handleResetPassword = async e => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     // Retrieve email from cookies
     const email = Cookies.get('email');
@@ -31,8 +35,10 @@ const ResetPassword = () => {
     try {
       const requestBody = {
         email: email,
-        password: newPassword,
+        new_password: newPassword,
       };
+
+      console.log('Request Body:', requestBody);
 
       // POST request to reset the password
       const response = await fetch(`${API_BASE_URL}/user/change-password`, {
@@ -43,7 +49,10 @@ const ResetPassword = () => {
 
       if (response.ok) {
         // Navigate to success page if the password was successfully reset
-        navigate('/success');
+        setSuccess('Password reset successful.');
+        setTimeout(() => {
+          navigate('/success');
+        }, 2000);
       } else {
         const responseData = await response.json();
         setErrorMessage(responseData?.message || 'Failed to reset password.');
@@ -88,12 +97,18 @@ const ResetPassword = () => {
             />
             <button
               type="submit"
+              disabled={isLoading}
               className="bg-primary text-black font-semibold py-2 px-4 lg:mt-8 mt-2 w-full hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
-              Reset Password
+              {isLoading ? 'Resetting...' : 'Reset Password'}
             </button>
           </form>
-          {errorMessage && <p className="mt-4 text-red-600">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="mt-4 text-center text-red-600">{errorMessage}</p>
+          )}
+          {success && (
+            <p className="mt-4 text-center text-green-600">{success}</p>
+          )}
         </div>
       </div>
     </div>
