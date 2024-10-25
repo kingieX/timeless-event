@@ -4,9 +4,11 @@ import Logo from '/image/logo.svg';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import Cookies from 'js-cookie';
+import FloatingLabelInput from '../FloatingLabelInput';
 
 const ForgottenPassword = () => {
   const [phone_number, setPhoneNumber] = useState(''); // Store the phone number
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false); // Track loading state
   // const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
@@ -19,7 +21,7 @@ const ForgottenPassword = () => {
     try {
       // Send GET request to retrieve user data by email
       const userResponse = await fetch(
-        `${BASE_URL}/user/check_user?phone_no=${phone_number}`,
+        `${BASE_URL}/user/email?email=${email}`,
         {
           method: 'GET',
           headers: {
@@ -28,7 +30,7 @@ const ForgottenPassword = () => {
         }
       );
 
-      console.log(phone_number);
+      // console.log(email);
 
       if (userResponse.ok) {
         const userData = await userResponse.json();
@@ -50,13 +52,13 @@ const ForgottenPassword = () => {
           secure: true,
           sameSite: 'Strict',
         });
-        Cookies.set('phone_no', phone_number, {
-          secure: true,
-          sameSite: 'Strict',
-        });
+        // Cookies.set('phone_no', phone_number, {
+        //   secure: true,
+        //   sameSite: 'Strict',
+        // });
 
         // Send OTP to phone number using the userId
-        await handleSendOtp(userId, phone_number);
+        await handleSendOtp(userId, email);
 
         // Navigate to the OTP verification page
         navigate('/verify');
@@ -72,18 +74,18 @@ const ForgottenPassword = () => {
   };
 
   // Function to send OTP
-  const handleSendOtp = async (userId, phone_no) => {
+  const handleSendOtp = async (userId, email) => {
     setLoading(true);
 
     try {
-      let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
-      // Check if the phone number already includes a '+', if not, add it
-      if (!formattedPhoneNo.startsWith('+')) {
-        formattedPhoneNo = `+${formattedPhoneNo}`;
-      }
+      // let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
+      // // Check if the phone number already includes a '+', if not, add it
+      // if (!formattedPhoneNo.startsWith('+')) {
+      //   formattedPhoneNo = `+${formattedPhoneNo}`;
+      // }
 
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${formattedPhoneNo}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}`,
         {
           method: 'POST',
           headers: {
@@ -92,13 +94,13 @@ const ForgottenPassword = () => {
         }
       );
 
-      console.log('Phone gotten for ForgottenPassword', formattedPhoneNo);
+      console.log('email gotten for ForgottenPassword', email);
 
       if (otpResponse.ok) {
         setLoading(true);
-        setMessage('A verification code has been sent to your phone number.');
+        setMessage('A verification code has been sent to your email.');
       } else {
-        setMessage('Failed to send OTP, Please enter a valid phone number.');
+        setMessage('Failed to send OTP, Please enter a valid email.');
       }
     } catch (error) {
       console.error('Error sending OTP:', error);
@@ -112,27 +114,8 @@ const ForgottenPassword = () => {
   const handleForgotPassword = async e => {
     e.preventDefault();
 
-    if (phone_number && phone_number.length >= 8) {
-      // Make a POST request to register user and then send OTP
-      await handleUserValidation();
-    } else {
-      // alert('Please enter a valid phone number.');
-      setMessage('Please enter a valid phone number.');
-    }
+    await handleUserValidation();
   };
-
-  // const handleForgotPassword = e => {
-  //   e.preventDefault();
-  //   if (phone_number) {
-  //     // Logic to send reset link or code
-  //     setMessage('A verification code has been sent to your phone number.');
-  //     setTimeout(() => {
-  //       navigate('/verify'); // Navigate to verification page
-  //     }, 2000);
-  //   } else {
-  //     setMessage('Please enter a valid phone number.');
-  //   }
-  // };
 
   // Determine message color based on content
   const messageClass =
@@ -158,11 +141,11 @@ const ForgottenPassword = () => {
             Forgot Your Password?
           </h2>
           <p className="text-slate-600 text-center mb-6 text-base md:text-lg lg:text-xl">
-            Enter your phone number below, and a code will be sent to reset your
+            Enter your email below, and a code will be sent to reset your
             password.
           </p>
           <form onSubmit={handleForgotPassword} className="w-full">
-            <div className="w-full flex justify-between items-center border border-gray p-2">
+            {/* <div className="w-full flex justify-between items-center border border-gray p-2">
               <PhoneInput
                 country={'ng'}
                 value={phone_number}
@@ -174,6 +157,15 @@ const ForgottenPassword = () => {
                   border: 'none',
                   paddingLeft: '58px',
                 }} // Removed border, padded for the flag and code
+              />
+            </div> */}
+            <div className="w-full flex justify-between items-center mb-4">
+              <FloatingLabelInput
+                label="Email"
+                type="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
             <button

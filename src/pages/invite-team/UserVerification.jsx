@@ -76,19 +76,11 @@ const UserVerification = () => {
   };
 
   // Function to send OTP
-  const handleSendOtp = async (userId, phone_no) => {
+  const handleSendOtp = async (userId, email) => {
     // await handleRegisterUser();
     try {
-      // let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
-      // // Check if the phone number already includes a '+', if not, add it
-      // if (!formattedPhoneNo.startsWith('+')) {
-      //   formattedPhoneNo = `+${formattedPhoneNo}`;
-      // }
-
-      // Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
-
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}&otp_type=email`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}`,
         {
           method: 'POST',
           headers: {

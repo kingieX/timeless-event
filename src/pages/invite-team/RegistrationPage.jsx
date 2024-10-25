@@ -65,9 +65,7 @@ const RegistrationPage = () => {
 
     // Validate password strength
     if (!passwordRegex.test(password)) {
-      setError(
-        'Password must contain at least 1 uppercase letter, 1 number, and 1 symbol.'
-      );
+      setError('Password must be at least 6 values.');
       setLoading(false);
       return;
     }
