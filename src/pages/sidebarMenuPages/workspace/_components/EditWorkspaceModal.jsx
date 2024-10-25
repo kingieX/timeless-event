@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { IoMdClose } from 'react-icons/io';
 
-const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
+const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
   const [message, setMessage] = useState(''); // Feedback message state
@@ -80,7 +80,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onWorkspaceUpdated }) => {
         );
 
         if (response.status === 200) {
-          onWorkspaceUpdated(response.data); // Update the parent with new workspace data
+          onUpdate(response.data); // Update the parent with new workspace data
           setMessage('Workspace updated successfully!');
         } else {
           setMessage('Failed to update workspace.');

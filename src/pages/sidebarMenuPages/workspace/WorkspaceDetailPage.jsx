@@ -308,6 +308,7 @@ const WorkspaceDetailPage = () => {
       {isEditModalOpen && (
         <EditWorkspaceModal
           workspaceId={workspaceId}
+          workspaceData={workspaceData}
           onClose={closeEditModal}
           onUpdate={handleWorkspaceUpdate}
           initialData={workspaceData}
