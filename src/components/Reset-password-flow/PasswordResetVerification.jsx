@@ -17,9 +17,9 @@ const PasswordResetVerification = () => {
 
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
-  // Extract userId and phone_no from cookies
+  // Extract userId and email from cookies
   const userId = Cookies.get('userId');
-  const phone_no = Cookies.get('phone_no');
+  const email = Cookies.get('email');
 
   useEffect(() => {
     if (countdown > 0) {
@@ -30,11 +30,11 @@ const PasswordResetVerification = () => {
     }
   }, [countdown, codeSent]);
 
-  // Function to send OTP using userId and phone_no from cookies
+  // Function to send OTP using userId and email from cookies
   const handleSendOtp = async () => {
     try {
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${phone_no}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}`,
         {
           method: 'POST',
           headers: {
@@ -48,7 +48,7 @@ const PasswordResetVerification = () => {
         setCountdown(60); // Start 60 seconds countdown
         setCodeSent(true);
         setShowVerificationMessage(true); // Show verification message
-        console.log(`Code sent to +${phone_no}`);
+        console.log(`Code sent to ${email}`);
       } else {
         setError('Failed to send OTP.');
         console.error('Failed to send OTP');
@@ -77,7 +77,7 @@ const PasswordResetVerification = () => {
       );
 
       if (response.ok) {
-        console.log('Phone verified successfully');
+        console.log('email verified successfully');
         navigate('/reset-password');
       } else {
         console.error('Failed to verify OTP');
@@ -91,31 +91,8 @@ const PasswordResetVerification = () => {
 
   // Function to refresh OTP (resend the code)
   const handleRefreshCode = async () => {
-    handleSendOtp(); // Call the resend OTP function using userId and phone_no from cookies
+    handleSendOtp(); // Call the resend OTP function using userId and email from cookies
   };
-
-  // Handle form submission and verification
-  // const handleVerification = e => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-
-  //   setTimeout(() => {
-  //     // const verificationCode = code.join(''); // Convert the array of code digits to a single string
-  //     // if (verificationCode === '123456') {
-  //     // Replace with actual verification logic
-  //     navigate('/reset-password');
-  //     // } else {
-  //     setErrorMessage(
-  //       'Invalid code. Please try again. Code is 123456 for testing purposes'
-  //     );
-  //     // }
-  //   }, 2000);
-  // };
-
-  // // Handle resending the code
-  // const resendCode = () => {
-  //   alert('Code resent to your email.');
-  // };
 
   return (
     <div className="w-full">
@@ -152,11 +129,6 @@ const PasswordResetVerification = () => {
             >
               {isSubmitting ? 'Verifying...' : 'Verify'}
             </button>
-            {showVerificationMessage && (
-              <p className="text-primary mt-1">
-                Verification code sent to {phone_no}
-              </p>
-            )}
           </form>
           <p
             className="mt-2 text-primary hover:underline cursor-pointer"
@@ -164,6 +136,11 @@ const PasswordResetVerification = () => {
           >
             Resend Code
           </p>
+          {showVerificationMessage && (
+            <p className="text-green-500 text-center mt-1">
+              Verification code sent to {email}
+            </p>
+          )}
           {error && <p className="mt-4 text-red-600">{error}</p>}
         </div>
       </div>

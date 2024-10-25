@@ -198,7 +198,7 @@ const VerificationPage = () => {
               {loading ? 'Sending Code...' : 'Send Code'}
             </button>
             {showVerificationMessage && (
-              <p className="text-primary mt-1">Verification code sent</p>
+              <p className="text-green-600 mt-1">Verification code sent</p>
             )}
             {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           </form>

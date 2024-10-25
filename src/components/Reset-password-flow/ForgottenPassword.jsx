@@ -52,16 +52,15 @@ const ForgottenPassword = () => {
           secure: true,
           sameSite: 'Strict',
         });
-        // Cookies.set('phone_no', phone_number, {
-        //   secure: true,
-        //   sameSite: 'Strict',
-        // });
 
-        // Send OTP to phone number using the userId
+        setMessage('A verification code has been sent to your email.');
+        // Send OTP to email using the userId
         await handleSendOtp(userId, email);
 
         // Navigate to the OTP verification page
-        navigate('/verify');
+        setTimeout(() => {
+          navigate('/verify');
+        }, 2000);
       } else {
         setMessage(
           'Failed to validate user, is this phone number registered to an account?'
@@ -78,12 +77,6 @@ const ForgottenPassword = () => {
     setLoading(true);
 
     try {
-      // let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
-      // // Check if the phone number already includes a '+', if not, add it
-      // if (!formattedPhoneNo.startsWith('+')) {
-      //   formattedPhoneNo = `+${formattedPhoneNo}`;
-      // }
-
       const otpResponse = await fetch(
         `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}`,
         {
