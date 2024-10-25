@@ -29,12 +29,12 @@ const Onboard2 = () => {
     const phoneNo = Cookies.get('phone_no');
 
     // Log the data retrieved from cookies
-    console.log('Data from Cookies:', {
-      email,
-      password,
-      fullName,
-      phoneNo,
-    });
+    // console.log('Data from Cookies:', {
+    //   email,
+    //   password,
+    //   fullName,
+    //   phoneNo,
+    // });
 
     // Ensure that all required data is available
     if (!email || !password || !fullName || !phoneNo) {

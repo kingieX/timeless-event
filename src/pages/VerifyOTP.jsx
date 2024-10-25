@@ -19,7 +19,6 @@ const VerifyOTP = () => {
 
   // Extract userId and phone_no from cookies
   const userId = Cookies.get('userId');
-  const phone_no = Cookies.get('phone_no');
   const email = Cookies.get('email');
 
   useEffect(() => {
@@ -113,7 +112,7 @@ const VerifyOTP = () => {
             Verify Your Account
           </h2>
           <p className="text-gray-600 text-center mb-6 text-base md:text-lg lg:text-xl">
-            Enter the 6-digit verification code sent to your phone number.
+            Enter the 6-digit verification code sent to your email.
           </p>
           <form onSubmit={handleSubmit} className="w-full space-y-2">
             {/* {showVerificationMessage && (
@@ -149,7 +148,7 @@ const VerifyOTP = () => {
             </button>
             {showVerificationMessage && (
               <p className="text-green-500 mt-1">
-                Verification code sent to +{phone_no}
+                Verification code sent to {email}
               </p>
             )}
           </form>
