@@ -52,9 +52,7 @@ const SignUp = () => {
 
     // Validate password strength
     if (!passwordRegex.test(password)) {
-      setError(
-        'Password must contain at least 1 uppercase letter, 1 number, and 1 symbol.'
-      );
+      setError('Password must be more than 6 values.');
       setLoading(false);
       return;
     }
