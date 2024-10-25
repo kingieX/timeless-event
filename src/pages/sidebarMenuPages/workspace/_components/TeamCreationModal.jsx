@@ -12,7 +12,12 @@ import FormInput from '../../../upboardingPages/_components/FormInput';
 import SelectInput from '../../../upboardingPages/_components/SelectInput';
 import AddMemberModal from '../../../create-team/AddMemberModal';
 
-const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
+const AddTeamModal = ({
+  onClose,
+  onWorkspaceUpdated,
+  workspaceData,
+  workspaceId,
+}) => {
   const [data, setData] = useState(null); // State to store the API response
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
@@ -30,6 +35,8 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
   const closeAddMemberModal = () => setIsAddMemberModal(false);
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  // console.log('workspace id:', workspaceId);
 
   // Formik hook for form handling
   const formik = useFormik({
@@ -62,7 +69,7 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
 
         // Make the API request to create the team
         const response = await fetch(
-          `${BASE_URL}/team/?team_space_id=${workspaceData.team_space_id}`,
+          `${BASE_URL}/team/?team_space_id=${workspaceId}`,
           {
             method: 'POST',
             headers: {
@@ -220,6 +227,19 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
                 </label>
               </div>
 
+              {/* Display error message */}
+              {errorMessage && (
+                <div className="text-center w-full mb-4 p-2 bg-red-100 text-red-500 border border-red-400 rounded mt-4">
+                  {errorMessage}
+                </div>
+              )}
+              {/* Display success message */}
+              {message && (
+                <div className="text-center w-full mb-4 p-2 bg-green-100 text-green-500 border border-green-400 rounded mt-4">
+                  {message}
+                </div>
+              )}
+
               {/* Buttons */}
               <div className="flex justify-end gap-4">
                 <button
@@ -237,19 +257,6 @@ const AddTeamModal = ({ onClose, onWorkspaceUpdated, workspaceData }) => {
                   {isSubmitting ? 'Creating...' : 'Create team'}
                 </button>
               </div>
-
-              {/* Display error message */}
-              {errorMessage && (
-                <div className="text-center w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded mt-4">
-                  {errorMessage}
-                </div>
-              )}
-              {/* Display success message */}
-              {message && (
-                <div className="text-center w-full p-2 bg-green-100 text-green-500 border border-green-400 rounded mt-4">
-                  {message}
-                </div>
-              )}
             </form>
           </div>
         )}

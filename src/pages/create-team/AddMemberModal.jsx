@@ -23,7 +23,7 @@ const AddMemberModal = ({ onClose, teamId, teamName }) => {
 
   // Retrieve access_token from cookies
   const accessToken = Cookies.get('access_token');
-  console.log(accessToken);
+  // console.log(accessToken);
 
   const handleSendInvites = async () => {
     setIsLoading(true); // Start loading
