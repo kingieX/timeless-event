@@ -40,6 +40,7 @@ const UserVerification = () => {
         phone_no,
         password,
         is_active: false,
+        provider: '',
         provider_id: '',
         avatar_url: '',
         role: 'user',

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Logo from '/image/logo.svg';
+import Logo from '/image/logo.png';
 import Cookies from 'js-cookie'; // Importing cookie handling
 
 const roleOptions = [
@@ -24,20 +24,20 @@ const Onboard2 = () => {
     // Retrieve stored data from cookies
     const userId = Cookies.get('userId');
     const email = Cookies.get('email');
-    const password = Cookies.get('password');
+    // const password = Cookies.get('password');
     const fullName = Cookies.get('fullName');
-    const phoneNo = Cookies.get('phone_no');
+    const phone_number = Cookies.get('phone_number');
 
     // Log the data retrieved from cookies
-    // console.log('Data from Cookies:', {
-    //   email,
-    //   password,
-    //   fullName,
-    //   phoneNo,
-    // });
+    console.log('Data from Cookies:', {
+      email,
+      // password,
+      fullName,
+      phone_number,
+    });
 
     // Ensure that all required data is available
-    if (!email || !password || !fullName || !phoneNo) {
+    if (!email || !fullName || !phone_number) {
       console.error('Required fields are missing.');
       return;
     }
@@ -51,7 +51,7 @@ const Onboard2 = () => {
       // password: password,
       fullname: fullName,
       role: role,
-      phone_no: phoneNo,
+      phone_no: phone_number,
       reason_for_use: 'work',
       is_active: true,
       provider: '',

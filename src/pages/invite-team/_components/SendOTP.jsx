@@ -34,7 +34,7 @@ const SendOTP = () => {
   const handleSendOtp = async () => {
     try {
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}&otp_type=email`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}`,
         {
           method: 'POST',
           headers: {
@@ -67,7 +67,7 @@ const SendOTP = () => {
     try {
       // Step 1: Verify OTP
       const response = await fetch(
-        `${BASE_URL}/user/verify-otp?user_id=${userId}&otp_code=${verificationCode}&otp_type=email`,
+        `${BASE_URL}/user/verify-otp?email=${email}&otp_code=${verificationCode}&otp_type=email`,
         {
           method: 'POST',
           headers: {

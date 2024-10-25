@@ -20,10 +20,6 @@ const SignUp = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
-  // Regular expression for password validation (Capital letter, number, and symbol)
-  const passwordRegex =
-    /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
-
   // Function to check if email exists
   const checkEmailExists = async email => {
     try {
@@ -49,13 +45,6 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    // Validate password strength
-    if (!passwordRegex.test(password)) {
-      setError('Password must be more than 6 values.');
-      setLoading(false);
-      return;
-    }
 
     // Check if email already exists
     const emailExists = await checkEmailExists(email);

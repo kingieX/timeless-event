@@ -20,9 +20,13 @@ const Onboard1 = () => {
     }
 
     setIsSubmitting(true);
-    // Store fullName in cookies
+    // Store fullName and phone_number in cookies
     Cookies.set('fullName', fullName);
     Cookies.set('phone_number', formattedPhoneNo);
+
+    // Logging to check the value saved
+    console.log('fullName:', Cookies.get('fullName'));
+    console.log('phone_number:', Cookies.get('phone_number'));
 
     // Navigate to the next page
     navigate('/signup/customize-experience');
@@ -57,7 +61,7 @@ const Onboard1 = () => {
             <PhoneInput
               country={'ng'}
               value={phone_number}
-              onChange={setPhoneNumber}
+              onChange={e => setPhoneNumber(e)}
               inputClass="text-xl w-full"
               buttonClass=""
               inputStyle={{
