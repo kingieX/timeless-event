@@ -4,6 +4,7 @@ import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import Logo from '/image/logo.png';
 import Cookies from 'js-cookie';
+import FloatingLabelInput from '../components/FloatingLabelInput';
 
 const LoginVerificationPage = () => {
   const [phone_number, setPhoneNumber] = useState(''); // Store the phone number
@@ -24,14 +25,14 @@ const LoginVerificationPage = () => {
     try {
       setLoading(true);
 
-      let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
-      // Check if the phone number already includes a '+', if not, add it
-      if (!formattedPhoneNo.startsWith('+')) {
-        formattedPhoneNo = `+${formattedPhoneNo}`;
-      }
+      // let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
+      // // Check if the phone number already includes a '+', if not, add it
+      // if (!formattedPhoneNo.startsWith('+')) {
+      //   formattedPhoneNo = `+${formattedPhoneNo}`;
+      // }
 
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${formattedPhoneNo}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}&otp_type=email`,
         {
           method: 'POST',
           headers: {
@@ -41,7 +42,7 @@ const LoginVerificationPage = () => {
         }
       );
 
-      console.log('For login verification', formattedPhoneNo);
+      console.log('For login verification', email);
 
       if (otpResponse.ok) {
         setShowVerificationMessage(true); // Show verification message
@@ -50,10 +51,10 @@ const LoginVerificationPage = () => {
         setError('Failed to send OTP, Please enter a valid phone number.');
       }
 
-      Cookies.set('phone_no', phone_number, {
-        secure: true,
-        sameSite: 'Strict',
-      });
+      // Cookies.set('phone_no', phone_number, {
+      //   secure: true,
+      //   sameSite: 'Strict',
+      // });
     } catch (error) {
       console.error('Error sending OTP:', error);
       setError('An error occurred while sending OTP.');
@@ -66,12 +67,12 @@ const LoginVerificationPage = () => {
   const handleFormSubmit = async e => {
     e.preventDefault();
 
-    if (phone_number && phone_number.length >= 8) {
-      // Send OTP directly without registering the user
-      await handleSendOtp(userId, phone_number);
-    } else {
-      alert('Please enter a valid phone number.');
-    }
+    await handleSendOtp(userId, email);
+    // if (phone_number && phone_number.length >= 8) {
+    //   // Send OTP directly without registering the user
+    // } else {
+    //   alert('Please enter a valid phone number.');
+    // }
   };
 
   return (
@@ -95,8 +96,8 @@ const LoginVerificationPage = () => {
             Enter your phone number to receive a 6-digit verification code.
           </p>
           <form className="w-full space-y-2" onSubmit={handleFormSubmit}>
-            <div className="w-full flex justify-between items-center border border-gray p-2">
-              <PhoneInput
+            <div className="w-full flex justify-between items-center mb-4">
+              {/* <PhoneInput
                 country={'ng'}
                 value={phone_number}
                 onChange={setPhoneNumber}
@@ -107,6 +108,13 @@ const LoginVerificationPage = () => {
                   border: 'none',
                   paddingLeft: '58px',
                 }} // Removed border, padded for the flag and code
+              /> */}
+              <FloatingLabelInput
+                label="Email"
+                type="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
 

@@ -6,6 +6,8 @@ import FloatingLabelInput from '../../components/FloatingLabelInput';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Cookies from 'js-cookie';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const RegistrationPage = () => {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ const RegistrationPage = () => {
 
   // State to capture form inputs
   const [fullname, setFullname] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -79,6 +82,7 @@ const RegistrationPage = () => {
 
     // Store important details in secure cookies
     Cookies.set('fullname', fullname, { secure: true, sameSite: 'Strict' });
+    Cookies.set('phone_no', phone_number, { secure: true, sameSite: 'Strict' });
     Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
     Cookies.set('password', password, { secure: true, sameSite: 'Strict' });
     Cookies.set('team_id', team_id, { secure: true, sameSite: 'Strict' });
@@ -164,6 +168,20 @@ const RegistrationPage = () => {
                 value={fullname}
                 onChange={e => setFullname(e.target.value)}
               />
+              <div className="w-full border py-2 mb-8">
+                <PhoneInput
+                  country={'ng'}
+                  value={phone_number}
+                  onChange={setPhoneNumber}
+                  inputClass="text-xl w-full"
+                  buttonClass=""
+                  inputStyle={{
+                    width: '100%',
+                    border: 'none',
+                    paddingLeft: '58px',
+                  }} // Removed border, padded for the flag and code
+                />
+              </div>
               <FloatingLabelInput
                 label="Email"
                 type="email"

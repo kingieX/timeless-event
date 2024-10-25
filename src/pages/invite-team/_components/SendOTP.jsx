@@ -18,7 +18,8 @@ const SendOTP = () => {
 
   // Extract userId and phone_no from cookies
   const userId = Cookies.get('userId');
-  const phone_no = Cookies.get('phone_no');
+  const email = Cookies.get('email');
+  // const phone_no = Cookies.get('phone_no');
 
   useEffect(() => {
     if (countdown > 0) {
@@ -33,7 +34,7 @@ const SendOTP = () => {
   const handleSendOtp = async () => {
     try {
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${phone_no}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}&otp_type=email`,
         {
           method: 'POST',
           headers: {
@@ -47,7 +48,7 @@ const SendOTP = () => {
         setCountdown(60); // Start 60 seconds countdown
         setCodeSent(true);
         setShowVerificationMessage(true); // Show verification message
-        console.log(`Code sent to +${phone_no}`);
+        console.log(`Code sent to ${email}`);
       } else {
         setError('Failed to send OTP.');
         console.error('Failed to send OTP');
@@ -66,7 +67,7 @@ const SendOTP = () => {
     try {
       // Step 1: Verify OTP
       const response = await fetch(
-        `${BASE_URL}/user/verify-otp?user_id=${userId}&otp_code=${verificationCode}&otp_type=sms`,
+        `${BASE_URL}/user/verify-otp?user_id=${userId}&otp_code=${verificationCode}&otp_type=email`,
         {
           method: 'POST',
           headers: {
@@ -155,7 +156,7 @@ const SendOTP = () => {
             </button>
             {showVerificationMessage && (
               <p className="text-green-500 mt-1">
-                Verification code sent to +{phone_no}
+                Verification code sent to {email}
               </p>
             )}
           </form>

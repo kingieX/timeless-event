@@ -4,9 +4,10 @@ import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
 import Logo from '/image/logo.png';
 import Cookies from 'js-cookie';
+import FloatingLabelInput from '../components/FloatingLabelInput';
 
 const VerificationPage = () => {
-  const [phone_number, setPhoneNumber] = useState(''); // Store the phone number
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false); // Track loading state
   const [showVerificationMessage, setShowVerificationMessage] = useState(false); // Control visibility of verification message
   const [error, setError] = useState(null); // Handle errors
@@ -15,7 +16,7 @@ const VerificationPage = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
   // Retrieve email and password from cookies
-  const email = Cookies.get('email');
+  // const email = Cookies.get('email');
   const password = Cookies.get('password');
 
   // Function to handle the complete POST request to register the user
@@ -23,18 +24,12 @@ const VerificationPage = () => {
     try {
       setLoading(true);
 
-      // Ensure the phone number starts with a '+'
-      let formattedPhoneNo = phone_number.trim();
-      if (!formattedPhoneNo.startsWith('+')) {
-        formattedPhoneNo = `+${formattedPhoneNo}`;
-      }
-
       const requestBody = {
         fullname: '', // Fill this as needed
         role: 'user',
         reason_for_use: 'work', // Fill this as needed
         email: email,
-        phone_no: formattedPhoneNo,
+        phone_no: '',
         is_active: false,
         provider: '', // Fill this as needed
         provider_id: '', // Fill this as needed
@@ -62,9 +57,7 @@ const VerificationPage = () => {
         await handlePostRegistration();
       } else {
         // If registration fails due to email duplication or another error
-        setError(
-          'phone number already exist, please input a new phone number.'
-        );
+        setError('Email already exist, please input a new email.');
       }
     } catch (error) {
       console.error('Error during registration:', error);
@@ -102,15 +95,12 @@ const VerificationPage = () => {
           return; // Stop further execution if user_id is missing
         }
 
-        // Store userId and phone_number in cookies
+        // Store userId and email in cookies
         Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
-        Cookies.set('phone_no', phone_number, {
-          secure: true,
-          sameSite: 'Strict',
-        });
+        Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
 
         // Send OTP to phone number using the userId
-        await handleSendOtp(userId, phone_number);
+        await handleSendOtp(userId, email);
 
         // Navigate to the OTP verification page
         navigate('/otp-verification');
@@ -124,16 +114,10 @@ const VerificationPage = () => {
   };
 
   // Function to send OTP
-  const handleSendOtp = async (userId, phone_no) => {
+  const handleSendOtp = async (userId, email) => {
     try {
-      let formattedPhoneNo = phone_no.trim(); // Assume phone_no is from the state
-      // Check if the phone number already includes a '+', if not, add it
-      if (!formattedPhoneNo.startsWith('+')) {
-        formattedPhoneNo = `+${formattedPhoneNo}`;
-      }
-
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&phone_number=${formattedPhoneNo}&otp_type=sms`,
+        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}&otp_type=email`,
         {
           method: 'POST',
           headers: {
@@ -142,7 +126,7 @@ const VerificationPage = () => {
         }
       );
 
-      console.log('For sign up verification', formattedPhoneNo);
+      console.log('For sign up verification', email);
 
       if (otpResponse.ok) {
         setLoading(true);
@@ -160,12 +144,7 @@ const VerificationPage = () => {
   const handleFormSubmit = async e => {
     e.preventDefault();
 
-    if (phone_number && phone_number.length >= 8) {
-      // Make a POST request to register user and then send OTP
-      await handleRegisterUser();
-    } else {
-      alert('Please enter a valid phone number.');
-    }
+    await handleRegisterUser();
   };
 
   return (
@@ -181,16 +160,16 @@ const VerificationPage = () => {
       </div>
 
       <div className="flex justify-center items-center lg:min-h-screen">
-        <div className="flex flex-col justify-center items-center bg-white py-8 lg:px-12 px-8 lg:border m-8 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
+        <div className="flex flex-col justify-center items-center bg-white py-8 lg:px-12 px-8 lg:border m-4 border-gray lg:shadow-lg rounded-md w-full max-w-md md:max-w-lg lg:max-w-2xl lg:mt-0 mt-20">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-center lg:mb-2 mb-2">
             Verify Your Account
           </h2>
           <p className="text-gray-600 text-center mb-6 text-base md:text-lg lg:text-xl">
-            Enter your phone number to receive a 6-digit verification code.
+            Enter your email to receive a 6-digit verification code.
           </p>
           <form className="w-full space-y-2" onSubmit={handleFormSubmit}>
-            <div className="w-full flex justify-between items-center border border-gray p-2">
-              <PhoneInput
+            <div className="w-full flex justify-between items-center mb-4">
+              {/* <PhoneInput
                 country={'ng'}
                 value={phone_number}
                 onChange={setPhoneNumber}
@@ -201,6 +180,13 @@ const VerificationPage = () => {
                   border: 'none',
                   paddingLeft: '58px',
                 }} // Removed border, padded for the flag and code
+              /> */}
+              <FloatingLabelInput
+                label="Email"
+                type="email"
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
 
