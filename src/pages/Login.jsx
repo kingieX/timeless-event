@@ -44,7 +44,7 @@ const Login = () => {
       });
 
       const postData = await response.json();
-      console.log('Server Response:', postData);
+      // console.log('Server Response:', postData);
 
       if (response.ok) {
         // Extract tokens and userId from the server response
@@ -79,7 +79,7 @@ const Login = () => {
         });
 
         const userDetails = await userResponse.json();
-        console.log('User Details:', userDetails);
+        // console.log('User Details:', userDetails);
 
         if (userResponse.ok) {
           // Store all user details in cookies
