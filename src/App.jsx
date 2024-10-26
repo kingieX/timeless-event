@@ -68,11 +68,15 @@ import VerifyOTP from './pages/VerifyOTP';
 import WorkspacePage from './pages/sidebarMenuPages/workspace/AddWorkspacePage';
 import WorkspaceDetailPage from './pages/sidebarMenuPages/workspace/WorkspaceDetailPage';
 
+// Invite team routes
 import InvitePage from './pages/invite-team/InvitePage';
 import RegistrationPage from './pages/invite-team/RegistrationPage';
 import UserVerification from './pages/invite-team/UserVerification';
 import SendOTP from './pages/invite-team/_components/SendOTP';
 import TeamSuccessPage from './pages/invite-team/_components/SuccessPage';
+
+// folder routes
+import FolderDetailPage from './pages/sidebarMenuPages/workspace/folder/FolderDetailPage';
 
 const App = () => {
   return (
@@ -138,6 +142,12 @@ const App = () => {
           <Route
             path="workspace/:workspaceId"
             element={<WorkspaceDetailPage />}
+          />
+
+          {/* Folder routes */}
+          <Route
+            path="workspace/:workspaceId/folders/:folderId"
+            element={<FolderDetailPage />}
           />
 
           {/* userMenu routes */}

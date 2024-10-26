@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { IoFolderOpenOutline } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 
 const FolderList = () => {
   const [folders, setFolders] = useState([]);
@@ -45,16 +46,19 @@ const FolderList = () => {
       {folders.length > 0 ? (
         <ul className="py-2 mb-4 grid lg:grid-cols-2 grid-cols-1 gap-4">
           {folders.map(folder => (
-            <li
+            <Link
               key={folder.folder_id}
-              className="flex justify-between items-center border rounded-lg p-4"
+              to={`/app/workspace/${folder.team_space_id}/folders/${folder.folder_id}`}
+              className="flex justify-between items-center border rounded-lg p-4 hover:bg-blue-50"
             >
-              <div className="flex gap-4">
-                <IoFolderOpenOutline className="w-6 h-6 text-primary" />
-                <span>{folder.folder_name}</span>
-              </div>
-              {/* Add icons, actions, or other elements as needed */}
-            </li>
+              <li className="">
+                <div className="flex gap-4">
+                  <IoFolderOpenOutline className="w-6 h-6 text-primary" />
+                  <span>{folder.folder_name}</span>
+                </div>
+                {/* Add icons, actions, or other elements as needed */}
+              </li>
+            </Link>
           ))}
         </ul>
       ) : (
