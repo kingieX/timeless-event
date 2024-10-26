@@ -11,6 +11,7 @@ import { GoPlus } from 'react-icons/go';
 import TeamOptionsMenu from './_components/TeamOptionsMenu';
 import FolderModal from './folder/_components/FolderModal';
 import { BsThreeDotsVertical } from 'react-icons/bs';
+import FolderList from './folder/_components/FolderList';
 
 const WorkspaceDetailPage = () => {
   const { workspaceId } = useParams(); // Get workspaceId from URL
@@ -115,6 +116,8 @@ const WorkspaceDetailPage = () => {
     }
   }, [workspaceData, access_token]);
 
+  // Routes to handle GET request for folders
+
   // Function to open the modal
   const openEditModal = () => setIsEditModalOpen(true);
 
@@ -181,6 +184,8 @@ const WorkspaceDetailPage = () => {
           <p className="text-sm font-semibold lg:block hidden">settings</p>
         </div>
       </div>
+
+      {/* WorkSpace Header */}
       <div className="lg:py-4 py-1 px-4 lg:px-24">
         {workspaceData ? (
           <>
@@ -308,6 +313,11 @@ const WorkspaceDetailPage = () => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Map teams goes here... */}
+        <div className="">
+          <FolderList />
         </div>
       </div>
 

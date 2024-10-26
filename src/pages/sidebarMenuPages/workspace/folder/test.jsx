@@ -10,6 +10,7 @@ import AddTeamModal from './_components/TeamCreationModal';
 import { GoPlus } from 'react-icons/go';
 import TeamOptionsMenu from './_components/TeamOptionsMenu';
 import FolderModal from './folder/_components/FolderModal';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 
 const WorkspaceDetailPage = () => {
   const { workspaceId } = useParams(); // Get workspaceId from URL
@@ -21,19 +22,27 @@ const WorkspaceDetailPage = () => {
   const [teamsError, setTeamsError] = useState(null); // Error state for teams
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal state
   const [isTeamCreationModal, setIsTeamCreationModal] = useState(false);
-  const [isTeamOptionsMenuOpen, setIsTeamOptionsMenuOpen] = useState(false);
-
-  const menuRef = useRef(null); // Ref for the modal
+  const menuRef = useRef(null); // Consolidated ref for both menu and dropdown
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [isTeamOptionsMenuOpen, setIsTeamOptionsMenuOpen] = useState(false);
 
-  // Close modal if a click happens outside the menu
+  // Toggle menu visibility
+  const toggleMenu = teamId => {
+    if (isTeamOptionsMenuOpen === teamId) {
+      setIsTeamOptionsMenuOpen(null); // Close if already open
+    } else {
+      setIsTeamOptionsMenuOpen(teamId); // Open the clicked menu
+    }
+  };
+
+  // Close modal or dropdown if a click happens outside the menu or dropdown
   useEffect(() => {
     const handleClickOutside = event => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsTeamOptionsMenuOpen(false); // Close the modal
+        setIsDropdownOpen(false); // Close the dropdown
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -41,18 +50,7 @@ const WorkspaceDetailPage = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isTeamOptionsMenuOpen]);
-
-  // setting up drop for three dotted icon
-  const [selectedTeam, setSelectedTeam] = useState({
-    teamId: null,
-    teamName: '',
-  });
-
-  // handle passing teamName and teamId to dotten icon menu
-  const handleTeamOptionsClick = (teamId, teamName) => {
-    setSelectedTeam({ teamId, teamName }); // Set selected team
-  };
+  }, []);
 
   const access_token = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -90,28 +88,29 @@ const WorkspaceDetailPage = () => {
   }, [workspaceId, access_token]);
 
   // Fetch teams assigned to this workspace once the workspace data is available
-  const fetchTeamsData = async () => {
-    setTeamsLoading(true); // Set teams loading state
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/team/${workspaceData.team_space_id}/teamspace`,
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-      setTeamsData(response.data); // Set the fetched teams data
-      console.log('Teams data:', response.data); // Log the teams data to console
-    } catch (error) {
-      console.error('Error fetching teams data:', error);
-      setTeamsError('Failed to load teams for this workspace.');
-    } finally {
-      setTeamsLoading(false); // End teams loading state
-    }
-  };
   useEffect(() => {
     if (workspaceData && workspaceData.team_space_id) {
+      const fetchTeamsData = async () => {
+        setTeamsLoading(true); // Set teams loading state
+        try {
+          const response = await axios.get(
+            `${API_BASE_URL}/team/${workspaceData.team_space_id}/teamspace`,
+            {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              },
+            }
+          );
+          setTeamsData(response.data); // Set the fetched teams data
+          console.log('Teams data:', response.data); // Log the teams data to console
+        } catch (error) {
+          console.error('Error fetching teams data:', error);
+          setTeamsError('Failed to load teams for this workspace.');
+        } finally {
+          setTeamsLoading(false); // End teams loading state
+        }
+      };
+
       fetchTeamsData();
     }
   }, [workspaceData, access_token]);
@@ -162,29 +161,8 @@ const WorkspaceDetailPage = () => {
     setIsFolderModalOpen(false);
   };
 
-  // Detect outside click and close dropdown
-  useEffect(() => {
-    const handleOutsideClick = event => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    // Add event listener when the dropdown is open
-    if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
-    } else {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    }
-
-    // Cleanup event listener when component unmounts or dropdown state changes
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [isDropdownOpen]);
-
   return (
-    <>
+    <div className="min-h-screen">
       <div className="flex gap-4 justify-end px-4">
         {/* invite member */}
         <div
@@ -255,134 +233,114 @@ const WorkspaceDetailPage = () => {
       {/* Add button */}
       <div className="px-4 lg:px-24">
         <div className="flex my-2 items-center px-4 py-2 border-2 border-gray border-opacity-20 mb-2">
-          <AiOutlineSearch className="w-6 h-6 text-gray" />
+          <AiOutlineSearch className="w-6 h-6 text-gray-400" />
           <input
-            type="text"
-            placeholder="Search teams, projects..."
-            className="flex-grow outline-none text-sm px-2"
+            type="search"
+            className="flex w-full outline-none bg-transparent px-4"
+            placeholder="Search teams"
           />
         </div>
-        <div className="relative flex justify-end" ref={dropdownRef}>
-          <button
-            onClick={toggleDropdown}
-            className=" flex space-x-1 border border-slate-300 text-slate-800 rounded py-1 px-2 hover:bg-blue-50"
-          >
-            <GoPlus className="w-6 h-6" />
-            Add
-          </button>
-          {isDropdownOpen && (
-            <div className="absolute bg-white border shadow-md mt-8 rounded-md">
-              <ul>
-                <li>
-                  <button
-                    className="block px-4 py-2 hover:bg-gray-100"
-                    onClick={openFolderModal}
-                  >
-                    Add Folder
-                  </button>
-                </li>
-                {/* Add other options here if needed */}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
 
-      {/* Display teams assigned to this workspace */}
-      <div className="px-4 lg:px-24 mt-4">
-        <h2 className="text-xl font-bold mb-2">Teams in this workspace:</h2>
-        {teamsLoading ? (
-          <p>Loading teams...</p>
-        ) : teamsError ? (
-          <p className="text-red-500">{teamsError}</p>
-        ) : teamsData.length > 0 ? (
-          <ul className="mb-8">
-            {teamsData.map((team, index) => (
-              <li
-                key={index}
-                className="flex justify-between items-center p-2 border-b hover:bg-blue-50 rounded"
+        {/* All Teams in the workspace */}
+        <div className="flex justify-between items-center py-2 px-1">
+          <h1 className="font-bold text-xl">Teams</h1>
+        </div>
+
+        {/* Map teams goes here... */}
+        <div className="py-2 mb-4 grid lg:grid-cols-2 grid-cols-1 gap-4">
+          {teamsLoading ? (
+            <p>Loading teams...</p>
+          ) : teamsError ? (
+            <p className="text-red-500">{teamsError}</p>
+          ) : (
+            teamsData.map((team, index) => (
+              <div
+                key={team.team_id}
+                className="flex justify-between items-center border rounded-lg p-4"
               >
-                <div className="flex items-center space-x-2">
-                  <RiGroupLine className="w-6 h-6 text-gray-500" />
-                  <div className="w-full flex flex-col">
-                    <p className="lg:text-xl">{team.team_name}</p>
-                    <div className="w-full flex space-x-1 items-center">
-                      <p className="lg:flex hidden items-center space-x-1 text-sm text-slate-700">
-                        <span className="lg:block hidden font-semibold">
-                          Created on:{' '}
-                        </span>
-                        <span>
-                          {new Date(team.created_at).toLocaleString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            // hour: 'numeric',
-                            // minute: 'numeric',
-                            // hour12: true,
-                          })}
-                        </span>
-                      </p>
-                      <p className="lg:flex hidden">•</p>
-                      <p className="flex items-center space-x-1 text-sm text-slate-700">
-                        <span className="lg:block hidden font-semibold">
-                          Work industry:{' '}
-                        </span>
-                        <span>{team.work_industry}</span>
-                      </p>
-                      <p className="">•</p>
-                      <p className="flex items-center space-x-1 text-sm text-slate-700">
-                        <span className="lg:block hidden font-semibold">
-                          Organization size:{' '}
-                        </span>
-                        <span>{team.organization_size}</span>
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex gap-4">
+                  <RiGroupLine className="w-6 h-6 text-primary" />
+                  <p>{team.team_name}</p>
                 </div>
-                <div
-                  ref={menuRef}
-                  onClick={() =>
-                    handleTeamOptionsClick(team.team_id, team.team_name)
-                  }
-                  className="hover:bg-blue-100 px-2 pt-1 rounded"
-                >
+                {/* Three-dotted icon */}
+                <button onClick={() => toggleMenu(team.team_id)}>
+                  <BsThreeDotsVertical className="w-5 h-5 cursor-pointer" />
+                </button>
+                {isTeamOptionsMenuOpen === team.team_id && (
                   <TeamOptionsMenu
+                    ref={menuRef} // Use the single ref for the team options dropdown
+                    isOpen={isTeamOptionsMenuOpen}
                     teamId={team.team_id}
                     teamName={team.team_name}
                     team={team}
-                    onTeamUpdated={() => fetchTeamsData()}
                   />
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No teams found for this workspace.</p>
-        )}
+                )}
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* All Folders in the workspace */}
+        <div className="flex justify-between items-center py-2 px-1">
+          <h1 className="font-bold text-xl">My folders</h1>
+          <div className="relative">
+            <div className="relative">
+              <button
+                className="flex items-center text-primary text-sm font-semibold"
+                onClick={toggleDropdown}
+              >
+                Add <GoPlus className="ml-2" />
+              </button>
+              {/* Dropdown menu */}
+              {isDropdownOpen && (
+                <ul
+                  ref={menuRef} // Single ref used for both modal and dropdown
+                  className="absolute top-8 right-2 w-[10rem] rounded-lg shadow-lg bg-white"
+                >
+                  <li
+                    className="px-4 py-2 hover:bg-primary hover:text-white rounded-t-lg"
+                    onClick={openFolderModal}
+                  >
+                    Add folder
+                  </li>
+                  {/* Add more dropdown items as needed */}
+                </ul>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Map teams goes here... */}
+        <div className="py-2 mb-4 grid lg:grid-cols-2 grid-cols-1 gap-4"></div>
       </div>
 
-      {/* Render Edit Modal if it's open */}
+      {/* Modals */}
       {isEditModalOpen && (
         <EditWorkspaceModal
+          workspaceId={workspaceId}
           workspaceData={workspaceData}
           onClose={closeEditModal}
-          onWorkspaceUpdated={handleWorkspaceUpdate}
+          onUpdate={handleWorkspaceUpdate}
+          initialData={workspaceData}
         />
       )}
-
-      {/* Render TeamCreation Modal if it's open */}
       {isTeamCreationModal && (
         <AddTeamModal
-          workspaceData={workspaceData}
+          workspaceId={workspaceId}
           onClose={closeTeamModal}
-          onWorkspaceUpdated={handleTeamCreationUpdate}
+          onUpdate={handleTeamCreationUpdate}
         />
       )}
-
-      {/* Render Folder Modal if it's open */}
       {/* Folder Modal */}
-      {isFolderModalOpen && <FolderModal closeModal={closeFolderModal} />}
-    </>
+      {isFolderModalOpen && (
+        <FolderModal
+          workspaceId={workspaceId}
+          workspaceData={workspaceData}
+          onClose={closeFolderModal}
+          // Add any additional props needed for FolderModal
+        />
+      )}
+    </div>
   );
 };
 
