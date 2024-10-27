@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+// import { createFolder } from '../../../../../../routes/folder-routes';
 
 const FolderModal = ({ onClose, workspaceData, workspaceId }) => {
   const [folderName, setFolderName] = useState('');
@@ -15,6 +16,33 @@ const FolderModal = ({ onClose, workspaceData, workspaceId }) => {
     setFolderName(e.target.value);
   };
 
+  // const handleSubmit = (async e => {
+  //   e.preventDefault();
+  //   setIsLoading(true);
+  //   setError(''); // Reset error message
+  //   setSuccess(''); // Reset success message
+
+  //   try {
+  //     const newFolder = await createFolder(folderName, user_id, workspaceId);
+  //     console.log('Created Folder:', newFolder);
+  //     if (response.ok) {
+  //       const result = await response.json();
+  //       setSuccess('Folder created successfully!');
+  //       // Optionally reset form or close modal
+  //       setFolderName(''); // Reset folder name
+  //       setTimeout(() => {
+  //         onClose();
+  //       }, 2000);
+  //     } else {
+  //       setError('Failed to create folder');
+  //     }
+  //   } catch (error) {
+  //     setError(error.message); // Set error message to display
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // })();
+
   const handleSubmit = async e => {
     e.preventDefault();
     setIsLoading(true);
@@ -26,9 +54,6 @@ const FolderModal = ({ onClose, workspaceData, workspaceId }) => {
       user_id: user_id,
       team_space_id: workspaceId, // Get workspaceId from prop
     };
-
-    // console.log('Request body', requestBody);
-    // console.log('user_id:', user_id);
 
     try {
       const response = await fetch(`${API_BASE_URL}/folder`, {
