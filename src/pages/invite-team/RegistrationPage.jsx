@@ -59,13 +59,13 @@ const RegistrationPage = () => {
     setLoading(true);
     setError(null);
 
-    // Check if email already exists
-    const emailExists = await checkEmailExists(email);
-    if (emailExists) {
-      setError('Email already exists.');
-      setLoading(false);
-      return;
-    }
+    // // Check if email already exists
+    // const emailExists = await checkEmailExists(email);
+    // if (emailExists) {
+    //   setError('Email already exists.');
+    //   setLoading(false);
+    //   return;
+    // }
 
     // Store important details in secure cookies
     Cookies.set('fullname', fullname, { secure: true, sameSite: 'Strict' });

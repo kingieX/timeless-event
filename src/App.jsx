@@ -77,6 +77,7 @@ import TeamSuccessPage from './pages/invite-team/_components/SuccessPage';
 
 // folder routes
 import FolderDetailPage from './pages/sidebarMenuPages/workspace/folder/FolderDetailPage';
+import TeamDetailPage from './pages/sidebarMenuPages/workspace/team/_components/TeamDetailpage';
 
 const App = () => {
   return (
@@ -142,6 +143,12 @@ const App = () => {
           <Route
             path="workspace/:workspaceId"
             element={<WorkspaceDetailPage />}
+          />
+
+          {/* Team routes */}
+          <Route
+            path="workspace/:workspaceId/team/:teamId"
+            element={<TeamDetailPage />}
           />
 
           {/* Folder routes */}

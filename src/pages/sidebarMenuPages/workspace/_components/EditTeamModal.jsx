@@ -52,7 +52,7 @@ const EditTeamModal = ({ onClose, teamId, team, onTeamUpdated }) => {
           allow_team_discovery: values.allowTeamDiscovery,
         };
 
-        const response = await fetch(`${BASE_URL}/team/${teamId}`, {
+        const response = await fetch(`${BASE_URL}/team/${teamId}/update-team`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -66,6 +66,7 @@ const EditTeamModal = ({ onClose, teamId, team, onTeamUpdated }) => {
           setMessage('Team updated successfully');
           console.log('updated response', TeamData);
           onClose();
+          window.location.reload();
           onTeamUpdated(); // Trigger team data refresh
         } else {
           const errorData = await response.json();

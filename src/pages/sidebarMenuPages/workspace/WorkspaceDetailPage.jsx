@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { RiGroupLine } from 'react-icons/ri';
 import { CiSettings } from 'react-icons/ci';
@@ -54,6 +54,7 @@ const WorkspaceDetailPage = () => {
   }, []);
 
   const access_token = Cookies.get('access_token');
+  console.log(access_token);
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Fetch workspace details
@@ -61,7 +62,7 @@ const WorkspaceDetailPage = () => {
     const fetchWorkspaceData = async () => {
       try {
         const response = await fetch(
-          `${API_BASE_URL}/teamspace/${workspaceId}`,
+          `${API_BASE_URL}/teamspace/${workspaceId}/retrieve-teamspace`,
           {
             method: 'GET',
             headers: {
@@ -102,11 +103,19 @@ const WorkspaceDetailPage = () => {
               },
             }
           );
+
           setTeamsData(response.data); // Set the fetched teams data
+
+          if (response.status === 404) {
+            setTeamsError('No teams found for this workspace, create a team!');
+          }
           console.log('Teams data:', response.data); // Log the teams data to console
         } catch (error) {
           console.error('Error fetching teams data:', error);
-          setTeamsError('Failed to load teams for this workspace.');
+          setTeamsError(
+            'Failed to load teams for this workspace, no team found!',
+            error.message
+          );
         } finally {
           setTeamsLoading(false); // End teams loading state
         }
@@ -261,16 +270,24 @@ const WorkspaceDetailPage = () => {
             teamsData.map((team, index) => (
               <div
                 key={team.team_id}
-                className="flex justify-between items-center border rounded-lg p-4"
+                // className="flex justify-between items-center border rounded-lg p-4"
               >
-                <div className="flex gap-4">
-                  <RiGroupLine className="w-6 h-6 text-primary" />
-                  <p>{team.team_name}</p>
+                <div className="w-full flex justify-between items-center border rounded-lg">
+                  <Link
+                    to={`/app/workspace/${workspaceData.team_space_id}/team/${team.team_id}`}
+                    className="flex flex-grow gap-4 m-1 p-4 hover:bg-blue-50"
+                  >
+                    <RiGroupLine className="w-6 h-6 text-primary" />
+                    <p>{team.team_name}</p>
+                  </Link>
+                  {/* Three-dotted icon */}
+                  <button
+                    className="mr-4"
+                    onClick={() => toggleMenu(team.team_id)}
+                  >
+                    <BsThreeDotsVertical className="w-5 h-5 cursor-pointer" />
+                  </button>
                 </div>
-                {/* Three-dotted icon */}
-                <button onClick={() => toggleMenu(team.team_id)}>
-                  <BsThreeDotsVertical className="w-5 h-5 cursor-pointer" />
-                </button>
                 {isTeamOptionsMenuOpen === team.team_id && (
                   <TeamOptionsMenu
                     ref={menuRef} // Use the single ref for the team options dropdown
@@ -300,10 +317,10 @@ const WorkspaceDetailPage = () => {
               {isDropdownOpen && (
                 <ul
                   ref={menuRef} // Single ref used for both modal and dropdown
-                  className="absolute top-8 right-2 w-[10rem] rounded-lg shadow-lg bg-white"
+                  className="absolute z-50 top-8 right-2 w-[10rem] rounded-lg shadow-lg bg-white"
                 >
                   <li
-                    className="px-4 py-2 hover:bg-primary hover:text-white rounded-t-lg"
+                    className="px-4 py-2 bg-white z-50 border border-gray hover:bg-gray-100 hover:text-black"
                     onClick={openFolderModal}
                   >
                     Add folder

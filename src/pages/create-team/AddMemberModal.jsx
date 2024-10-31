@@ -77,6 +77,11 @@ const AddMemberModal = ({ onClose, teamId, teamName }) => {
     }
   };
 
+  const handleSkip = () => {
+    onClose();
+    window.location.reload();
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white w-full max-w-2xl px-6 py-4 rounded-lg m-4 max-h-[90vh] overflow-hidden">
@@ -154,7 +159,7 @@ const AddMemberModal = ({ onClose, teamId, teamName }) => {
           <div className="mt-6 flex space-x-2 justify-end">
             <button
               className="border border-red-500 px-4 py-2 text-red-500 hover:border-red-800 hover:text-red-800"
-              onClick={onClose}
+              onClick={handleSkip}
               disabled={isLoading}
             >
               Skip

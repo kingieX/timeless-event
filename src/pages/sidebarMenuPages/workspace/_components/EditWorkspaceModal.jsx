@@ -23,7 +23,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
         setMessage('');
 
         const response = await axios.delete(
-          `${API_BASE_URL}/teamspace/${workspaceData.team_space_id}`,
+          `${API_BASE_URL}/teamspace/${workspaceData.team_space_id}/delete-teamspace`,
           {
             headers: {
               Authorization: `Bearer ${access_token}`,
@@ -70,7 +70,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
         setMessage('');
 
         const response = await axios.put(
-          `${API_BASE_URL}/teamspace/${workspaceData.team_space_id}`,
+          `${API_BASE_URL}/teamspace/${workspaceData.team_space_id}/update-teamspace`,
           updatedWorkspace,
           {
             headers: {

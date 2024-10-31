@@ -26,7 +26,7 @@ const InvitePage = () => {
 
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/user/check_user?email=${email}`
+        `${API_BASE_URL}/user/email?email=${email}`
       );
 
       if (response.data.exists) {

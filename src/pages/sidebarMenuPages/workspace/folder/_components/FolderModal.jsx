@@ -74,6 +74,7 @@ const FolderModal = ({ onClose, workspaceData, workspaceId }) => {
         setFolderName(''); // Reset folder name
         setTimeout(() => {
           onClose();
+          window.location.reload(); // Reload the page
         }, 2000);
       } else {
         const errorData = await response.json();

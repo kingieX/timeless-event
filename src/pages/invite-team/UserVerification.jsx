@@ -25,8 +25,8 @@ const UserVerification = () => {
   const team_id = searchParams.get('team_id');
   const invite_id = searchParams.get('invite_id');
 
-  //   console.log('Fetched teams_id: ', team_id);
-  //   console.log('Fetchd invite_id: ', invite_id);
+  // console.log('Fetched teams_id: ', team_id);
+  // console.log('Fetchd invite_id: ', invite_id);
 
   //   Function to register the user
   const handleRegisterUser = async () => {
@@ -46,6 +46,8 @@ const UserVerification = () => {
         role: 'user',
         reason_for_use: 'work',
       };
+
+      // console.log('Request body:', requestBody);
       // Make a POST request to register the user
       const response = await fetch(
         `${BASE_URL}/teamMember/register-and-join/${team_id}/${invite_id}`,
@@ -66,7 +68,10 @@ const UserVerification = () => {
         secure: true,
         sameSite: 'Strict',
       });
+
       handleSendOtp(result.user_id);
+
+      console.log('User registered successfully:', result);
     } catch (error) {
       console.error('Error registering user:', error);
       setError('An error occurred while registering user');

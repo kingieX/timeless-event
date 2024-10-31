@@ -26,7 +26,7 @@ const EditFolderModal = ({ onClose, folder, onUpdate }) => {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/folder/${folder.folder_id}`,
+        `${API_BASE_URL}/folder/${folder.folder_id}/update-folder`,
         {
           method: 'PUT',
           headers: {
