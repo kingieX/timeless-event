@@ -78,7 +78,8 @@ import TeamSuccessPage from './pages/invite-team/_components/SuccessPage';
 // folder routes
 import FolderDetailPage from './pages/sidebarMenuPages/workspace/folder/FolderDetailPage';
 import TeamDetailPage from './pages/sidebarMenuPages/workspace/team/_components/TeamDetailpage';
-import ProjectDetailPage from './pages/sidebarMenuPages/workspace/_components/project/ProjectDetailPage';
+import ProjectDetailPage from './pages/sidebarMenuPages/workspace/project/ProjectDetailPage';
+import TaskDetailPage from './pages/sidebarMenuPages/workspace/task/TaskDetailPage';
 
 const App = () => {
   return (
@@ -162,6 +163,12 @@ const App = () => {
           <Route
             path="workspace/:workspaceId/folders/:folderId/projects/:projectId"
             element={<ProjectDetailPage />}
+          />
+
+          {/* Task route */}
+          <Route
+            path="workspace/:workspaceId/folders/:folderId/projects/:projectId/tasks/:taskId"
+            element={<TaskDetailPage />}
           />
 
           {/* userMenu routes */}

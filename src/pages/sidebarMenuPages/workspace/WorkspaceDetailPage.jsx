@@ -54,7 +54,7 @@ const WorkspaceDetailPage = () => {
   }, []);
 
   const access_token = Cookies.get('access_token');
-  console.log(access_token);
+  // console.log(access_token);
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // Fetch workspace details
@@ -77,7 +77,7 @@ const WorkspaceDetailPage = () => {
 
         const data = await response.json(); // Parse the response as JSON
         setWorkspaceData(data); // Set the data from the API
-        console.log('Workspace detail:', data);
+        // console.log('Workspace detail:', data);
       } catch (error) {
         console.error('Error fetching workspace data:', error);
         setError('Failed to load workspace details.');

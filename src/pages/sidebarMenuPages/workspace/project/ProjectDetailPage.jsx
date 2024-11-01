@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { BiTask } from 'react-icons/bi';
 import { CiSettings } from 'react-icons/ci';
 import FetchTask from './_components/FetchTask';
+import CreateTaskModal from '../task/_components/CreateTaskModal';
+import ProjectSettings from './_components/ProjectSettings';
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
@@ -13,6 +15,12 @@ const ProjectDetailPage = () => {
   const [error, setError] = useState('');
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const [createTask, setCreateTask] = useState(null);
+
+  const menuRef = useRef(null);
+  const [isProjectSettingsMenuOpen, setIsProjectSettingsMenuOpen] =
+    useState(false);
 
   //   Route to fetch Project details
   useEffect(() => {
@@ -34,7 +42,7 @@ const ProjectDetailPage = () => {
 
         const data = await response.json();
         setProject(data);
-        console.log('Project details:', data);
+        // console.log('Project details:', data);
       } catch (error) {
         console.error('Error fetching project details:', error);
         setError(error.message);
@@ -45,6 +53,35 @@ const ProjectDetailPage = () => {
 
     fetchProjectDetails();
   }, [projectId, accessToken, API_BASE_URL]);
+
+  // logic to create task
+  const handleCreateTask = projectId => {
+    setCreateTask(projectId);
+  };
+
+  // ** settings dropdown **//
+  // Toggle menu visibility
+  const toggleMenu = projectId => {
+    if (isProjectSettingsMenuOpen === projectId) {
+      setIsProjectSettingsMenuOpen(null); // Close if already open
+    } else {
+      setIsProjectSettingsMenuOpen(projectId); // Open the clicked menu
+    }
+  };
+
+  // Close modal or dropdown if a click happens outside the menu or dropdown
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsProjectSettingsMenuOpen(false); // Close the modal
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -58,7 +95,7 @@ const ProjectDetailPage = () => {
     <>
       <div className="flex justify-between items-center mb-8">
         {/* navigation */}
-        <div className="flex space-x-1">
+        <div className="flex space-x-1 lg:text-sm text-xs">
           <Link
             to={`/app/workspace/${project.team_space_id}`}
             className="text-slate-700 hover:underline cursor-pointer"
@@ -82,6 +119,7 @@ const ProjectDetailPage = () => {
           {/* invite member */}
           <div
             // onClick={openProjectModal}
+            onClick={() => handleCreateTask(project.project_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
             <BiTask className="w-5 h-5" />
@@ -89,26 +127,26 @@ const ProjectDetailPage = () => {
           </div>
           {/* settings */}
           <div
-            // onClick={() => toggleMenu(team.team_id)}
+            onClick={() => toggleMenu(project.project_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
             <CiSettings className="w-5 h-5" />
             <p className="text-sm font-semibold lg:block hidden">settings</p>
           </div>
-          {/* {isTeamOptionsMenuOpen === project.project_id && (
-            <Settings
+          {isProjectSettingsMenuOpen === project.project_id && (
+            <ProjectSettings
               ref={menuRef} // Use the single ref for the team options dropdown
-              isOpen={isTeamOptionsMenuOpen}
+              isOpen={isProjectSettingsMenuOpen}
               projectId={project.project_id}
               projectName={project.project_name}
               project={project}
             />
-          )} */}
+          )}
         </div>
       </div>
 
       {/* project details */}
-      <div className="lg:py-4 py-1 px-4 lg:px-24">
+      <div className="lg:py-4 py-1 px-4 lg:px-16">
         {project ? (
           <>
             <div className="flex flex-col space-y-2">
@@ -162,10 +200,18 @@ const ProjectDetailPage = () => {
       </div>
 
       {/* tasks */}
-      <div className="p-6 mx-auto bg-white rounded-lg shadow-lg">
-        <h2 className="lg:text-lg font-semibold">Tasks</h2>
-        <FetchTask projectId={projectId} />
+      <div className="py-6 mx-auto bg-white mb-24">
+        <h2 className="lg:text-lg lg:px-12 px-4 font-semibold">Tasks</h2>
+        <FetchTask projectId={projectId} project={project} />
       </div>
+
+      {/* Render the CreateTaskModal if createTask is set */}
+      {createTask && (
+        <CreateTaskModal
+          projectId={createTask}
+          onClose={() => setCreateTask(null)}
+        />
+      )}
     </>
   );
 };

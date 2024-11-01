@@ -4,8 +4,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { LuFolderGit } from 'react-icons/lu';
 import { FiMoreVertical } from 'react-icons/fi';
-import UpdateAccessModal from '../_components/project/_components/UpdateAccessModal';
-import EditProjectModal from '../_components/project/_components/EditProjectModal';
+import UpdateAccessModal from '../project/_components/UpdateAccessModal';
+import EditProjectModal from '../project/_components/EditProjectModal';
 
 const FolderDetailPage = () => {
   const { folderId } = useParams();
@@ -36,7 +36,7 @@ const FolderDetailPage = () => {
         );
         setFolder(response.data);
         setProjects(response.data.projects);
-        console.log('Fetched folder details:', response.data);
+        // console.log('Fetched folder details:', response.data);
       } catch (error) {
         setError('Error fetching folder details, reload page.');
         console.error('Error fetching folder details:', error);
@@ -48,7 +48,7 @@ const FolderDetailPage = () => {
     fetchFolderDetails();
   }, [folderId]);
 
-  // function to close deopdown when clicked outside of the page
+  // function to close dropdown when clicked outside of the page
   useEffect(() => {
     const handleClickOutside = event => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -85,12 +85,11 @@ const FolderDetailPage = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        // setFolders(folders.filter(folder => folder.folder_id !== folderId));
-        console.log('Folder deleted successfully');
+        console.log('Project deleted successfully');
         window.location.reload(); // Trigger project data refresh
       } catch (err) {
-        console.error('Error deleting folder:', err);
-        setError('Failed to delete folder.');
+        console.error('Error deleting Project:', err);
+        setError('Failed to delete Project.');
       }
     }
   };
@@ -102,7 +101,7 @@ const FolderDetailPage = () => {
     <>
       <div className="flex justify-between items-center mb-8">
         {/* navigation */}
-        <div className="flex space-x-1">
+        <div className="flex space-x-1 lg:text-sm text-xs">
           <Link
             to={`/app/workspace/${folder.team_space_id}`}
             className="text-slate-700 hover:underline cursor-pointer"
