@@ -3,12 +3,20 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { LuFolderGit } from 'react-icons/lu';
+import { FiMoreVertical } from 'react-icons/fi';
+import UpdateAccessModal from '../_components/project/_components/UpdateAccessModal';
+import EditProjectModal from '../_components/project/_components/EditProjectModal';
 
 const FolderDetailPage = () => {
   const { folderId } = useParams();
   const [folder, setFolder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(null); // Track which dropdown is open
+  const dropdownRef = useRef(null);
+  const [projects, setProjects] = useState([]);
+  const [projectToUpdate, setProjectToUpdate] = useState(null);
+  const [editProject, setEditProject] = useState(null);
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const accessToken = Cookies.get('access_token');
@@ -27,6 +35,7 @@ const FolderDetailPage = () => {
           }
         );
         setFolder(response.data);
+        setProjects(response.data.projects);
         console.log('Fetched folder details:', response.data);
       } catch (error) {
         setError('Error fetching folder details, reload page.');
@@ -39,6 +48,53 @@ const FolderDetailPage = () => {
     fetchFolderDetails();
   }, [folderId]);
 
+  // function to close deopdown when clicked outside of the page
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(null); // Close dropdown if clicking outside
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const toggleDropdown = projectId => {
+    setShowDropdown(showDropdown === projectId ? null : projectId);
+  };
+
+  // logic to handle Update project access
+  const handleUpdateAccess = projectId => {
+    setProjectToUpdate(projectId);
+  };
+
+  // logic to handle Edit project
+  const handleEditProject = project => {
+    setEditProject(project);
+  };
+
+  // logic to handle Delete project
+  const handleDeleteProject = async projectId => {
+    if (window.confirm('Are you sure you want to delete this project?')) {
+      try {
+        await axios.delete(`${API_BASE_URL}/project/delete/${projectId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        // setFolders(folders.filter(folder => folder.folder_id !== folderId));
+        console.log('Folder deleted successfully');
+        window.location.reload(); // Trigger project data refresh
+      } catch (err) {
+        console.error('Error deleting folder:', err);
+        setError('Failed to delete folder.');
+      }
+    }
+  };
+
   if (loading) return <p className="px-8">Loading...</p>;
   if (error) return <p className="text-red-500 px-8">{error}</p>;
 
@@ -46,7 +102,7 @@ const FolderDetailPage = () => {
     <>
       <div className="flex justify-between items-center mb-8">
         {/* navigation */}
-        <div>
+        <div className="flex space-x-1">
           <Link
             to={`/app/workspace/${folder.team_space_id}`}
             className="text-slate-700 hover:underline cursor-pointer"
@@ -54,6 +110,7 @@ const FolderDetailPage = () => {
             {folder.team_space.team_space_name}
           </Link>
           <span className="text-slate-700"> /</span>
+          <p className=" font-bold">{folder.folder_name}</p>
         </div>
         {/* team options */}
         <div className="flex gap-4 justify-end px-4">
@@ -69,18 +126,18 @@ const FolderDetailPage = () => {
           </div>
           {/* settings */}
           {/* <div
-            onClick={() => toggleMenu(team.team_id)}
+            onClick={() => toggleMenu(folder.folder_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
             <CiSettings className="w-5 h-5" />
             <p className="text-sm font-semibold lg:block hidden">settings</p>
-          </div> */}
-          {/* {isTeamOptionsMenuOpen === team.team_id && (
+          </div>
+          {isTeamOptionsMenuOpen === folder.folder_id && (
             <Settings
               ref={menuRef} // Use the single ref for the team options dropdown
               isOpen={isTeamOptionsMenuOpen}
-              teamId={team.team_id}
-              teamName={team.team_name}
+              teamId={folder.folder_id}
+              teamName={folder.team_name}
               team={team}
             />
           )} */}
@@ -149,29 +206,110 @@ const FolderDetailPage = () => {
                 <h2 className="text-lg font-semibold">
                   Projects ({folder.projects.length})
                 </h2>
-                <ul>
-                  {folder.projects.map(project => (
-                    <li
-                      key={project.project_id}
-                      className="flex items-center space-x-2"
-                    >
-                      <Link
-                        to={`/app/workspace/${folder.team_space_id}/projects/${project.project_id}`}
-                        className="text-blue-600 hover:underline"
+                {folder.projects.length > 0 ? (
+                  <ul className="py-2 mb-12 grid lg:grid-cols-2 grid-cols-1 gap-4">
+                    {folder.projects.map(project => (
+                      <li
+                        key={project.project_id}
+                        className="relative w-full flex items-center space-x-2"
                       >
-                        {project.project_name}
-                      </Link>
-                      <span className="text-sm text-slate-500">
-                        ({project.access})
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                        <Link
+                          to={`/app/workspace/${folder.team_space_id}/folders/${folder.folder_id}/projects/${project.project_id}`}
+                          className="w-full flex justify-between items-center border rounded-lg p-4 hover:bg-blue-50"
+                        >
+                          <div className="flex flex-col">
+                            <div className="flex gap-2 items-center">
+                              <LuFolderGit className="w-6 h-6 text-primary" />
+                              <h1 className="lg:text-xl text-lg font-semibold">
+                                {project.project_name}
+                              </h1>
+                            </div>
+                            <span className="text-sm text-slate-500">
+                              ({project.access})
+                            </span>
+                          </div>
+                        </Link>
+                        <button
+                          className="absolute z-40 right-4 top-7"
+                          onClick={() => toggleDropdown(project.project_id)}
+                        >
+                          <FiMoreVertical className="w-5 h-5 cursor-pointer" />
+                        </button>
+                        {showDropdown === project.project_id && (
+                          <ul
+                            ref={dropdownRef}
+                            className="absolute z-50 right-4 top-10 w-40 bg-white border rounded-lg shadow-lg"
+                          >
+                            <li
+                              onClick={() =>
+                                handleUpdateAccess(project.project_id)
+                              } // Pass folder ID here
+                              className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+                            >
+                              Update project access
+                            </li>
+
+                            <li
+                              onClick={() => handleAddUsers(project.project_id)} // Pass folder ID here
+                              className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+                            >
+                              Share with members
+                            </li>
+
+                            <li
+                              onClick={() => handleEditProject(project)}
+                              className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+                            >
+                              Edit Project
+                            </li>
+
+                            <li
+                              onClick={() =>
+                                handleDeleteProject(project.project_id)
+                              }
+                              className="flex w-full items-center space-x-2 p-2 text-red-500 text-sm hover:bg-blue-100 cursor-pointer"
+                            >
+                              Delete Project
+                            </li>
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No projects found in this folder.</p>
+                )}
               </div>
             </div>
           </>
         ) : (
           <p>No folder data found.</p>
+        )}
+
+        {/* Render the UpdateAccessModal if projectToUpdate is set */}
+        {projectToUpdate && (
+          <UpdateAccessModal
+            projectId={projectToUpdate} // Pass the project
+            onClose={() => setProjectToUpdate(null)} // Close modal on close
+          />
+        )}
+
+        {/* Render the EditProjectModal if editProject is set */}
+        {editProject && (
+          <EditProjectModal
+            project={editProject}
+            onClose={() => setEditProject(null)} // Close modal on close
+            // onUpdate={updatedProject => {
+            //   setProjects(
+            //     projects.map(project =>
+            //       project.project_id === updatedProject.project_id
+            //         ? updatedProject
+            //         : project
+            //     )
+            //   );
+            //   setEditProject(null);
+            // }}
+          />
         )}
       </div>
     </>

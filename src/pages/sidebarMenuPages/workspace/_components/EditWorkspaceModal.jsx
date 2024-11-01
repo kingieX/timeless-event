@@ -165,7 +165,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
             <h2 className="text-lg font-semibold mb-2">Danger action</h2>
 
             {/* leave team */}
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <p className="text-sm font-semibold">Leave workspace</p>
               <p className="text-xs text-slate-700 mb-2">
                 By leaving, you’ll immediately lose access to all{' '}
@@ -177,7 +177,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
               <button className="border border-red-500 text-red-500 font-semibold text-sm px-4 py-2 hover:border-red-800 hover:text-red-800">
                 Leave workspace
               </button>
-            </div>
+            </div> */}
 
             {/* delete workspace */}
             <div className="mb-4">
