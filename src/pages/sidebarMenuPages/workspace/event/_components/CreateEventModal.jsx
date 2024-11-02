@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 
-const CreateTaskModal = ({ projectId, onClose }) => {
+const CreateEventModal = ({ projectId, onClose }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState(0);
-  const [status, setStatus] = useState('pending');
-  const [dueDate, setDueDate] = useState('');
-  const [accessLevel, setAccessLevel] = useState('public');
+  const [eventDate, setEventDate] = useState('');
+  const [eventTime, setEventTime] = useState('');
+  const [location, setLocation] = useState('');
+  const [isVirtual, setIsVirtual] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
-  //   const projectId = tasks.project_id;
-
-  //   console.log('Project Id: ', projectId);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -27,17 +24,15 @@ const CreateTaskModal = ({ projectId, onClose }) => {
     const requestBody = {
       title,
       description,
-      priority,
-      status,
-      access: accessLevel,
-      due_date: dueDate,
+      event_date: eventDate,
+      event_time: eventTime,
+      location,
+      is_virtual: isVirtual,
       project_id: projectId,
     };
 
-    console.log('requestBody: ', requestBody);
-
     try {
-      const response = await fetch(`${API_BASE_URL}/task/`, {
+      const response = await fetch(`${API_BASE_URL}/event/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,18 +43,17 @@ const CreateTaskModal = ({ projectId, onClose }) => {
 
       if (response.ok) {
         const result = await response.json();
-        setSuccess('Task created successfully!');
-
+        setSuccess('Event created successfully!');
         setTimeout(() => {
           onClose();
-          window.location.reload(); // Trigger task data refresh
+          window.location.reload(); // Refresh the event data
         }, 2000);
       } else {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create task');
+        throw new Error(errorData.message || 'Failed to create event');
       }
     } catch (error) {
-      console.error('Error creating task:', error);
+      console.error('Error creating event:', error);
       setError(error.message);
     } finally {
       setIsLoading(false);
@@ -69,7 +63,7 @@ const CreateTaskModal = ({ projectId, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-start justify-center z-50 bg-gray-500 bg-opacity-50">
       <div className="bg-white p-6 w-full m-8 overflow-y-auto h-[80vh] border border-gray max-w-xl rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Create Task</h2>
+        <h2 className="text-xl font-bold mb-4">Create Event</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -95,62 +89,52 @@ const CreateTaskModal = ({ projectId, onClose }) => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Priority</label>
-            <select
-              value={priority}
-              onChange={e => setPriority(Number(e.target.value))}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            >
-              {[1, 2, 3, 4, 5].map(num => (
-                <option key={num} value={num}>
-                  {num}
-                </option>
-              ))}
-            </select>
+          <div className="w-full gap-4 flex">
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Event Date</label>
+              <input
+                type="date"
+                value={eventDate}
+                onChange={e => setEventDate(e.target.value)}
+                className="border border-gray-300 p-2 rounded w-full"
+                required
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Event Time</label>
+              <input
+                type="time"
+                value={eventTime}
+                onChange={e => setEventTime(e.target.value)}
+                className="border border-gray-300 p-2 rounded w-full"
+                required
+                disabled={isLoading}
+              />
+            </div>
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Access Level</label>
-            <select
-              value={accessLevel}
-              onChange={e => setAccessLevel(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            >
-              <option value="private">Private</option>
-              <option value="restricted">Restricted</option>
-              <option value="public">Public</option>
-              <option value="team_only">Team Only</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Status</label>
-            <select
-              value={status}
-              onChange={e => setStatus(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            >
-              <option value="pending">Pending</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Due Date</label>
+            <label className="block text-gray-700 mb-2">Location</label>
             <input
-              type="datetime-local"
-              value={dueDate.slice(0, 16)} // Adjusting format for datetime-local input
-              onChange={e => setDueDate(e.target.value)}
+              type="text"
+              value={location}
+              onChange={e => setLocation(e.target.value)}
               className="border border-gray-300 p-2 rounded w-full"
               required
               disabled={isLoading}
             />
+          </div>
+
+          <div className="mb-4 flex items-center">
+            <input
+              type="checkbox"
+              checked={isVirtual}
+              onChange={e => setIsVirtual(e.target.checked)}
+              className="mr-2"
+            />
+            <label className="text-gray-700">Is this event virtual?</label>
           </div>
 
           <div className="flex justify-end mb-4">
@@ -167,7 +151,7 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               className="bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
               disabled={isLoading}
             >
-              {isLoading ? 'Creating...' : 'Create Task'}
+              {isLoading ? 'Creating...' : 'Create Event'}
             </button>
           </div>
 
@@ -180,4 +164,4 @@ const CreateTaskModal = ({ projectId, onClose }) => {
   );
 };
 
-export default CreateTaskModal;
+export default CreateEventModal;

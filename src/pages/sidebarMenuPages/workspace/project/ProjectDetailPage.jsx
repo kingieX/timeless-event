@@ -2,10 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { BiTask } from 'react-icons/bi';
+import { MdOutlineEventAvailable } from 'react-icons/md';
 import { CiSettings } from 'react-icons/ci';
 import FetchTask from './_components/FetchTask';
 import CreateTaskModal from '../task/_components/CreateTaskModal';
 import ProjectSettings from './_components/ProjectSettings';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import CreateEventModal from '../event/_components/CreateEventModal';
+import FetchEvent from './_components/FetchEvent';
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
@@ -17,10 +21,18 @@ const ProjectDetailPage = () => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [createTask, setCreateTask] = useState(null);
+  const [createEvent, setCreateEvent] = useState(null);
 
   const menuRef = useRef(null);
   const [isProjectSettingsMenuOpen, setIsProjectSettingsMenuOpen] =
     useState(false);
+
+  const [showTasks, setShowTasks] = useState(true);
+  const [showEvents, setShowEvents] = useState(true);
+
+  const toggleTasks = () => setShowTasks(!showTasks);
+
+  const toggleEvents = () => setShowEvents(!showEvents);
 
   //   Route to fetch Project details
   useEffect(() => {
@@ -57,6 +69,11 @@ const ProjectDetailPage = () => {
   // logic to create task
   const handleCreateTask = projectId => {
     setCreateTask(projectId);
+  };
+
+  // logic to create event
+  const handleCreateEvent = projectId => {
+    setCreateEvent(projectId);
   };
 
   // ** settings dropdown **//
@@ -114,17 +131,28 @@ const ProjectDetailPage = () => {
           <span className="text-slate-700"> / </span>
           <p className=" font-bold">{project.project_name}</p>
         </div>
-        {/* team options */}
+
         <div className="flex gap-4 justify-end px-4">
-          {/* invite member */}
+          {/* Create Task */}
           <div
-            // onClick={openProjectModal}
             onClick={() => handleCreateTask(project.project_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
             <BiTask className="w-5 h-5" />
             <p className="text-sm font-semibold lg:block hidden">Create Task</p>
           </div>
+
+          {/* Create Event */}
+          <div
+            onClick={() => handleCreateEvent(project.project_id)}
+            className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+          >
+            <MdOutlineEventAvailable className="w-5 h-5" />
+            <p className="text-sm font-semibold lg:block hidden">
+              Create Event
+            </p>
+          </div>
+
           {/* settings */}
           <div
             onClick={() => toggleMenu(project.project_id)}
@@ -200,9 +228,37 @@ const ProjectDetailPage = () => {
       </div>
 
       {/* tasks */}
-      <div className="py-6 mx-auto bg-white mb-24">
-        <h2 className="lg:text-lg lg:px-12 px-4 font-semibold">Tasks</h2>
-        <FetchTask projectId={projectId} project={project} />
+      <div className="pt-6 mx-auto bg-white">
+        <div
+          className="flex lg:px-12 px-4 items-center cursor-pointer"
+          onClick={toggleTasks}
+        >
+          {showTasks ? (
+            <FaChevronUp className="mr-2 text-slate-600 w-3" />
+          ) : (
+            <FaChevronDown className="mr-2 text-slate-600 w-3" />
+          )}
+          <h2 className="lg:text-lg font-semibold">Tasks</h2>
+        </div>
+
+        {showTasks && <FetchTask projectId={projectId} project={project} />}
+      </div>
+
+      {/* events */}
+      <div className="mx-auto bg-white mb-24">
+        <div
+          className="flex lg:px-12 px-4 items-center cursor-pointer"
+          onClick={toggleEvents}
+        >
+          {showEvents ? (
+            <FaChevronUp className="mr-2 text-slate-600 w-3" />
+          ) : (
+            <FaChevronDown className="mr-2 text-slate-600 w-3" />
+          )}
+          <h2 className="lg:text-lg font-semibold">Events</h2>
+        </div>
+
+        {showEvents && <FetchEvent projectId={projectId} project={project} />}
       </div>
 
       {/* Render the CreateTaskModal if createTask is set */}
@@ -210,6 +266,14 @@ const ProjectDetailPage = () => {
         <CreateTaskModal
           projectId={createTask}
           onClose={() => setCreateTask(null)}
+        />
+      )}
+
+      {/* Render the CreateEventModal if createEvent is set */}
+      {createEvent && (
+        <CreateEventModal
+          projectId={createEvent}
+          onClose={() => setCreateEvent(null)}
         />
       )}
     </>

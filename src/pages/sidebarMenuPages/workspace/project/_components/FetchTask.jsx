@@ -122,7 +122,7 @@ const FetchTask = ({ projectId, project }) => {
   return (
     <div className=" mb-12">
       {tasks.length > 0 ? (
-        <ul className="py-2 lg:px-8 px-4 mb-12 grid lg:grid-cols-1 grid-cols-1 gap-4">
+        <ul className="py-2 lg:px-8 px-4 mb-12 grid lg:grid-cols-1 grid-cols-1">
           {tasks.map(task => (
             <li
               key={task.task_id}
@@ -130,13 +130,11 @@ const FetchTask = ({ projectId, project }) => {
             >
               <Link
                 to={`/app/workspace/${project.team_space_id}/folders/${project.folder_id}/projects/${project.project_id}/tasks/${task.task_id}`}
-                className="relative w-full flex justify-between items-center border rounded-lg p-4 hover:bg-blue-50"
+                className="relative w-full flex justify-between items-center border-b border-gray p-2 hover:bg-blue-50"
               >
-                <div className="flex flex-col">
-                  <h1 className="lg:text-xl text-lg font-semibold">
-                    {task.title}
-                  </h1>
-                  <div className="flex space-x-2 text-sm text-slate-500">
+                <div className="flex flex-col gap-1">
+                  <h1 className="lg:text-lg text-xs font-">{task.title}</h1>
+                  <div className="flex space-x-2 text-xs text-primary">
                     <p>
                       <span className="font-semibold">Access: </span>
                       {task.access}
@@ -152,7 +150,7 @@ const FetchTask = ({ projectId, project }) => {
                         hour12: true,
                       })}
                     </p>
-                    <span className="text-sm text-slate-500">
+                    <span className="text-xs">
                       ({task.status}) {/* Assuming `status` is a property */}
                     </span>
                   </div>

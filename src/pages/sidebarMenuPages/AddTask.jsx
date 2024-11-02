@@ -1,92 +1,82 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CiLocationOn } from 'react-icons/ci';
-import { IoMdArrowDropdown } from 'react-icons/io';
-import { FiTag } from 'react-icons/fi';
 import { CiAlarmOn } from 'react-icons/ci';
+import Cookies from 'js-cookie';
 // import ReminderModal from '../../components/ReminderModal';
-import { MdOutlineLowPriority } from 'react-icons/md';
-
-// Dynamic options for the modal
-const groupOptions = [
-  { value: 'Group 1', label: 'Group 1' },
-  { value: 'Group 2', label: 'Group 2' },
-  // Add more groups as needed
-];
-
-const deliveryMediumOptions = [
-  { value: 'sms', label: 'SMS' },
-  { value: 'whatsapp', label: 'WhatsApp' },
-  { value: 'email', label: 'Email' },
-  // Add more options as needed
-];
 
 const AddTask = () => {
   const [taskName, setTaskName] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [dueTime, setDueTime] = useState('');
-  const [priority, setPriority] = useState('');
-  const [labels, setLabels] = useState('');
+  const [priority, setPriority] = useState(0);
+  const [status, setStatus] = useState('pending');
   const [comment, setComment] = useState('');
-  const [location, setLocation] = useState('');
-  const [priorityOpen, setPriorityOpen] = useState(false);
+  const [accessLevel, setAccessLevel] = useState('public');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const [showReminderModal, setShowReminderModal] = useState(false); // Control modal visibility
   const [reminderSettings, setReminderSettings] = useState(null); // Store reminder settings
+
+  const accessToken = Cookies.get('access_token');
+  const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const navigate = useNavigate();
-
-  const priorityOptions = [
-    {
-      value: 'Priority 1',
-      label: 'Priority 1',
-      icon: <FiTag className="text-red-500 w-4 h-4" />,
-    },
-    {
-      value: 'Priority 2',
-      label: 'Priority 2',
-      icon: <FiTag className="text-orange-500 w-4 h-4" />,
-    },
-    {
-      value: 'Priority 3',
-      label: 'Priority 3',
-      icon: <FiTag className="text-yellow-500 w-4 h-4" />,
-    },
-    {
-      value: 'Priority 4',
-      label: 'Priority 4',
-      icon: <FiTag className="text-green-500 w-4 h-4" />,
-    },
-  ];
-
-  const handleDueDateChange = date => {
-    setDueDate(date);
-  };
-
-  const handleDueTimeChange = e => {
-    setDueTime(e.target.value);
-  };
 
   // const handleRemindersChange = date => {
   //   setReminders(date);
   // };
 
-  const handleCancel = () => {
-    navigate('/dashboard'); // Redirects to the dashboard
-  };
+  // const handleCancel = () => {
+  //   navigate('/dashboard'); // Redirects to the dashboard
+  // };
 
-  const handleAddTask = () => {
-    // You can add logic to handle form submission here
-    // For now, we'll just navigate to the task page
-    navigate('/dashboard/tasks');
-  };
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
 
-  const togglePriorityDropdown = () => {
-    setPriorityOpen(!priorityOpen);
-  };
+    const requestBody = {
+      title: taskName,
+      description: comment,
+      priority,
+      status,
+      access: accessLevel,
+      due_date: dueDate,
+      project_id: projectId,
+    };
 
-  const selectPriority = option => {
-    setPriority(option.label);
-    setPriorityOpen(false); // Close the dropdown after selection
+    console.log('requestBody: ', requestBody);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/task/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setSuccess('Task added successfully!');
+
+        setTimeout(() => {
+          navigate('/dashboard/tasks');
+          window.location.reload(); // Trigger task data refresh
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add task');
+      }
+    } catch (error) {
+      console.error('Error adding task:', error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle modal close
@@ -95,7 +85,7 @@ const AddTask = () => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-4 mx-4">
+    <div className="flex justify-center items-center mb-8 mx-4">
       {/* Reminder Modal */}
       {/* {showReminderModal && (
         <ReminderModal
@@ -109,7 +99,11 @@ const AddTask = () => {
       <div className="bg-white w-full max-w-xl py-4 lg:border border-gray rounded-lg lg:shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Add Task</h2>
         <hr className="hidden lg:block mb-4 border-gray" />
-        <form className="flex flex-col justify-center items-center lg:px-12">
+        <form
+          className="flex flex-col justify-center items-center lg:px-12"
+          onSubmit={handleSubmit}
+        >
+          {/* Taks name */}
           <div className="w-full mb-6">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -124,77 +118,47 @@ const AddTask = () => {
               value={taskName}
               onChange={e => setTaskName(e.target.value)}
               placeholder="Enter task name"
+              required
+              disabled={isLoading}
             />
           </div>
 
           <div className="w-full mb-4 flex lg:flex-row flex-col gap-4">
-            <div className="lg:w-1/3">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="dueDate"
-              >
-                Date
+            {/* due date */}
+            <div className=" mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Due Date/Time
               </label>
-              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
-                <input
-                  id="dueDate"
-                  type="date"
-                  className="w-full text-sm flex-grow outline-none pl-1"
-                  value={dueDate}
-                  onChange={handleDueDateChange}
-                />
-              </div>
+              <input
+                type="datetime-local"
+                value={dueDate.slice(0, 16)} // Adjusting format for datetime-local input
+                onChange={e => setDueDate(e.target.value)}
+                className="flex items-center text-sm w-full px-2 py-2 border border-gray focus-within:border-primary cursor-pointer"
+                required
+                disabled={isLoading}
+              />
             </div>
 
-            <div className="lg:w-1/3">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="dueTime"
-              >
-                Time
-              </label>
-              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
-                <input
-                  id="dueTime"
-                  type="time"
-                  className="w-full text-sm flex-grow outline-none pl-1"
-                  value={dueTime}
-                  onChange={handleDueTimeChange}
-                />
-              </div>
-            </div>
-
-            <div className="lg:w-1/3 relative">
+            <div className="lg:w-full relative">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="priority"
               >
                 Priority
               </label>
-              <div
-                className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary cursor-pointer"
-                onClick={togglePriorityDropdown}
+              <select
+                value={priority}
+                onChange={e => setPriority(Number(e.target.value))}
+                className="w-full px-4 py-2 border text-sm border-gray text-left focus-within:border-primary flex items-center"
+                required
+                disabled={isLoading}
               >
-                <MdOutlineLowPriority className="text-slate-500 w-6 h-6" />
-                <span className="w-full text-sm flex-grow outline-none pl-2 text-slate-500">
-                  {priority || 'priority'}
-                </span>
-                <IoMdArrowDropdown className="w-6 h-6 text-slate-500" />
-              </div>
-              {priorityOpen && (
-                <ul className="absolute w-full mt-1 bg-white border border-gray shadow-md z-10">
-                  {priorityOptions.map((option, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center px-2 py-2 hover:bg-gray-100 cursor-pointer"
-                      onClick={() => selectPriority(option)}
-                    >
-                      {option.icon}
-                      <span className="ml-2">{option.label}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+                {[1, 2, 3, 4, 5].map(num => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -212,81 +176,83 @@ const AddTask = () => {
               onChange={e => setComment(e.target.value)}
               placeholder="Enter comment"
               rows="2"
+              required
+              disabled={isLoading}
             ></textarea>
           </div>
 
           <div className="w-full mb-4 flex lg:flex-row flex-col gap-4">
+            <div className="lg:w-1/3">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Access Level
+              </label>
+              <select
+                value={accessLevel}
+                onChange={e => setAccessLevel(e.target.value)}
+                className="w-full px-4 py-2 border border-gray text-left text-sm focus-within:border-primary flex items-center"
+                required
+                disabled={isLoading}
+              >
+                <option value="private">Private</option>
+                <option value="restricted">Restricted</option>
+                <option value="public">Public</option>
+                <option value="team_only">Team Only</option>
+              </select>
+            </div>
+
+            <div className="lg:w-1/3">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Status
+              </label>
+              <select
+                value={status}
+                onChange={e => setStatus(e.target.value)}
+                className="w-full px-4 py-2 border text-sm border-gray text-left focus-within:border-primary flex items-center"
+                required
+                disabled={isLoading}
+              >
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+
             <div className="lg:w-1/2">
               <label className="block text-gray-700 text-sm font-bold mb-2">
-                {/* Reminders */}
+                Reminders
               </label>
               <button
                 type="button"
                 className="w-full px-4 py-2 border border-gray text-left focus-within:border-primary flex items-center"
                 onClick={() => setShowReminderModal(true)} // This will open the modal
               >
-                <CiAlarmOn className="text-slate-500 w-6 h-6" />
-                <span className="ml-2 text-sm">Reminder</span>
+                <CiAlarmOn className="text-slate-500 w-5 h-5" />
+                <span className="ml-2 text-sm">Set Reminder</span>
               </button>
-            </div>
-
-            <div className="lg:w-1/2">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="location"
-              >
-                {/* Location */}
-              </label>
-              <div className="flex items-center w-full px-4 py-2 border border-gray focus-within:border-primary">
-                <input
-                  id="location"
-                  type="text"
-                  className="w-full flex-grow outline-none pr-2"
-                  value={location}
-                  onChange={e => setLocation(e.target.value)}
-                  placeholder="Enter location"
-                />
-                <CiLocationOn className="text-slate-500 w-6 h-6" />
-              </div>
-            </div>
-
-            <div className="lg:w-1/3">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="labels"
-              >
-                {/* Labels */}
-              </label>
-              <div className="flex items-center w-full px-2 py-2 border border-gray focus-within:border-primary">
-                <FiTag className="text-slate-500 w-6 h-6" />
-                <input
-                  id="labels"
-                  type="text"
-                  className="w-full text-sm flex-grow outline-none pl-1"
-                  value={labels}
-                  onChange={e => setLabels(e.target.value)}
-                  placeholder="Enter labels"
-                />
-              </div>
             </div>
           </div>
 
-          <div className="lg:w-3/4 w-full flex justify-center gap-8 my-4">
-            <button
+          <div className="w-full flex justify-center gap-8 my-4">
+            {/* <button
               type="button"
               className="lg:w-1/2 w-full border border-red-400 text-red-400 font-semibold py-2 px-4 hover:bg-red-400 hover:text-white transition duration-300"
               onClick={handleCancel}
             >
               Cancel
-            </button>
+            </button> */}
             <button
-              type="button"
+              type="submit"
               className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
-              onClick={handleAddTask}
+              disabled={isLoading}
             >
-              Add Task
+              {isLoading ? 'Adding...' : 'Add Task'}
             </button>
           </div>
+
+          {/* Display Success or Error Messages */}
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>
     </div>
