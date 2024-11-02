@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { BiTask } from 'react-icons/bi';
 import { CiSettings } from 'react-icons/ci';
+import TaskSettings from './_components/TaskSettings';
 
 const TaskDetailPage = () => {
   const { taskId } = useParams();
@@ -11,6 +12,9 @@ const TaskDetailPage = () => {
   const [error, setError] = useState('');
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const menuRef = useRef(null);
+  const [isTaskSettingsMenuOpen, setIsTaskSettingsMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchTaskDetails = async () => {
@@ -39,6 +43,30 @@ const TaskDetailPage = () => {
 
     fetchTaskDetails();
   }, [taskId, accessToken, API_BASE_URL]);
+
+  // ** settings dropdown **//
+  // Toggle menu visibility
+  const toggleMenu = taskId => {
+    if (isTaskSettingsMenuOpen === taskId) {
+      setIsTaskSettingsMenuOpen(null); // Close if already open
+    } else {
+      setIsTaskSettingsMenuOpen(taskId); // Open the clicked menu
+    }
+  };
+
+  // Close modal or dropdown if a click happens outside the menu or dropdown
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsTaskSettingsMenuOpen(false); // Close the modal
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -84,10 +112,22 @@ const TaskDetailPage = () => {
               Create Subtask
             </p>
           </div>
-          <div className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer">
+          <div
+            onClick={() => toggleMenu(task.task_id)}
+            className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+          >
             <CiSettings className="w-5 h-5" />
             <p className="text-sm font-semibold lg:block hidden">Settings</p>
           </div>
+          {isTaskSettingsMenuOpen === task.task_id && (
+            <TaskSettings
+              ref={menuRef} // Use the single ref for the team options dropdown
+              isOpen={isTaskSettingsMenuOpen}
+              taskId={task.task_id}
+              taskName={task.title}
+              task={task}
+            />
+          )}
         </div>
       </div>
 

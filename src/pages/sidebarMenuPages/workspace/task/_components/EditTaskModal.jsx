@@ -107,7 +107,7 @@ const EditTaskModal = ({ task, onClose }) => {
               className="border border-gray-300 p-2 rounded w-full"
               disabled={isLoading}
             >
-              {[0, 1, 2, 3, 4, 5].map(num => (
+              {[1, 2, 3, 4, 5].map(num => (
                 <option key={num} value={num}>
                   {num}
                 </option>
@@ -123,6 +123,7 @@ const EditTaskModal = ({ task, onClose }) => {
               className="border border-gray-300 p-2 rounded w-full"
               disabled={isLoading}
             >
+              <option value="just_started">Just started</option>
               <option value="pending">Pending</option>
               <option value="in_progress">In Progress</option>
               <option value="completed">Completed</option>

@@ -298,16 +298,6 @@ const FolderDetailPage = () => {
           <EditProjectModal
             project={editProject}
             onClose={() => setEditProject(null)} // Close modal on close
-            // onUpdate={updatedProject => {
-            //   setProjects(
-            //     projects.map(project =>
-            //       project.project_id === updatedProject.project_id
-            //         ? updatedProject
-            //         : project
-            //     )
-            //   );
-            //   setEditProject(null);
-            // }}
           />
         )}
       </div>

@@ -94,7 +94,6 @@ const FetchTask = ({ projectId, project }) => {
   };
 
   // logic to handle delete task
-  // logic to handle Delete project
   const handleDeleteTask = async taskId => {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {

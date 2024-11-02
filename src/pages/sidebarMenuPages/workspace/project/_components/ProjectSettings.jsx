@@ -6,6 +6,8 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CiEdit } from 'react-icons/ci';
 import { RiDeleteBin6Line, RiAddLine } from 'react-icons/ri';
 import Cookies from 'js-cookie';
+import EditProjectModal from './EditProjectModal';
+import UpdateAccessModal from './UpdateAccessModal';
 
 const ProjectSettings = forwardRef(
   ({ projectId, project, projectName, onProjectUpdated }, ref) => {
@@ -16,6 +18,10 @@ const ProjectSettings = forwardRef(
     const [showEditTeamModal, setShowEditTeamModal] = useState(false);
     const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
+    const [projectToUpdate, setProjectToUpdate] = useState(null);
+    const [editProject, setEditProject] = useState(null);
+    const [shareMember, setShareMember] = useState(null);
+
     const access_token = Cookies.get('access_token');
     const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -25,90 +31,128 @@ const ProjectSettings = forwardRef(
 
     //   console.log('Team id for deletion', teamId);
 
-    const handleDeleteTeam = () => {
-      setIsLoading(true);
-      // Send DELETE request to backend
-      fetch(`${API_BASE_URL}/team/${team.team_id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${access_token}`, // Pass token_id in the header
-        },
-      })
-        .then(response => {
-          if (response.ok) {
-            setIsLoading(false);
-            console.log('Team deleted successfully');
-            setShowConfirmationDialog(false);
-            window.location.reload(); // Reload the page
+    // const handleDeleteTeam = () => {
+    //   setIsLoading(true);
+    //   // Send DELETE request to backend
+    //   fetch(`${API_BASE_URL}/team/${team.team_id}`, {
+    //     method: 'DELETE',
+    //     headers: {
+    //       Authorization: `Bearer ${access_token}`, // Pass token_id in the header
+    //     },
+    //   })
+    //     .then(response => {
+    //       if (response.ok) {
+    //         setIsLoading(false);
+    //         console.log('Team deleted successfully');
+    //         setShowConfirmationDialog(false);
+    //         window.location.reload(); // Reload the page
 
-            // Handle success, possibly refresh the team list
-          }
-        })
-        .catch(error => {
-          console.error('Error deleting team:', error);
-        });
+    //         // Handle success, possibly refresh the team list
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Error deleting team:', error);
+    //     });
+    // };
+
+    // logic to handle Update project access
+    const handleUpdateAccess = projectId => {
+      setProjectToUpdate(projectId);
+    };
+
+    // logic to handle share with members
+    const handleShare = projectId => {
+      setShareMember(projectId);
+    };
+
+    // logic to handle Edit project
+    const handleEditProject = project => {
+      setEditProject(project);
+    };
+
+    // logic to handle Delete project
+    const handleDeleteProject = async projectId => {
+      if (window.confirm('Are you sure you want to delete this project?')) {
+        try {
+          await axios.delete(`${API_BASE_URL}/project/delete/${projectId}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          console.log('Project deleted successfully');
+          window.location.reload(); // Trigger project data refresh
+        } catch (err) {
+          console.error('Error deleting Project:', err);
+          setError('Failed to delete Project.');
+        }
+      }
     };
 
     return (
       <div ref={ref} className="relative">
-        {/* <button onClick={toggleDropdown}>
-          <BsThreeDotsVertical className="w-5 h-5 cursor-pointer" />
-        </button> */}
+        <ul className="absolute z-50 right-4 top-10 w-40 bg-white border rounded-lg shadow-lg">
+          <li
+            onClick={() => handleUpdateAccess(project.project_id)} // Pass folder ID here
+            className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+          >
+            Update project access
+          </li>
 
-        {/* {showDropdown && ( */}
-        <ul className="absolute w-40 right-0 mt-4 bg-white border border-slate-300 rounded shadow-lg z-10">
           <li
-            onClick={() => setShowAddMemberModal(true)}
-            className="flex items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+            onClick={() => handleShare(project.project_id)} // Pass folder ID here
+            className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
           >
-            <RiAddLine size={20} />
-            <span>Add Member</span>
+            Share with members
           </li>
+
           <li
-            onClick={() => setShowEditTeamModal(true)}
-            className="flex items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+            onClick={() => handleEditProject(project)}
+            className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
           >
-            <CiEdit size={20} />
-            <span>Edit Team</span>
+            Edit Project
           </li>
-          {/* <li
-            onClick={() => setShowConfirmationDialog(true)}
-            className="flex items-center space-x-2 p-2 text-red-500 text-sm hover:bg-blue-100 cursor-pointer"
+
+          <li
+            onClick={() => handleDeleteProject(project.project_id)}
+            className="flex w-full items-center space-x-2 p-2 text-red-500 text-sm hover:bg-blue-100 cursor-pointer"
           >
-            <RiDeleteBin6Line size={20} />
-            <span>Delete Team</span>
-          </li> */}
+            Delete Project
+          </li>
         </ul>
-        {/* )} */}
-
-        {/* Add Member Modal */}
-        {showAddMemberModal && (
-          <AddMemberModal
-            onClose={() => setShowAddMemberModal(false)}
-            teamId={teamId}
-            teamName={teamName}
-          />
-        )}
-
-        {/* Edit Team Modal */}
-        {showEditTeamModal && (
-          <EditTeamModal
-            onClose={() => setShowEditTeamModal(false)}
-            teamId={teamId}
-            team={team}
-            onTeamUpdated={onTeamUpdated}
-          />
-        )}
 
         {/* Confirmation Dialog */}
-        {/* {showConfirmationDialog && (
+        {showConfirmationDialog && (
           <ConfirmationDialog
             isLoading={isLoading}
             onClose={() => setShowConfirmationDialog(false)}
             onConfirm={handleDeleteTeam}
             message={`Are you sure you want to delete ${teamName}?`}
           />
-        )} */}
+        )}
+
+        {/* Render the UpdateAccessModal if projectToUpdate is set */}
+        {projectToUpdate && (
+          <UpdateAccessModal
+            projectId={projectToUpdate} // Pass the project
+            onClose={() => setProjectToUpdate(null)} // Close modal on close
+          />
+        )}
+
+        {/* Render the EditProjectModal if editProject is set */}
+        {editProject && (
+          <EditProjectModal
+            project={editProject}
+            onClose={() => setEditProject(null)} // Close modal on close
+          />
+        )}
+
+        {/* Render the ShareMemberModal if shareMember is set */}
+        {shareMember && (
+          <ShareMemberModal
+            projectId={shareMember} // Pass the project
+            onClose={() => setShareMember(null)} // Close modal on close
+          />
+        )}
       </div>
     );
   }
