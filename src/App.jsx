@@ -80,6 +80,7 @@ import FolderDetailPage from './pages/sidebarMenuPages/workspace/folder/FolderDe
 import TeamDetailPage from './pages/sidebarMenuPages/workspace/team/_components/TeamDetailpage';
 import ProjectDetailPage from './pages/sidebarMenuPages/workspace/project/ProjectDetailPage';
 import TaskDetailPage from './pages/sidebarMenuPages/workspace/task/TaskDetailPage';
+import EventDetailPage from './pages/sidebarMenuPages/workspace/event/EventDetailPage';
 
 const App = () => {
   return (
@@ -169,6 +170,12 @@ const App = () => {
           <Route
             path="workspace/:workspaceId/folders/:folderId/projects/:projectId/tasks/:taskId"
             element={<TaskDetailPage />}
+          />
+
+          {/* Event route */}
+          <Route
+            path="workspace/:workspaceId/folders/:folderId/projects/:projectId/events/:eventId"
+            element={<EventDetailPage />}
           />
 
           {/* userMenu routes */}

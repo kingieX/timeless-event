@@ -160,6 +160,30 @@ const AddTask = () => {
                 ))}
               </select>
             </div>
+
+            <div className="lg:w-full">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="priority"
+              >
+                Add task to
+              </label>
+              <select
+                value={priority}
+                onChange={e => setPriority(e.target.value)}
+                className="w-full px-4 py-2 border text-sm border-gray text-left focus-within:border-primary flex items-center"
+                required
+                disabled={isLoading}
+              >
+                {['project 1', 'project 2', 'project 3', 'project 4'].map(
+                  (project, index) => (
+                    <option key={index} value={project}>
+                      {project}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
           </div>
 
           <div className="w-full mb-4">

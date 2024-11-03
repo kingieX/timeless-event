@@ -2,17 +2,21 @@ import Cookies from 'js-cookie';
 import React, { useEffect, useRef, useState } from 'react';
 import { FiMoreVertical } from 'react-icons/fi';
 import axios from 'axios';
+import EditEventModal from '../../event/_components/EditEventModal';
+import { Link } from 'react-router-dom';
 
-const FetchEvent = ({ projectId }) => {
+const FetchEvent = ({ projectId, project }) => {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
   const accessToken = Cookies.get('access_token');
+  // console.log('Access token:', accessToken);
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [showDropdown, setShowDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const [editEvent, setEditEvent] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -64,6 +68,29 @@ const FetchEvent = ({ projectId }) => {
     setShowDropdown(showDropdown === eventId ? null : eventId);
   };
 
+  // logic to handle Edit EVent
+  const handleEditEvent = event => {
+    setEditEvent(event);
+  };
+
+  // logic to handle Delete Event
+  const handleDeleteEvent = async eventId => {
+    if (window.confirm('Are you sure you want to delete this event?')) {
+      try {
+        await axios.delete(`${API_BASE_URL}/event/${eventId}/delete-event`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        console.log('Event deleted successfully');
+        window.location.reload(); // Trigger project data refresh
+      } catch (err) {
+        console.error('Error deleting event:', err);
+        setError('Failed to delete event.');
+      }
+    }
+  };
+
   if (isLoading) {
     return <div className="text-center">Loading...</div>;
   }
@@ -81,10 +108,13 @@ const FetchEvent = ({ projectId }) => {
               key={event.event_id}
               className="relative w-full flex items-center space-x-2"
             >
-              <div className="relative w-full flex justify-between items-center border-b border-gray p-2 hover:bg-blue-50">
+              <Link
+                to={`/app/workspace/${project.team_space_id}/folders/${project.folder_id}/projects/${project.project_id}/events/${event.event_id}`}
+                className="relative w-full flex justify-between items-center border-b border-gray p-2 hover:bg-blue-50"
+              >
                 <div className="flex flex-col gap-1">
                   <h1 className="lg:text-lg text-xs font-">{event.title}</h1>
-                  <div className="flex space-x-2 text-xs text-primary">
+                  <div className="flex space-x-1 text-xs text-primary">
                     <p>
                       <span className="font-semibold">Location: </span>
                       {event.location}
@@ -107,7 +137,7 @@ const FetchEvent = ({ projectId }) => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
               <button
                 className="absolute z-40 right-4 top-7"
                 onClick={() => toggleDropdown(event.event_id)}
@@ -120,10 +150,26 @@ const FetchEvent = ({ projectId }) => {
                   className="absolute z-50 right-4 top-10 w-40 bg-white border rounded-lg shadow-lg"
                 >
                   {/* Add your dropdown options here */}
-                  <li className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer">
-                    View Details
+                  <li
+                    onClick={() => handleSetReminder(event)}
+                    className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+                  >
+                    Set Reminder
                   </li>
-                  {/* You can add more actions like Edit or Delete if needed */}
+
+                  <li
+                    onClick={() => handleEditEvent(event)}
+                    className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+                  >
+                    Edit task
+                  </li>
+
+                  <li
+                    onClick={() => handleDeleteEvent(event.event_id)}
+                    className="flex w-full items-center space-x-2 p-2 text-red-500 text-sm hover:bg-blue-100 cursor-pointer"
+                  >
+                    Delete task
+                  </li>
                 </ul>
               )}
             </li>
@@ -131,6 +177,11 @@ const FetchEvent = ({ projectId }) => {
         </ul>
       ) : (
         <p className="px-8">No events found for this project.</p>
+      )}
+
+      {/* Render the EditEventModal if editEvent is set */}
+      {editEvent && (
+        <EditEventModal event={editEvent} onClose={() => setEditEvent(null)} />
       )}
     </div>
   );
