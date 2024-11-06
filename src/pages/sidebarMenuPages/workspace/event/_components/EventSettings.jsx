@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
 import { useState, forwardRef, useEffect } from 'react';
 import Cookies from 'js-cookie';
 // import SetReminderModal from './SetReminderModal'; // Import your modal for setting reminders
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import EditEventModal from './EditEventModal';
+import EventReminderModal from './EventReminderModal';
 
-const EventSettings = forwardRef(({ eventId, eventName, event }, ref) => {
+const EventSettings = forwardRef(({ event }, ref) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [ids, setIds] = useState(null);
   const [reminder, setReminder] = useState(null);
@@ -99,12 +101,12 @@ const EventSettings = forwardRef(({ eventId, eventName, event }, ref) => {
       </ul>
 
       {/* Render the SetReminderModal if reminder is set */}
-      {/* {reminder && (
-        <SetReminderModal
+      {reminder && (
+        <EventReminderModal
           eventId={reminder}
           onClose={() => setReminder(null)} // Close modal on close
         />
-      )} */}
+      )}
 
       {/* Render the EditEventModal if editEvent is set */}
       {editEvent && (

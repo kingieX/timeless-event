@@ -7,6 +7,7 @@ import UpdateStatusModal from '../../task/_components/UpdateStatusModal';
 import UpdatePriorityModal from '../../task/_components/UpdatePriorityModal';
 import EditTaskModal from '../../task/_components/EditTaskModal';
 import axios from 'axios';
+import TaskReminderModal from '../../task/_components/TaskReminderModal';
 
 const FetchTask = ({ projectId, project }) => {
   const [tasks, setTasks] = useState([]);
@@ -19,6 +20,7 @@ const FetchTask = ({ projectId, project }) => {
 
   const [showDropdown, setShowDropdown] = useState(null); // Track which dropdown is open
   const dropdownRef = useRef(null);
+  const [reminder, setReminder] = useState(null);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
   const [taskStatus, setTaskStatus] = useState(null);
   const [taskPriority, setTaskPriority] = useState(null);
@@ -71,6 +73,11 @@ const FetchTask = ({ projectId, project }) => {
 
   const toggleDropdown = taskId => {
     setShowDropdown(showDropdown === taskId ? null : taskId);
+  };
+
+  // logic to handle set Reminder
+  const handleSetReminder = taskId => {
+    setReminder(taskId);
   };
 
   // logic to handle Update task access
@@ -168,6 +175,13 @@ const FetchTask = ({ projectId, project }) => {
                   className="absolute z-50 right-4 top-10 w-40 bg-white border rounded-lg shadow-lg"
                 >
                   <li
+                    onClick={() => handleSetReminder(task.task_id)} // Pass folder ID here
+                    className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+                  >
+                    Set Reminder
+                  </li>
+
+                  <li
                     onClick={() => handleUpdateAccess(task.task_id)} // Pass folder ID here
                     className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
                   >
@@ -215,6 +229,14 @@ const FetchTask = ({ projectId, project }) => {
         </ul>
       ) : (
         <p className="px-8">No tasks found for this project.</p>
+      )}
+
+      {/* Render the ReminderModal if reminder is set */}
+      {reminder && (
+        <TaskReminderModal
+          taskId={reminder} // Pass the task
+          onClose={() => setReminder(null)} // Close modal on close
+        />
       )}
 
       {/* Render the UpdateAccessModal if taskToUpdate is set */}

@@ -6,6 +6,7 @@ import { LuFolderGit } from 'react-icons/lu';
 import { FiMoreVertical } from 'react-icons/fi';
 import UpdateAccessModal from '../project/_components/UpdateAccessModal';
 import EditProjectModal from '../project/_components/EditProjectModal';
+import CreateProjectModal from '../project/_components/CreateProjectModal';
 
 const FolderDetailPage = () => {
   const { folderId } = useParams();
@@ -17,6 +18,7 @@ const FolderDetailPage = () => {
   const [projects, setProjects] = useState([]);
   const [projectToUpdate, setProjectToUpdate] = useState(null);
   const [editProject, setEditProject] = useState(null);
+  const [createProject, setCreateProject] = useState(null);
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const accessToken = Cookies.get('access_token');
@@ -66,6 +68,11 @@ const FolderDetailPage = () => {
     setShowDropdown(showDropdown === projectId ? null : projectId);
   };
 
+  // logic to handle create project
+  const handleCreateProject = folderId => {
+    setCreateProject(folderId);
+  };
+
   // logic to handle Update project access
   const handleUpdateAccess = projectId => {
     setProjectToUpdate(projectId);
@@ -113,9 +120,9 @@ const FolderDetailPage = () => {
         </div>
         {/* team options */}
         <div className="flex gap-4 justify-end px-4">
-          {/* invite member */}
+          {/* Create Project */}
           <div
-            // onClick={openTeamModal}
+            onClick={() => handleCreateProject(folder.folder_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
             <LuFolderGit className="w-5 h-5" />
@@ -283,6 +290,14 @@ const FolderDetailPage = () => {
           </>
         ) : (
           <p>No folder data found.</p>
+        )}
+
+        {/* Render the CreateProjectModal if createProject is set */}
+        {createProject && (
+          <CreateProjectModal
+            folderId={createProject} // Pass the folder
+            onClose={() => setCreateProject(null)} // Close modal on close
+          />
         )}
 
         {/* Render the UpdateAccessModal if projectToUpdate is set */}

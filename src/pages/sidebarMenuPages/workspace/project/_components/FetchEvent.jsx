@@ -4,6 +4,7 @@ import { FiMoreVertical } from 'react-icons/fi';
 import axios from 'axios';
 import EditEventModal from '../../event/_components/EditEventModal';
 import { Link } from 'react-router-dom';
+import EventReminderModal from '../../event/_components/EventReminderModal';
 
 const FetchEvent = ({ projectId, project }) => {
   const [events, setEvents] = useState([]);
@@ -16,6 +17,7 @@ const FetchEvent = ({ projectId, project }) => {
 
   const [showDropdown, setShowDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const [reminder, setReminder] = useState(null);
   const [editEvent, setEditEvent] = useState(null);
 
   useEffect(() => {
@@ -68,6 +70,11 @@ const FetchEvent = ({ projectId, project }) => {
     setShowDropdown(showDropdown === eventId ? null : eventId);
   };
 
+  // logic to handle reminder
+  const handleSetReminder = eventId => {
+    setReminder(eventId);
+  };
+
   // logic to handle Edit EVent
   const handleEditEvent = event => {
     setEditEvent(event);
@@ -115,10 +122,10 @@ const FetchEvent = ({ projectId, project }) => {
                 <div className="flex flex-col gap-1">
                   <h1 className="lg:text-lg text-xs font-">{event.title}</h1>
                   <div className="flex space-x-1 text-xs text-primary">
-                    <p>
+                    {/* <p>
                       <span className="font-semibold">Location: </span>
                       {event.location}
-                    </p>
+                    </p> */}
                     <p>
                       <span className="font-semibold">Date: </span>
                       {new Date(event.event_date).toLocaleString('en-US', {
@@ -151,7 +158,7 @@ const FetchEvent = ({ projectId, project }) => {
                 >
                   {/* Add your dropdown options here */}
                   <li
-                    onClick={() => handleSetReminder(event)}
+                    onClick={() => handleSetReminder(event.event_id)}
                     className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
                   >
                     Set Reminder
@@ -177,6 +184,14 @@ const FetchEvent = ({ projectId, project }) => {
         </ul>
       ) : (
         <p className="px-8">No events found for this project.</p>
+      )}
+
+      {/* Render the EventReminderModal if reminder is set */}
+      {reminder && (
+        <EventReminderModal
+          eventId={reminder}
+          onClose={() => setReminder(null)}
+        />
       )}
 
       {/* Render the EditEventModal if editEvent is set */}

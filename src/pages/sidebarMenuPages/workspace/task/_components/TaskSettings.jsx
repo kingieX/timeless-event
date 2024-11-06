@@ -7,11 +7,13 @@ import UpdateAccessModal from '../../task/_components/UpdateAccessModal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AddMemberModal from './AddMemberModal';
+import TaskReminderModal from './TaskReminderModal';
 
-const TaskSettings = forwardRef(({ taskId, task }, ref) => {
+const TaskSettings = forwardRef(({ task }, ref) => {
   // console.log('team details:', teamName);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const [reminder, setReminder] = useState(null);
   const [taskToUpdate, setTaskToUpdate] = useState(null);
   const [taskStatus, setTaskStatus] = useState(null);
   const [taskPriority, setTaskPriority] = useState(null);
@@ -56,6 +58,11 @@ const TaskSettings = forwardRef(({ taskId, task }, ref) => {
     };
     GetIds();
   }, [task.project_id, access_token, API_BASE_URL]);
+
+  // logic to handle Reminder
+  const handleReminder = taskId => {
+    setReminder(taskId);
+  };
 
   // logic to handle Update task access
   const handleUpdateAccess = taskId => {
@@ -108,6 +115,13 @@ const TaskSettings = forwardRef(({ taskId, task }, ref) => {
     <div ref={ref} className="relative">
       <ul className="absolute z-50 right-4 top-10 w-40 bg-white border border-gray rounded-lg shadow-lg">
         <li
+          onClick={() => handleReminder(task.task_id)} // Pass folder ID here
+          className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
+        >
+          Add Reminder
+        </li>
+
+        <li
           onClick={() => handleUpdateAccess(task.task_id)} // Pass folder ID here
           className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
         >
@@ -149,6 +163,14 @@ const TaskSettings = forwardRef(({ taskId, task }, ref) => {
           Delete task
         </li>
       </ul>
+
+      {/* Render the TaskReminderModal if reminder is set */}
+      {reminder && (
+        <TaskReminderModal
+          taskId={reminder} // Pass the task
+          onClose={() => setReminder(null)} // Close modal on close
+        />
+      )}
 
       {/* Render the UpdateAccessModal if taskToUpdate is set */}
       {taskToUpdate && (

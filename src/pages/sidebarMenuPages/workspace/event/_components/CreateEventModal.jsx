@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import Cookies from 'js-cookie';
 
 const CreateEventModal = ({ projectId, onClose }) => {
@@ -21,11 +22,15 @@ const CreateEventModal = ({ projectId, onClose }) => {
     setError('');
     setSuccess('');
 
+    // Format event_date and event_time
+    const formattedEventDate = eventDate; // eventDate is already in "YYYY-MM-DD" format
+    const formattedEventTime = `${eventDate}T${eventTime}:00Z`; // Combine date and time to match "YYYY-MM-DDTHH:MM:SSZ" format
+
     const requestBody = {
       title,
       description,
-      event_date: eventDate,
-      event_time: eventTime,
+      event_date: formattedEventDate,
+      event_time: formattedEventTime,
       location,
       is_virtual: isVirtual,
       project_id: projectId,
@@ -44,7 +49,7 @@ const CreateEventModal = ({ projectId, onClose }) => {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        await response.json();
         setSuccess('Event created successfully!');
         setTimeout(() => {
           onClose();

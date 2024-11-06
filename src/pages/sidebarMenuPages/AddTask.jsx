@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiAlarmOn } from 'react-icons/ci';
 import Cookies from 'js-cookie';
-// import ReminderModal from '../../components/ReminderModal';
 
 const AddTask = () => {
   const [taskName, setTaskName] = useState('');
@@ -14,28 +13,58 @@ const AddTask = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
+  const [projects, setProjects] = useState([]); // Store project data
+  const [selectedProjectId, setSelectedProjectId] = useState(''); // Store selected project ID
   const [showReminderModal, setShowReminderModal] = useState(false); // Control modal visibility
-  const [reminderSettings, setReminderSettings] = useState(null); // Store reminder settings
 
   const accessToken = Cookies.get('access_token');
+  const userId = Cookies.get('user_id');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
-
   const navigate = useNavigate();
 
-  // const handleRemindersChange = date => {
-  //   setReminders(date);
-  // };
+  // Fetch Projects on Page Load
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/project/users/${userId}/projects`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
-  // const handleCancel = () => {
-  //   navigate('/dashboard'); // Redirects to the dashboard
-  // };
+        if (response.ok) {
+          const data = await response.json();
+          const projectList = data.map(project => ({
+            project_name: project.project_name,
+            project_id: project.project_id,
+          }));
+          setProjects(projectList); // Store the projects in state
+        } else {
+          throw new Error('Failed to fetch projects');
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchProjects();
+  }, [userId, accessToken, API_BASE_URL]);
 
   const handleSubmit = async e => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     setSuccess('');
+
+    if (!selectedProjectId) {
+      setError('Please select a project.');
+      setIsLoading(false);
+      return;
+    }
 
     const requestBody = {
       title: taskName,
@@ -44,10 +73,8 @@ const AddTask = () => {
       status,
       access: accessLevel,
       due_date: dueDate,
-      project_id: projectId,
+      project_id: selectedProjectId, // Include the selected project_id in the request
     };
-
-    console.log('requestBody: ', requestBody);
 
     try {
       const response = await fetch(`${API_BASE_URL}/task/`, {
@@ -63,10 +90,19 @@ const AddTask = () => {
         const result = await response.json();
         setSuccess('Task added successfully!');
 
-        setTimeout(() => {
-          navigate('/dashboard/tasks');
-          window.location.reload(); // Trigger task data refresh
-        }, 2000);
+        // Find the selected project in the projects list
+        const selectedProject = projects.find(
+          project => project.project_id === selectedProjectId
+        );
+
+        if (selectedProject) {
+          // Navigate using the project details to the correct URL
+          setTimeout(() => {
+            navigate(
+              `/app/workspace/${selectedProject.team_space_id}/folders/${selectedProject.folder_id}/projects/${selectedProject.project_id}`
+            ); // Navigate to the correct workspace/project URL
+          }, 2000);
+        }
       } else {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to add task');
@@ -79,23 +115,8 @@ const AddTask = () => {
     }
   };
 
-  // Handle modal close
-  const handleReminderSave = settings => {
-    setReminderSettings(settings);
-  };
-
   return (
     <div className="flex justify-center items-center mb-8 mx-4">
-      {/* Reminder Modal */}
-      {/* {showReminderModal && (
-        <ReminderModal
-          onClose={() => setShowReminderModal(false)}
-          onSave={handleReminderSave}
-          groupOptions={groupOptions}
-          deliveryMediumOptions={deliveryMediumOptions}
-        />
-      )} */}
-
       <div className="bg-white w-full max-w-xl py-4 lg:border border-gray rounded-lg lg:shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Add Task</h2>
         <hr className="hidden lg:block mb-4 border-gray" />
@@ -103,7 +124,7 @@ const AddTask = () => {
           className="flex flex-col justify-center items-center lg:px-12"
           onSubmit={handleSubmit}
         >
-          {/* Taks name */}
+          {/* Task Name */}
           <div className="w-full mb-6">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -124,8 +145,8 @@ const AddTask = () => {
           </div>
 
           <div className="w-full mb-4 flex lg:flex-row flex-col gap-4">
-            {/* due date */}
-            <div className=" mb-4">
+            {/* Due Date */}
+            <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Due Date/Time
               </label>
@@ -139,6 +160,7 @@ const AddTask = () => {
               />
             </div>
 
+            {/* Priority */}
             <div className="lg:w-full relative">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -161,31 +183,32 @@ const AddTask = () => {
               </select>
             </div>
 
+            {/* Select Project */}
             <div className="lg:w-full">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="priority"
+                htmlFor="projectSelect"
               >
-                Add task to
+                Select Project
               </label>
               <select
-                value={priority}
-                onChange={e => setPriority(e.target.value)}
+                value={selectedProjectId}
+                onChange={e => setSelectedProjectId(e.target.value)}
                 className="w-full px-4 py-2 border text-sm border-gray text-left focus-within:border-primary flex items-center"
                 required
                 disabled={isLoading}
               >
-                {['project 1', 'project 2', 'project 3', 'project 4'].map(
-                  (project, index) => (
-                    <option key={index} value={project}>
-                      {project}
-                    </option>
-                  )
-                )}
+                <option value="">Select a Project</option>
+                {projects.map(project => (
+                  <option key={project.project_id} value={project.project_id}>
+                    {project.project_name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
+          {/* Comment */}
           <div className="w-full mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -241,30 +264,10 @@ const AddTask = () => {
                 <option value="cancelled">Cancelled</option>
               </select>
             </div>
-
-            <div className="lg:w-1/2">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Reminders
-              </label>
-              <button
-                type="button"
-                className="w-full px-4 py-2 border border-gray text-left focus-within:border-primary flex items-center"
-                onClick={() => setShowReminderModal(true)} // This will open the modal
-              >
-                <CiAlarmOn className="text-slate-500 w-5 h-5" />
-                <span className="ml-2 text-sm">Set Reminder</span>
-              </button>
-            </div>
           </div>
 
+          {/* Submit Button */}
           <div className="w-full flex justify-center gap-8 my-4">
-            {/* <button
-              type="button"
-              className="lg:w-1/2 w-full border border-red-400 text-red-400 font-semibold py-2 px-4 hover:bg-red-400 hover:text-white transition duration-300"
-              onClick={handleCancel}
-            >
-              Cancel
-            </button> */}
             <button
               type="submit"
               className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"

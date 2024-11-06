@@ -6,6 +6,7 @@ import { LuFolderGit } from 'react-icons/lu';
 import { CiSettings } from 'react-icons/ci';
 import TeamOptionsMenu from '../../_components/TeamOptionsMenu';
 import Settings from './_components/Settings';
+import CreateProjectModal from '../../project/_components/CreateProjectModal';
 
 function TeamDetailPage() {
   const { teamId } = useParams();
@@ -13,6 +14,7 @@ function TeamDetailPage() {
   const [membersDetail, setMembersDetail] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [createProject, setCreateProject] = useState(null);
 
   const [isTeamOptionsMenuOpen, setIsTeamOptionsMenuOpen] = useState(false);
   const menuRef = useRef(null); // Consolidated ref for both menu and dropdown
@@ -94,6 +96,11 @@ function TeamDetailPage() {
     };
   }, []);
 
+  // logic to handle create project
+  const handleCreateProject = teamId => {
+    setCreateProject(teamId);
+  };
+
   if (loading) return <p className="px-8">Loading...</p>;
   if (error) return <p className="text-red-500 px-8">{error}</p>;
 
@@ -112,9 +119,9 @@ function TeamDetailPage() {
         </div>
         {/* team options */}
         <div className="flex gap-4 justify-end px-4">
-          {/* invite member */}
+          {/* Create Project */}
           <div
-            // onClick={openTeamModal}
+            onClick={() => handleCreateProject(team.team_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
             <LuFolderGit className="w-5 h-5" />
@@ -219,6 +226,14 @@ function TeamDetailPage() {
           </>
         ) : (
           <p>No Team data found.</p>
+        )}
+
+        {/* Render the CreateProjectModal if createProject is set */}
+        {createProject && (
+          <CreateProjectModal
+            teamId={createProject}
+            onClose={() => setCreateProject(null)}
+          />
         )}
       </div>
     </>
