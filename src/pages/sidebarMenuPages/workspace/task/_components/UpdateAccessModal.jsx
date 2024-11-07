@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 
-const UpdateAccessModal = ({ taskId, onClose }) => {
-  const [accessLevel, setAccessLevel] = useState('public'); // Default access level
+const UpdateAccessModal = ({ task, onClose }) => {
+  const [accessLevel, setAccessLevel] = useState(task.status); // Default access level
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -22,7 +22,7 @@ const UpdateAccessModal = ({ taskId, onClose }) => {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/task/${taskId}/update-task-access-control/`,
+        `${API_BASE_URL}/task/${task.task_id}/update-task-access-control/`,
         {
           method: 'PATCH',
           headers: {

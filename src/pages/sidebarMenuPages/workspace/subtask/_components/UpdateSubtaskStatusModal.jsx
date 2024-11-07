@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 
-const UpdateStatusModal = ({ task, onClose }) => {
-  const [status, setStatus] = useState(task.status); // Default status
+const UpdateSubtaskStatusModal = ({ subtask, onClose }) => {
+  const [status, setStatus] = useState(subtask.status); // Default status
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -14,6 +14,8 @@ const UpdateStatusModal = ({ task, onClose }) => {
     setStatus(e.target.value);
   };
 
+  //   console.log('SubTaskId: ', subTaskId);
+
   const handleSubmit = async e => {
     e.preventDefault();
     setIsLoading(true);
@@ -22,14 +24,14 @@ const UpdateStatusModal = ({ task, onClose }) => {
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/task/${task.task_id}/update-task-status`,
+        `${API_BASE_URL}/subtask/update-subtask-status?sub_task_id=${subtask.sub_task_id}`,
         {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ new_status: status }), // Update body to match expected structure
+          body: JSON.stringify({ status: status }), // Update body to match expected structure
         }
       );
 
@@ -54,11 +56,11 @@ const UpdateStatusModal = ({ task, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Update Task Status</h2>
+        <h2 className="text-xl font-bold mb-4">Update Subtask Status</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Task Status</label>
+            <label className="block text-gray-700 mb-2">Subtask Status</label>
             <select
               value={status}
               onChange={handleStatusChange}
@@ -99,4 +101,4 @@ const UpdateStatusModal = ({ task, onClose }) => {
   );
 };
 
-export default UpdateStatusModal;
+export default UpdateSubtaskStatusModal;

@@ -4,6 +4,9 @@ import Cookies from 'js-cookie';
 import { BiTask } from 'react-icons/bi';
 import { CiSettings } from 'react-icons/ci';
 import TaskSettings from './_components/TaskSettings';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import FetchSubTask from './_components/FetchSubTask';
+import CreateSubtaskModal from '../subtask/_components/CreateSubtaskModal';
 
 const TaskDetailPage = () => {
   const { taskId } = useParams();
@@ -13,8 +16,14 @@ const TaskDetailPage = () => {
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
+  const [createSubtask, setCreateSubtask] = useState(null);
+
   const menuRef = useRef(null);
   const [isTaskSettingsMenuOpen, setIsTaskSettingsMenuOpen] = useState(false);
+
+  const [showSubTasks, setShowSubTasks] = useState(true);
+
+  const toggleSubTasks = () => setShowSubTasks(!showSubTasks);
 
   useEffect(() => {
     const fetchTaskDetails = async () => {
@@ -43,6 +52,11 @@ const TaskDetailPage = () => {
 
     fetchTaskDetails();
   }, [taskId, accessToken, API_BASE_URL]);
+
+  // logic to create Subtask
+  const handleCreateSubtask = taskId => {
+    setCreateSubtask(taskId);
+  };
 
   // ** settings dropdown **//
   // Toggle menu visibility
@@ -77,7 +91,7 @@ const TaskDetailPage = () => {
   }
 
   return (
-    <>
+    <div className="min-h-screen">
       <div className="flex justify-between items-center mb-8">
         {/* Navigation */}
         <div className="flex space-x-1 lg:text-sm text-xs">
@@ -104,14 +118,19 @@ const TaskDetailPage = () => {
           <span className="text-slate-700"> / </span>
           <p className="font-bold">{task.title}</p>
         </div>
-        {/* Task options */}
+        {/* Creat Subtask */}
         <div className="flex gap-4 justify-end px-4">
-          <div className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer">
+          <div
+            onClick={() => handleCreateSubtask(task.task_id)}
+            className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+          >
             <BiTask className="w-5 h-5" />
             <p className="text-sm font-semibold lg:block hidden">
               Create Subtask
             </p>
           </div>
+
+          {/* Settings */}
           <div
             onClick={() => toggleMenu(task.task_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
@@ -159,6 +178,8 @@ const TaskDetailPage = () => {
                       day: 'numeric',
                     })}
                   </p>
+                </div>
+                <div className="flex lg:flex-row flex-col gap-2">
                   <p>
                     <span className="font-semibold">Created on: </span>
                     {new Date(task.created_at).toLocaleString('en-US', {
@@ -185,12 +206,35 @@ const TaskDetailPage = () => {
             </div>
 
             {/* Sub tasks */}
+            <div className="pt-6 mx-auto bg-white">
+              <div
+                className="flex lg:px-2 px-4 items-center cursor-pointer"
+                onClick={toggleSubTasks}
+              >
+                {showSubTasks ? (
+                  <FaChevronUp className="mr-2 text-slate-600 w-3" />
+                ) : (
+                  <FaChevronDown className="mr-2 text-slate-600 w-3" />
+                )}
+                <h2 className="lg:text-lg font-semibold">Sub Tasks</h2>
+              </div>
+
+              {showSubTasks && <FetchSubTask taskId={taskId} task={task} />}
+            </div>
           </>
         ) : (
           <p>No task found with the given ID.</p>
         )}
       </div>
-    </>
+
+      {/* Render CreateSubtaskModal if createSubtask is set */}
+      {createSubtask && (
+        <CreateSubtaskModal
+          taskId={createSubtask}
+          onClose={() => setCreateSubtask(null)}
+        />
+      )}
+    </div>
   );
 };
 

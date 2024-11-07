@@ -9,7 +9,7 @@ import EditTaskModal from '../../task/_components/EditTaskModal';
 import axios from 'axios';
 import TaskReminderModal from '../../task/_components/TaskReminderModal';
 
-const FetchTask = ({ projectId, project }) => {
+const FetchSubTask = ({ taskId, task }) => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -26,13 +26,15 @@ const FetchTask = ({ projectId, project }) => {
   const [taskPriority, setTaskPriority] = useState(null);
   const [editTask, setEditTask] = useState(null);
 
+  const [isCopied, setIsCopied] = useState(false);
+
   useEffect(() => {
-    //   Route to fetch Tasks
-    const fetchTasks = async () => {
+    //   Route to fetch SubTasks
+    const fetchSubTasks = async () => {
       try {
         setIsLoading(true);
         const response = await fetch(
-          `${API_BASE_URL}/task/${projectId}/projects`,
+          `${API_BASE_URL}/subtask/list-all-subtask-under-task?task_id=${taskId}`,
           {
             method: 'GET',
             headers: {
@@ -42,20 +44,20 @@ const FetchTask = ({ projectId, project }) => {
         );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch tasks, no tasks found');
+          throw new Error('Failed to fetch subtasks, no subtasks found');
         }
 
         const data = await response.json();
         setTasks(data); // Set tasks data
-        console.log('Tasks:', data);
+        console.log('SubTasks:', data);
       } catch (error) {
-        console.error('Error fetching tasks:', error);
+        console.error('Error fetching subtasks:', error);
         setError(error.message);
       }
     };
 
-    fetchTasks();
-  }, [projectId, accessToken, API_BASE_URL]);
+    fetchSubTasks();
+  }, [taskId, accessToken, API_BASE_URL]);
 
   // function to close dropdown when clicked outside of the page
   useEffect(() => {
@@ -81,13 +83,13 @@ const FetchTask = ({ projectId, project }) => {
   };
 
   // logic to handle Update task access
-  const handleUpdateAccess = task => {
-    setTaskToUpdate(task);
+  const handleUpdateAccess = taskId => {
+    setTaskToUpdate(taskId);
   };
 
   // logic to handle update task status
-  const handleUpdateStatus = task => {
-    setTaskStatus(task);
+  const handleUpdateStatus = taskId => {
+    setTaskStatus(taskId);
   };
 
   // logic to handle update task priority
@@ -126,43 +128,88 @@ const FetchTask = ({ projectId, project }) => {
     return <div className="text-red-500 text-center">{error}</div>;
   }
 
+  // Function to handle the "Copy" button click
+  const handleCopy = () => {
+    if (task.link_address) {
+      navigator.clipboard
+        .writeText(task.link_address)
+        .then(() => {
+          setIsCopied(true);
+          setTimeout(() => setIsCopied(false), 2000);
+        })
+        .catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+    } else {
+      console.error('Link address is not available.');
+    }
+  };
+
+  // Truncate the link to show only the first 30 characters
+  const truncatedLink =
+    task?.link_address && task.link_address.length > 30
+      ? task.link_address.slice(0, 30) + '...'
+      : task?.link_address || 'No link available';
   return (
     <div className=" mb-12">
       {tasks.length > 0 ? (
         <ul className="py-2 lg:px-8 px-4 mb-12 grid lg:grid-cols-1 grid-cols-1">
-          {tasks.map(task => (
+          {tasks.map((task, index) => (
             <li
               key={task.task_id}
               className="relative w-full flex items-center space-x-2"
             >
-              <Link
+              {/* <Link
                 to={`/app/workspace/${project.team_space_id}/folders/${project.folder_id}/projects/${project.project_id}/tasks/${task.task_id}`}
                 className="relative w-full flex justify-between items-center border-b border-gray p-2 hover:bg-blue-50"
-              >
-                <div className="flex flex-col gap-1">
-                  <h1 className="lg:text-lg text-xs font-">{task.title}</h1>
-                  <div className="flex space-x-2 text-xs text-primary">
-                    <p>
-                      <span className="font-semibold">Access: </span>
-                      {task.access}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Due: </span>
-                      {new Date(task.due_date).toLocaleString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true,
-                      })}
-                    </p>
-                    <span className="text-xs">
-                      ({task.status}) {/* Assuming `status` is a property */}
-                    </span>
-                  </div>
+              > */}
+              <div className="flex flex-col gap-1">
+                <h1 className="lg:text-lg text-xs font-">
+                  {index + 1}. {task.description}
+                </h1>
+                <div className="flex items-center space-x-2">
+                  {/* Display truncated link */}
+                  <input
+                    type="text"
+                    value={truncatedLink}
+                    readOnly
+                    className="border border-gray-300 p-2 rounded w-full bg-gray-100"
+                  />
+
+                  {/* Copy button */}
+                  <button
+                    onClick={handleCopy}
+                    className="bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+                  >
+                    {isCopied ? 'Copied!' : 'Copy'}
+                  </button>
                 </div>
-              </Link>
+                <div className="flex space-x-2 text-xs text-primary">
+                  <p>
+                    <span className="font-semibold">Status: </span>
+                    {task.status}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Frequency: </span>
+                    {task.frequency}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Due: </span>
+                    {new Date(task.due_date).toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true,
+                    })}
+                  </p>
+                  <span className="text-xs">
+                    ({task.status}) {/* Assuming `status` is a property */}
+                  </span>
+                </div>
+              </div>
+              {/* </Link> */}
               <button
                 className="absolute z-40 right-4 top-7"
                 onClick={() => toggleDropdown(task.task_id)}
@@ -182,14 +229,14 @@ const FetchTask = ({ projectId, project }) => {
                   </li>
 
                   <li
-                    onClick={() => handleUpdateAccess(task)} // Pass folder ID here
+                    onClick={() => handleUpdateAccess(task.task_id)} // Pass folder ID here
                     className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
                   >
                     Update task access
                   </li>
 
                   <li
-                    onClick={() => handleUpdateStatus(task)} // Pass folder ID here
+                    onClick={() => handleUpdateStatus(task.task_id)} // Pass folder ID here
                     className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
                   >
                     Update task status
@@ -240,35 +287,35 @@ const FetchTask = ({ projectId, project }) => {
       )}
 
       {/* Render the UpdateAccessModal if taskToUpdate is set */}
-      {taskToUpdate && (
+      {/* {taskToUpdate && (
         <UpdateAccessModal
-          task={taskToUpdate} // Pass the task
+          taskId={taskToUpdate} // Pass the task
           onClose={() => setTaskToUpdate(null)} // Close modal on close
         />
-      )}
+      )} */}
 
       {/* Render the UpdateStatusModal if taskStatus is set */}
-      {taskStatus && (
+      {/* {taskStatus && (
         <UpdateStatusModal
-          task={taskStatus} // Pass the task
+          taskId={taskStatus} // Pass the task
           onClose={() => setTaskStatus(null)} // Close modal on close
         />
-      )}
+      )} */}
 
       {/* Render the UpdatePriorityModal if taskPriority is set */}
-      {taskPriority && (
+      {/* {taskPriority && (
         <UpdatePriorityModal
           taskId={taskPriority} // Pass the task
           onClose={() => setTaskPriority(null)} // Close modal on close
         />
-      )}
+      )} */}
 
       {/* Render the EditTaskModal if editTask is set */}
-      {editTask && (
+      {/* {editTask && (
         <EditTaskModal task={editTask} onClose={() => setEditTask(null)} />
-      )}
+      )} */}
     </div>
   );
 };
 
-export default FetchTask;
+export default FetchSubTask;

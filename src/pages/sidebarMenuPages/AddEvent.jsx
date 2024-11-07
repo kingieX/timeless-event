@@ -124,7 +124,7 @@ const AddEvent = () => {
   };
 
   return (
-    <div className="flex justify-center items-center lg:mt-12 mt-4 mx-4">
+    <div className="flex justify-center items-center lg:mt-2 mt-4 mx-4">
       <div className="bg-white w-full max-w-xl py-4 mb-10 lg:border border-gray rounded-lg lg:shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Add an Event</h2>
         <hr className="hidden lg:block mb-4 border-gray" />
