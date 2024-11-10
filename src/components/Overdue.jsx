@@ -14,7 +14,7 @@ const Overdue = () => {
   const [tasks, setTasks] = useState([
     {
       id: 1,
-      title: 'Browse the Timeless Event',
+      title: 'Browse the Timeless Planner',
       description: 'For productivity advice and to sign up for our newsletter',
       dueDate: 'Jul 26',
       statusColor: 'bg-gray-400',
@@ -26,7 +26,7 @@ const Overdue = () => {
       description: '',
       dueDate: 'Jul 27',
       statusColor: 'bg-red-500',
-      location: 'Inbox / Welcome to Heliscom',
+      location: 'Inbox /',
     },
     {
       id: 3,
@@ -34,7 +34,7 @@ const Overdue = () => {
       description: '',
       dueDate: 'Jul 28',
       statusColor: 'bg-blue-500',
-      location: 'Inbox / Welcome to Heliscom',
+      location: 'Inbox /',
     },
     {
       id: 4,
@@ -42,7 +42,7 @@ const Overdue = () => {
       description: '',
       dueDate: 'Jul 29',
       statusColor: 'bg-green-500',
-      location: 'Inbox / Welcome to Heliscom',
+      location: 'Inbox / Welcome',
     },
     // Add more tasks as needed
   ]);
