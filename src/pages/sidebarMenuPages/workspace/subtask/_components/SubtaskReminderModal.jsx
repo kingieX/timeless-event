@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 
-const EventReminderModal = ({ eventId, onClose }) => {
+const SubtaskReminderModal = ({ subTaskId, onClose }) => {
+  const [title, setTitle] = useState('');
+  const [icon, setIcon] = useState(''); // Icon file
   const [message, setMessage] = useState('');
   const [medium, setMedium] = useState('sms');
+  const [mediaType, setMediaType] = useState('');
+  const [mediaUrl, setMediaUrl] = useState(''); // Media file
   const [reminderTimes, setReminderTimes] = useState([]);
   const [reminderTime, setReminderTime] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -16,11 +20,24 @@ const EventReminderModal = ({ eventId, onClose }) => {
   // Add reminder time to the list
   const addReminderTime = () => {
     if (reminderTime) {
-      setReminderTimes([
-        ...reminderTimes,
-        { reminder_time: reminderTime, triggered: true },
-      ]);
+      setReminderTimes([...reminderTimes, { reminder_time: reminderTime }]);
       setReminderTime(''); // Reset reminder time input after adding
+    }
+  };
+
+  // Handle file input for icon
+  const handleIconChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      setIcon(file);
+    }
+  };
+
+  // Handle file input for media
+  const handleMediaChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      setMediaUrl(file);
     }
   };
 
@@ -31,23 +48,24 @@ const EventReminderModal = ({ eventId, onClose }) => {
     setError('');
     setSuccess('');
 
-    // Prepare the request body in the required structure
-    const requestBody = {
-      message,
-      medium,
-      reminder_times: reminderTimes, // Include reminder times with 'triggered' field
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('icon', icon); // Attach icon file
+    formData.append('message', message);
+    formData.append('medium', medium);
+    formData.append('media_type', mediaType);
+    formData.append('media_url', mediaUrl); // Attach media file
+    formData.append('reminder_times', JSON.stringify(reminderTimes)); // Add reminder times as JSON string
 
     try {
       const response = await fetch(
-        `${API_BASE_URL}/event/${eventId}/create-event-reminder`,
+        `${API_BASE_URL}/reminder/create-subtask-reminder?sub_task_id=${subTaskId}`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify(requestBody), // Send as JSON
+          body: formData,
         }
       );
 
@@ -72,9 +90,37 @@ const EventReminderModal = ({ eventId, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50">
       <div className="bg-white p-6 w-full m-8 overflow-y-auto h-[90vh] max-w-xl rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">Set Event Reminder</h2>
+        <h2 className="text-xl font-bold mb-4">Set Subtask Reminder</h2>
 
         <form onSubmit={handleSubmit}>
+          {/* Title */}
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              className="border border-gray-300 p-2 rounded w-full"
+              required
+              disabled={isLoading}
+            />
+          </div>
+
+          {/* Icon */}
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Icon</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleIconChange}
+              className="border border-gray-300 p-2 rounded w-full"
+              disabled={isLoading}
+            />
+            {icon && (
+              <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
+            )}
+          </div>
+
           {/* Message */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Message</label>
@@ -104,6 +150,39 @@ const EventReminderModal = ({ eventId, onClose }) => {
             </select>
           </div>
 
+          {/* Media Type */}
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Media Type</label>
+            <select
+              value={mediaType}
+              onChange={e => setMediaType(e.target.value)}
+              className="border border-gray-300 p-2 rounded w-full"
+              disabled={isLoading}
+            >
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+              <option value="audio">Audio</option>
+              <option value="document">Document</option>
+            </select>
+          </div>
+
+          {/* Media File */}
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Media File</label>
+            <input
+              type="file"
+              accept="image/*,video/*,audio/*,.pdf"
+              onChange={handleMediaChange}
+              className="border border-gray-300 p-2 rounded w-full"
+              disabled={isLoading}
+            />
+            {mediaUrl && (
+              <p className="mt-2 text-gray-600">
+                Media selected: {mediaUrl.name}
+              </p>
+            )}
+          </div>
+
           {/* Reminder Times */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Reminder Times</label>
@@ -127,8 +206,7 @@ const EventReminderModal = ({ eventId, onClose }) => {
             <ul className="mt-2">
               {reminderTimes.map((time, index) => (
                 <li key={index} className="text-gray-600">
-                  {new Date(time.reminder_time).toLocaleString()} -{' '}
-                  {time.triggered ? 'Triggered' : 'Not Triggered'}
+                  {new Date(time.reminder_time).toLocaleString()}
                 </li>
               ))}
             </ul>
@@ -161,4 +239,4 @@ const EventReminderModal = ({ eventId, onClose }) => {
   );
 };
 
-export default EventReminderModal;
+export default SubtaskReminderModal;

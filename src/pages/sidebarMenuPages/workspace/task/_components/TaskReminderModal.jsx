@@ -3,11 +3,11 @@ import Cookies from 'js-cookie';
 
 const TaskReminderModal = ({ taskId, onClose }) => {
   const [title, setTitle] = useState('');
-  const [icon, setIcon] = useState('');
+  const [icon, setIcon] = useState(''); // Icon file
   const [message, setMessage] = useState('');
   const [medium, setMedium] = useState('sms');
   const [mediaType, setMediaType] = useState('');
-  const [mediaUrl, setMediaUrl] = useState('');
+  const [mediaUrl, setMediaUrl] = useState(''); // Media file URL
   const [reminderTimes, setReminderTimes] = useState([]);
   const [reminderTime, setReminderTime] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +25,22 @@ const TaskReminderModal = ({ taskId, onClose }) => {
     }
   };
 
+  // Handle file input for icon
+  const handleIconChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      setIcon(file);
+    }
+  };
+
+  // Handle file input for media
+  const handleMediaChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      setMediaUrl(file);
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async e => {
     e.preventDefault();
@@ -32,15 +48,14 @@ const TaskReminderModal = ({ taskId, onClose }) => {
     setError('');
     setSuccess('');
 
-    const requestBody = {
-      title,
-      icon,
-      message,
-      medium,
-      media_type: mediaType,
-      media_url: mediaUrl,
-      reminder_times: reminderTimes,
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('icon', icon); // Include icon file directly
+    formData.append('message', message);
+    formData.append('medium', medium);
+    formData.append('media_type', mediaType);
+    formData.append('media_url', mediaUrl); // Include media file directly
+    formData.append('reminder_times', JSON.stringify(reminderTimes)); // Send reminder times as a JSON string
 
     try {
       const response = await fetch(
@@ -48,17 +63,15 @@ const TaskReminderModal = ({ taskId, onClose }) => {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify(requestBody),
+          body: formData,
         }
       );
 
       if (response.ok) {
         const result = await response.json();
         setSuccess('Reminder set successfully!');
-
         setTimeout(() => {
           onClose(); // Close modal after success
         }, 2000);
@@ -95,15 +108,17 @@ const TaskReminderModal = ({ taskId, onClose }) => {
 
           {/* Icon */}
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Icon URL</label>
+            <label className="block text-gray-700 mb-2">Icon</label>
             <input
-              type="url"
-              value={icon}
-              onChange={e => setIcon(e.target.value)}
+              type="file"
+              accept="image/*"
+              onChange={handleIconChange}
               className="border border-gray-300 p-2 rounded w-full"
-              required
               disabled={isLoading}
             />
+            {icon && (
+              <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
+            )}
           </div>
 
           {/* Message */}
@@ -138,27 +153,34 @@ const TaskReminderModal = ({ taskId, onClose }) => {
           {/* Media Type */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Media Type</label>
-            <input
-              type="text"
+            <select
               value={mediaType}
               onChange={e => setMediaType(e.target.value)}
               className="border border-gray-300 p-2 rounded w-full"
-              required
               disabled={isLoading}
-            />
+            >
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+              <option value="audio">Audio</option>
+              <option value="document">Document</option>
+            </select>
           </div>
 
-          {/* Media URL */}
+          {/* Media File */}
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Media URL</label>
+            <label className="block text-gray-700 mb-2">Media File</label>
             <input
-              type="url"
-              value={mediaUrl}
-              onChange={e => setMediaUrl(e.target.value)}
+              type="file"
+              accept="image/*,video/*,audio/*,.pdf"
+              onChange={handleMediaChange}
               className="border border-gray-300 p-2 rounded w-full"
-              required
               disabled={isLoading}
             />
+            {mediaUrl && (
+              <p className="mt-2 text-gray-600">
+                Media selected: {mediaUrl.name}
+              </p>
+            )}
           </div>
 
           {/* Reminder Times */}

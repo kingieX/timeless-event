@@ -41,7 +41,7 @@ const TaskDetailPage = () => {
 
         const data = await response.json();
         setTask(data);
-        console.log('Task details:', data);
+        // console.log('Task details:', data);
       } catch (error) {
         console.error('Error fetching task details:', error);
         setError(error.message);
