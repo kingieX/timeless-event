@@ -120,7 +120,7 @@ function TeamDetailPage() {
         {/* team options */}
         <div className="flex gap-4 justify-end px-4">
           {/* Create Project */}
-          <div
+          {/* <div
             onClick={() => handleCreateProject(team.team_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
           >
@@ -128,7 +128,7 @@ function TeamDetailPage() {
             <p className="text-sm font-semibold lg:block hidden">
               Create Project
             </p>
-          </div>
+          </div> */}
           {/* settings */}
           <div
             onClick={() => toggleMenu(team.team_id)}
