@@ -5,8 +5,10 @@ import { BiTask } from 'react-icons/bi';
 import { CiSettings } from 'react-icons/ci';
 import TaskSettings from './_components/TaskSettings';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { IoMdAlarm } from 'react-icons/io';
 import FetchSubTask from './_components/FetchSubTask';
 import CreateSubtaskModal from '../subtask/_components/CreateSubtaskModal';
+import ViewReminderModal from './_components/ViewReminderModal';
 
 const TaskDetailPage = () => {
   const { taskId } = useParams();
@@ -17,6 +19,7 @@ const TaskDetailPage = () => {
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [createSubtask, setCreateSubtask] = useState(null);
+  const [viewReminder, setViewReminder] = useState(null);
 
   const menuRef = useRef(null);
   const [isTaskSettingsMenuOpen, setIsTaskSettingsMenuOpen] = useState(false);
@@ -52,6 +55,11 @@ const TaskDetailPage = () => {
 
     fetchTaskDetails();
   }, [taskId, accessToken, API_BASE_URL]);
+
+  // logic to handle reminders
+  const handleReminder = taskId => {
+    setViewReminder(taskId);
+  };
 
   // logic to create Subtask
   const handleCreateSubtask = taskId => {
@@ -118,8 +126,18 @@ const TaskDetailPage = () => {
           <span className="text-slate-700"> / </span>
           <p className="font-bold">{task.title}</p>
         </div>
-        {/* Creat Subtask */}
         <div className="flex gap-4 justify-end px-4">
+          {/* View reminder */}
+          <div
+            onClick={() => handleReminder(task.task_id)}
+            className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+          >
+            <IoMdAlarm className="w-5 h-5" />
+            <p className="text-sm font-semibold lg:block hidden">
+              View Reminders
+            </p>
+          </div>
+          {/* Creat Subtask */}
           <div
             onClick={() => handleCreateSubtask(task.task_id)}
             className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
@@ -226,6 +244,14 @@ const TaskDetailPage = () => {
           <p>No task found with the given ID.</p>
         )}
       </div>
+
+      {/* Render the ViewReminderModal if viewReminder is set */}
+      {viewReminder && (
+        <ViewReminderModal
+          taskId={viewReminder}
+          onClose={() => setViewReminder(null)}
+        />
+      )}
 
       {/* Render CreateSubtaskModal if createSubtask is set */}
       {createSubtask && (

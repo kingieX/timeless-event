@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import Cookies from 'js-cookie';
 import { CiSettings } from 'react-icons/ci';
+import SubtaskSettings from './_components/SubtaskSettings';
+import { IoMdAlarm } from 'react-icons/io';
+import ViewSubtaskReminderModal from './_components/ViewSubtaskReminderModal';
 
 const SubtaskDetailPage = () => {
   const { subTaskId } = useParams(); // Extract subTaskId from URL
@@ -13,6 +16,12 @@ const SubtaskDetailPage = () => {
 
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const menuRef = useRef(null);
+  const [isSubtaskSettingsMenuOpen, setIsSubtaskSettingsMenuOpen] =
+    useState(false);
+
+  const [viewReminder, setViewReminder] = useState(null);
 
   // Fetch subtask details using useEffect
   useEffect(() => {
@@ -65,6 +74,35 @@ const SubtaskDetailPage = () => {
       : linkAddress;
   };
 
+  // logic to handle subtask reminders
+  const handleSubTaskReminder = subtaskId => {
+    setViewReminder(subtaskId);
+  };
+
+  // ** settings dropdown **//
+  // Toggle menu visibility
+  const toggleMenu = subtaskId => {
+    if (isSubtaskSettingsMenuOpen === subtaskId) {
+      setIsSubtaskSettingsMenuOpen(null); // Close if already open
+    } else {
+      setIsSubtaskSettingsMenuOpen(subtaskId); // Open the clicked menu
+    }
+  };
+
+  // Close modal or dropdown if a click happens outside the menu or dropdown
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsSubtaskSettingsMenuOpen(false); // Close the modal
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   if (isLoading) {
     return <div>Loading...</div>; // Show loading message while fetching data
   }
@@ -75,24 +113,36 @@ const SubtaskDetailPage = () => {
 
   return (
     <div className="min-h-screen">
-      {/* settings */}
-      <div className="flex justify-end px-4 items-center mb-8">
+      <div className="flex justify-end items-center mb-8">
+        {/* View reminder */}
         <div
-          onClick={() => toggleMenu(task.task_id)}
+          onClick={() => handleSubTaskReminder(subtask.sub_task_id)}
           className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
         >
-          <CiSettings className="w-5 h-5" />
-          <p className="text-sm font-semibold lg:block hidde">Settings</p>
+          <IoMdAlarm className="w-5 h-5" />
+          <p className="text-sm font-semibold lg:block hidden">
+            View Reminders
+          </p>
         </div>
-        {/* {isTaskSettingsMenuOpen === task.task_id && (
-            <TaskSettings
+        {/* settings */}
+        <div className="flex justify-end px-4 items-center">
+          <div
+            onClick={() => toggleMenu(subtask.sub_task_id)}
+            className="flex items-center space-x-1 text-slate-700 hover:underline cursor-pointer"
+          >
+            <CiSettings className="w-5 h-5" />
+            <p className="text-sm font-semibold lg:block hidden">Settings</p>
+          </div>
+          {isSubtaskSettingsMenuOpen === subtask.sub_task_id && (
+            <SubtaskSettings
               ref={menuRef} // Use the single ref for the team options dropdown
-              isOpen={isTaskSettingsMenuOpen}
-              taskId={task.task_id}
-              taskName={task.title}
-              task={task}
+              isOpen={isSubtaskSettingsMenuOpen}
+              subtaskId={subtask.sub_task_id}
+              subtaskName={subtask.description}
+              subtask={subtask}
             />
-          )} */}
+          )}
+        </div>
       </div>
       <div className="lg:px-16 px-4 py-1">
         <div className="flex space-x-4">
@@ -181,6 +231,13 @@ const SubtaskDetailPage = () => {
           <p>No subtask found with the given ID.</p>
         )}
       </div>
+      {/* Render the ViewSubtaskReminderModal if viewReminder is set */}
+      {viewReminder && (
+        <ViewSubtaskReminderModal
+          subtaskId={viewReminder}
+          onClose={() => setViewReminder(null)}
+        />
+      )}
     </div>
   );
 };

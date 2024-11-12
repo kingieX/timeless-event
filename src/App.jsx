@@ -82,6 +82,7 @@ import ProjectDetailPage from './pages/sidebarMenuPages/workspace/project/Projec
 import TaskDetailPage from './pages/sidebarMenuPages/workspace/task/TaskDetailPage';
 import EventDetailPage from './pages/sidebarMenuPages/workspace/event/EventDetailPage';
 import SubtaskDetailPage from './pages/sidebarMenuPages/workspace/subtask/SubtaskDetailPage';
+import PersonalProjectsPage from './pages/sidebarMenuPages/Personal-projects/PersonalProjects';
 
 const App = () => {
   return (
@@ -141,6 +142,7 @@ const App = () => {
           <Route path="inbox/rsvp-tracking" element={<RsvpTracking />} />
           <Route path="today" element={<Today />} />
           <Route path="upcoming" element={<Upcoming />} />
+          <Route path="personal-projects" element={<PersonalProjectsPage />} />
 
           {/* Workspace routes */}
           <Route path="workspace" element={<WorkspacePage />} />

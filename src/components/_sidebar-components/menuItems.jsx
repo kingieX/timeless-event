@@ -5,6 +5,7 @@ import { PiCalendarStarDuotone } from 'react-icons/pi';
 import { BsCalendar4Event } from 'react-icons/bs';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
 import { FaRegCalendarCheck } from 'react-icons/fa6';
+import { GoProjectRoadmap } from 'react-icons/go';
 
 const menuItems = [
   {
@@ -22,33 +23,33 @@ const menuItems = [
     icon: IoSearchOutline,
     link: '/app/search',
   },
-  {
-    name: 'Inbox',
-    icon: HiOutlineInboxIn,
-    link: '#',
-    subMenu: [
-      {
-        name: 'User messages',
-        icon: TbMessage,
-        link: '/app/inbox/user-messages',
-      },
-      {
-        name: 'Team messages',
-        icon: TbMessages,
-        link: '/app/inbox/team-messages',
-      },
-      {
-        name: 'Vendor messages',
-        icon: TbMessage2Pin,
-        link: '/app/inbox/vendor-messages',
-      },
-      {
-        name: 'RSVP tracking',
-        icon: PiCalendarStarDuotone,
-        link: '/app/inbox/rsvp-tracking',
-      },
-    ],
-  },
+  // {
+  //   name: 'Inbox',
+  //   icon: HiOutlineInboxIn,
+  //   link: '#',
+  //   subMenu: [
+  //     {
+  //       name: 'User messages',
+  //       icon: TbMessage,
+  //       link: '/app/inbox/user-messages',
+  //     },
+  //     {
+  //       name: 'Team messages',
+  //       icon: TbMessages,
+  //       link: '/app/inbox/team-messages',
+  //     },
+  //     {
+  //       name: 'Vendor messages',
+  //       icon: TbMessage2Pin,
+  //       link: '/app/inbox/vendor-messages',
+  //     },
+  //     {
+  //       name: 'RSVP tracking',
+  //       icon: PiCalendarStarDuotone,
+  //       link: '/app/inbox/rsvp-tracking',
+  //     },
+  //   ],
+  // },
   {
     name: 'Today',
     icon: BsCalendar4Event,
@@ -63,6 +64,11 @@ const menuItems = [
     name: 'Completed',
     icon: FaRegCalendarCheck,
     link: '/app/completed',
+  },
+  {
+    name: 'Personal Projects',
+    icon: GoProjectRoadmap,
+    link: '/app/personal-projects',
   },
 ];
 
