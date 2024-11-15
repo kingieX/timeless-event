@@ -28,7 +28,7 @@ const menuGroups = [
       logo: '/image/modal-assets/btn4.svg',
     },
     {
-      name: 'Add a Guest',
+      name: 'Add Guest Reminder',
       link: 'add-guest',
       logo: '/image/modal-assets/btn5.svg',
     },
