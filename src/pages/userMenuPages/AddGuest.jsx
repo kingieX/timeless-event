@@ -173,16 +173,16 @@ const AddGuest = () => {
 
           {/* Submit Button */}
           <div className="flex justify-end mb-4">
-            <button
+            {/* <button
               type="button"
               className="mr-2 border border-red-400 text-red-400 font-semibold py-2 px-4 rounded"
               disabled={isLoading}
             >
               Cancel
-            </button>
+            </button> */}
             <button
               type="submit"
-              className="bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              className="w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
               disabled={isLoading}
             >
               {isLoading ? 'Sending Reminder...' : 'Send Reminder'}
