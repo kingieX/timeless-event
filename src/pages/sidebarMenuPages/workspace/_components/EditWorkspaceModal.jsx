@@ -34,7 +34,7 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
         if (response.status === 200) {
           onClose(); // Close the modal
           setMessage('Workspace deleted successfully!');
-          navigate('/app/workspace');
+          navigate('/app');
           window.location.reload(); // Reload the page
         } else {
           setMessage('Failed to delete workspace.');

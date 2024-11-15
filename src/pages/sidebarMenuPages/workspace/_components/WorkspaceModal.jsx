@@ -22,7 +22,9 @@ const WorkspaceModal = ({ onClose, onWorkspaceCreated }) => {
         .min(3, 'Workspace Name must be at least 3 characters'),
     }),
     onSubmit: async values => {
-      const userId = Cookies.get('userId');
+      const userId = Cookies.get('user_id');
+      console.log('userId: ', userId);
+
       const newWorkspace = {
         team_space_name: values.workspaceName,
         share_space: values.isShared,

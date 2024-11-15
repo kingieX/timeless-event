@@ -21,7 +21,10 @@ const UserInfo = ({ userData, isUserMenuModalOpen, toggleUserMenuModal }) => {
         </div>
       )}
 
-      <div className="flex ml-3 relative">
+      <div
+        onClick={toggleUserMenuModal}
+        className="flex ml-3 relative cursor-pointer"
+      >
         <h4 className="font-semibold">
           {fullname?.length > maxLength
             ? `${fullname.slice(0, maxLength)}...`

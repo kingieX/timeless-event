@@ -4,6 +4,7 @@ import { PiSidebarSimpleThin } from 'react-icons/pi';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Redirect from './components/Redirect';
+import WorkspaceModal from './pages/sidebarMenuPages/workspace/_components/WorkspaceModal';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const Dashboard = () => {
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [currentPageTitle, setCurrentPageTitle] = useState('');
   const [workspaces, setWorkspaces] = useState([]); // Workspaces state
+
+  const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
 
   const fullname = Cookies.get('fullname');
   const user_id = Cookies.get('user_id'); // Assuming you have user_id stored in cookies
@@ -139,6 +142,21 @@ const Dashboard = () => {
     }
   }, [location.pathname]);
 
+  // workspace creation
+  const openWorkspaceModal = () => {
+    setIsWorkspaceModalOpen(true);
+  };
+
+  const closeWorkspaceModal = () => {
+    setIsWorkspaceModalOpen(false);
+  };
+
+  const handleWorkspaceCreated = workspaceId => {
+    // Logic to create the workspace and redirect to the new workspace page
+    closeWorkspaceModal();
+    navigate(`/app/workspace/${workspaceId}`);
+  };
+
   return (
     <>
       <div className="flex lg:items-start justify-center items-center">
@@ -169,6 +187,7 @@ const Dashboard = () => {
             onToggleSidebar={handleToggleSidebar}
             isSidebarOpen={isSidebarOpen}
             workspaces={workspaces} // Dynamically render workspaces here
+            openWorkspaceModal={openWorkspaceModal}
           />
         </div>
 
@@ -197,6 +216,13 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {/* Modal for workspace creation */}
+      {isWorkspaceModalOpen && (
+        <WorkspaceModal
+          onClose={closeWorkspaceModal}
+          onWorkspaceCreated={handleWorkspaceCreated}
+        />
+      )}
     </>
   );
 };

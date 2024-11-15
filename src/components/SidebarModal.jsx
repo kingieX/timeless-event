@@ -32,11 +32,11 @@ const menuGroups = [
       link: 'add-guest',
       logo: '/image/modal-assets/btn5.svg',
     },
-    {
-      name: 'Add a Vendor',
-      link: 'add-vendor',
-      logo: '/image/modal-assets/btn6.svg',
-    },
+    // {
+    //   name: 'Add a Vendor',
+    //   link: 'add-vendor',
+    //   logo: '/image/modal-assets/btn6.svg',
+    // },
   ],
   [
     {
@@ -44,7 +44,7 @@ const menuGroups = [
       link: 'activity-log',
       logo: '/image/modal-assets/btn7.svg',
     },
-    { name: 'Print', link: 'print', logo: '/image/modal-assets/btn8.svg' }, // Print menu item
+    // { name: 'Print', link: 'print', logo: '/image/modal-assets/btn8.svg' }, // Print menu item
     {
       name: 'Resources',
       link: '#',
@@ -75,17 +75,17 @@ const menuGroups = [
     },
   ],
   [
-    {
-      name: "What's new",
-      link: 'whats-new',
-      logo: '/image/modal-assets/btn15.svg',
-    },
-    {
-      name: 'Upgrade team',
-      link: 'upgrade-team',
-      logo: '/image/modal-assets/btn16.svg',
-    },
-    { name: 'Sync', link: 'sync', logo: '/image/modal-assets/btn17.svg' },
+    // {
+    //   name: "What's new",
+    //   link: 'whats-new',
+    //   logo: '/image/modal-assets/btn15.svg',
+    // },
+    // {
+    //   name: 'Upgrade team',
+    //   link: 'upgrade-team',
+    //   logo: '/image/modal-assets/btn16.svg',
+    // },
+    // { name: 'Sync', link: 'sync', logo: '/image/modal-assets/btn17.svg' },
     {
       name: 'Log out',
       link: 'log-out',

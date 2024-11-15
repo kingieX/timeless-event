@@ -55,8 +55,8 @@ const MemberWorkspaceList = ({ handleLinkClick }) => {
         className="flex justify-between items-center px-4 py-1 hover:bg-blue-50 cursor-pointer"
       >
         <div className="flex items-center" onClick={toggleWorkspaceMenu}>
-          <GrGroup className="w-6 h-6 mr-2 text-slate-800" />
-          <span>Team Workspace</span>
+          <GrGroup className="w-5 h-5 mr-2 text-slate-800" />
+          <span className="text-sm">Team Workspace</span>
         </div>
 
         <div className="flex items-center">
@@ -87,11 +87,11 @@ const MemberWorkspaceList = ({ handleLinkClick }) => {
                 }`}
               >
                 <MdWorkspacesOutline
-                  className={`w-6 h-6 mr-2 ${
+                  className={`w-5 h-5 mr-2 ${
                     isWorkspaceActive(workspace) ? 'text-primary' : ''
                   }`}
                 />
-                <span>{workspace.team_space_name}</span>
+                <span className="text-sm">{workspace.team_space_name}</span>
               </Link>
             ))
           ) : (

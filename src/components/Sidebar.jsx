@@ -7,7 +7,13 @@ import MyWorkspaceList from './_sidebar-components/WorkspaceList';
 import menuItems from './_sidebar-components/menuItems';
 import MemberWorkspaceList from './_sidebar-components/MemberWorkspaceList';
 
-const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
+const Sidebar = ({
+  userData,
+  onToggleSidebar,
+  isSidebarOpen,
+  workspaces,
+  openWorkspaceModal,
+}) => {
   const [isUserMenuModalOpen, setIsUserMenuModalOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
 
@@ -60,6 +66,7 @@ const Sidebar = ({ userData, onToggleSidebar, isSidebarOpen, workspaces }) => {
             <MyWorkspaceList
               workspaces={workspaces}
               handleLinkClick={handleLinkClick}
+              openWorkspaceModal={openWorkspaceModal}
             />
             <MemberWorkspaceList handleLinkClick={handleLinkClick} />
           </div>

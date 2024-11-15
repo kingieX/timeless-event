@@ -22,9 +22,9 @@ const MenuItem = ({
             onClick={() => toggleSubMenu(index)}
           >
             <menu.icon
-              className={`w-6 h-6 mr-2 ${isMenuActive ? 'text-primary' : ''}`}
+              className={`w-5 h-5 mr-2 ${isMenuActive ? 'text-primary' : ''}`}
             />
-            <span>{menu.name}</span>
+            <span className="text-sm">{menu.name}</span>
             <span className="ml-auto">
               {isSubMenuOpen ? (
                 <IoMdArrowDropup className="w-6 h-6 text-slate-800" />
@@ -49,9 +49,9 @@ const MenuItem = ({
                     }`}
                   >
                     <subMenu.icon
-                      className={`w-6 h-6 mr-2 text-slate-800 ${currentPath === subMenu.link ? 'text-primary' : ''}`}
+                      className={`w-5 h-5 mr-2 text-slate-800 ${currentPath === subMenu.link ? 'text-primary' : ''}`}
                     />
-                    <span>{subMenu.name}</span>
+                    <span className="text-sm">{subMenu.name}</span>
                   </div>
                 </Link>
               ))}
@@ -68,9 +68,9 @@ const MenuItem = ({
             }`}
           >
             <menu.icon
-              className={`w-6 h-6 mr-2 text-slate-800 ${currentPath === menu.link ? 'text-primary' : ''}`}
+              className={`w-5 h-5 mr-2 text-slate-800 ${currentPath === menu.link ? 'text-primary' : ''}`}
             />
-            <span>{menu.name}</span>
+            <span className="text-sm">{menu.name}</span>
           </div>
         </Link>
       )}
