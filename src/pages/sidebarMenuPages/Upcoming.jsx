@@ -6,6 +6,7 @@ import { format, addDays, isToday, isTomorrow } from 'date-fns';
 
 import Overdue from '../../components/Overdue';
 import { FaChevronDown } from 'react-icons/fa';
+import UpcomingTasks from './_components/UpcomingTasks';
 
 const Upcoming = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -82,7 +83,7 @@ const Upcoming = () => {
       </div>
 
       {/* dates */}
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
@@ -99,11 +100,12 @@ const Upcoming = () => {
             inline
           />
         )}
-      </div>
+      </div> */}
 
       {/* overdue */}
       <div className="mb-8">
-        <Overdue />
+        {/* <Overdue /> */}
+        <UpcomingTasks />
       </div>
 
       <div>
