@@ -116,15 +116,12 @@ const AddTeam = () => {
       <form onSubmit={formik.handleSubmit} className="w-full max-w-lg mx-auto">
         {/* Team Space Dropdown */}
         <div className="mb-6">
-          <label
-            htmlFor="teamSpace"
-            className="block text-gray-700 font-bold mb-2"
-          >
-            Select Team Space
+          <label htmlFor="teamSpace" className="block text-gray-700 mb-1">
+            Select WorkSpace
           </label>
           {teamSpaces.length === 0 ? (
             <div className="text-red-500">
-              You don't have any linked team spaces. Please create one first.
+              You don't have any Workspaces. Please create one first.
             </div>
           ) : (
             <select
@@ -135,7 +132,7 @@ const AddTeam = () => {
               className="w-full p-2 border border-gray-300 rounded-md"
             >
               <option value="" disabled>
-                Select a Team Space
+                Select a WorkSpace
               </option>
               {teamSpaces.map(space => (
                 <option key={space.team_space_id} value={space.team_space_id}>
@@ -148,10 +145,7 @@ const AddTeam = () => {
 
         {/* Team Name */}
         <div className="mb-4">
-          <label
-            htmlFor="team_name"
-            className="block text-gray-700 font-bold mb-2"
-          >
+          <label htmlFor="team_name" className="block text-gray-700 mb-1">
             Team Name
           </label>
           <input
