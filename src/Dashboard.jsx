@@ -210,7 +210,7 @@ const Dashboard = () => {
           <div
             className={`flex-grow transition-all duration-300 ease-in-out ${
               isSidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
-            } outlet px-4 mt-8 lg:mt-4 overflow-y-auto`}
+            } outlet px-4 mt-2 lg:mt-4 overflow-y-auto`}
           >
             <Outlet />
           </div>

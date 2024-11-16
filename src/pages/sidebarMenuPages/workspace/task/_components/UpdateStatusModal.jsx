@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 const UpdateStatusModal = ({ task, onClose }) => {
-  const [status, setStatus] = useState(task.status); // Default status
+  // Initialize the status state correctly, checking if task.status exists
+  const [status, setStatus] = useState(task?.status || 'not_started');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -10,8 +11,15 @@ const UpdateStatusModal = ({ task, onClose }) => {
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
+  // Ensure that status is updated when the task prop changes (useEffect)
+  useEffect(() => {
+    if (task?.status) {
+      setStatus(task.status);
+    }
+  }, [task]); // Only rerun if the task prop changes
+
   const handleStatusChange = e => {
-    setStatus(e.target.value);
+    setStatus(e.target.value); // Update the state when a new status is selected
   };
 
   const handleSubmit = async e => {
@@ -29,7 +37,7 @@ const UpdateStatusModal = ({ task, onClose }) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${accessToken}`,
           },
-          body: JSON.stringify({ new_status: status }), // Update body to match expected structure
+          body: JSON.stringify({ new_status: status }), // Correct body structure
         }
       );
 
@@ -41,7 +49,7 @@ const UpdateStatusModal = ({ task, onClose }) => {
       setSuccess('Status updated successfully!');
       setTimeout(() => {
         onClose();
-        window.location.reload(); // Trigger refresh if needed
+        window.location.reload(); // Trigger a refresh if necessary
       }, 2000);
     } catch (error) {
       console.error('Error updating status:', error);

@@ -47,7 +47,7 @@ import Event from './pages/userMenuPages/Event';
 import Settings from './pages/userMenuPages/Settings';
 import AddTeam from './pages/userMenuPages/AddTeam';
 import AddGuest from './pages/userMenuPages/AddGuest';
-import AddVendor from './pages/userMenuPages/AddVendor';
+import InstantReminder from './pages/userMenuPages/InstantReminder';
 import ActivityLog from './pages/userMenuPages/ActivityLog';
 import Print from './pages/userMenuPages/Print';
 import ContactSupport from './pages/userMenuPages/resources/ContactSupport';
@@ -193,7 +193,7 @@ const App = () => {
           <Route path="settings" element={<Settings />} />
           <Route path="add-team" element={<AddTeam />} />
           <Route path="add-guest" element={<AddGuest />} />
-          <Route path="add-vendor" element={<AddVendor />} />
+          <Route path="instant-reminder" element={<InstantReminder />} />
           <Route path="activity-log" element={<ActivityLog />} />
           <Route path="print" element={<Print />} />
           <Route path="contact-support" element={<ContactSupport />} />

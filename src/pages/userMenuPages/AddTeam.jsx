@@ -18,6 +18,8 @@ const AddTeam = () => {
   const [selectedTeamSpaceId, setSelectedTeamSpaceId] = useState('');
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const accessToken = Cookies.get('access_token'); // Assuming token is stored in cookies
+  // console.log('Access Token:', accessToken);
+
   const user_id = Cookies.get('user_id');
   // console.log('User ID:', user_id);
 

@@ -48,7 +48,7 @@ const serviceTypeOptions = [
   { value: 'others', label: 'Others' },
 ];
 
-const AddVendor = () => {
+const InstantReminder = () => {
   const [name, setName] = useState('');
   // const [serviceType, setServiceType] = useState('');
   // const [industry, setIndustry] = useState('');
@@ -275,4 +275,4 @@ const AddVendor = () => {
   );
 };
 
-export default AddVendor;
+export default InstantReminder;
