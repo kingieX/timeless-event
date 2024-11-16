@@ -64,6 +64,7 @@ const AddMemberModal = ({ onClose, teamId, teamName }) => {
       // Delay modal close by 2 seconds to give feedback
       setTimeout(() => {
         onClose();
+        window.location.reload();
       }, 2000);
     } catch (error) {
       // Improved error logging and feedback
