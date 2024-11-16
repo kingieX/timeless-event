@@ -6,12 +6,12 @@ const menuGroups = [
   // Your existing menu groups here
   [
     {
-      name: 'View tasks',
+      name: 'View Tasks',
       link: 'tasks',
       logo: '/image/modal-assets/btn1.svg',
     },
     {
-      name: 'View events',
+      name: 'View Events',
       link: 'events',
       logo: '/image/modal-assets/btn2.svg',
     },
@@ -33,9 +33,9 @@ const menuGroups = [
       logo: '/image/modal-assets/btn5.svg',
     },
     {
-      name: 'Send instant reminder',
+      name: 'Send Instant Reminder',
       link: 'instant-reminder',
-      logo: '/image/modal-assets/btn6.svg',
+      logo: '/image/modal-assets/reminder.png',
     },
   ],
   [
