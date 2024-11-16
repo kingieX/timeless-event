@@ -9,15 +9,11 @@ import { useState } from 'react'; // For error state handling
 const Onboard3 = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null); // Handle errors
+  const [emails, setEmails] = useState([]); // State to hold the list of emails
+  const [isloading, setIsLoading] = useState(false); // Track loading state
 
   // Access userId from Cookies
   const userId = Cookies.get('userId');
-  // const access_token = Cookies.get('access_token'); // Get the access token from cookies
-
-  // if (!access_token) {
-  //   throw errorMessage('You do not have an access_token');
-  // }
-
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
   // Formik for form handling
@@ -27,44 +23,64 @@ const Onboard3 = () => {
       sharedWorkspace: false,
     },
     validationSchema: Yup.object({
-      workspaceName: Yup.string().required('workspace name is required'),
+      workspaceName: Yup.string().required('Workspace name is required'),
     }),
     onSubmit: async values => {
       setErrorMessage(null); // Reset error message before submission
-      try {
-        const body = {
-          team_space_name: values.teamName,
-          share_space: values.sharedWorkspace,
-          user_id: userId, // Get userId from cookies
-        };
 
-        const response = await fetch(`${BASE_URL}/teamspace/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${access_token}`, // Pass token_id in the header
-          },
-          body: JSON.stringify(body),
-        });
+      const body = {
+        team_space_name: values.workspaceName, // Assuming you want 'workspaceName' in the body
+        share_space: values.sharedWorkspace,
+        // user_id: userId, // Get userId from cookies
+        email: emails, // Include the list of emails if shared workspace is true
+      };
+
+      // console.log('Request Body:', body);
+
+      try {
+        setIsLoading(true); // Set loading state to true
+        const response = await fetch(
+          `${BASE_URL}/teamspace?user_id=${userId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+          }
+        );
+
+        const data = await response.json();
 
         if (response.ok) {
           // Save the team_space_id in cookies
           Cookies.set('team_space_id', data.team_space_id);
+          console.log('Team Space ID to set:', data.team_space_id);
 
           // Handle successful team creation
           navigate('/signup/create-team');
         } else {
           // Handle non-successful response
-          const errorData = await response.json();
-          setErrorMessage(errorData.message || 'Failed to create workspace');
+          setErrorMessage(data.message || 'Failed to create workspace');
         }
       } catch (error) {
         // Handle fetch error
         setErrorMessage('An unexpected error occurred. Please try again.');
         console.error('Error:', error);
+      } finally {
+        setIsLoading(false); // Stop loading state
       }
     },
   });
+
+  // Function to add a new email to the list
+  const handleAddEmail = () => {
+    const newEmail = formik.values.email.trim();
+    if (newEmail && !emails.includes(newEmail)) {
+      setEmails(prevEmails => [...prevEmails, newEmail]);
+      formik.setFieldValue('email', ''); // Clear the input field after adding
+    }
+  };
 
   return (
     <div>
@@ -83,12 +99,14 @@ const Onboard3 = () => {
           <h2 className="lg:text-4xl text-2xl font-semibold lg:mb-12 mb-8 text-center">
             Create your workspace
           </h2>
+
           {/* Display error message if it exists */}
           {errorMessage && (
             <div className="lg:w-3/4 w-full mb-4 p-2 bg-red-100 text-red-500 border border-red-400 rounded-md">
               {errorMessage}
             </div>
           )}
+
           <div className="lg:w-3/4 w-full mb-12">
             {/* Replace regular input with FloatingLabelInput */}
             <FloatingLabelInput
@@ -102,6 +120,7 @@ const Onboard3 = () => {
             {formik.touched.workspaceName && formik.errors.workspaceName ? (
               <div className="text-red-500">{formik.errors.workspaceName}</div>
             ) : null}
+
             <div className="flex items-center justify-between space-x-4 py-4">
               <label
                 htmlFor="sharedWorkspace"
@@ -117,7 +136,42 @@ const Onboard3 = () => {
                 onChange={formik.handleChange}
               />
             </div>
+
+            {/* Conditionally show email input if sharedWorkspace is true */}
+            {formik.values.sharedWorkspace && (
+              <div>
+                <div className="flex items-center mb-4">
+                  <FloatingLabelInput
+                    label="Enter team member's email"
+                    type="email"
+                    id="email"
+                    value={formik.values.email || ''}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <button
+                    type="button"
+                    className="ml-2 bg-primary text-white p-2 rounded"
+                    onClick={handleAddEmail}
+                  >
+                    Add
+                  </button>
+                </div>
+                {/* Display added emails */}
+                <div className="mb-4">
+                  <h4 className="text-sm text-gray-700">Added Emails:</h4>
+                  <ul>
+                    {emails.map((email, index) => (
+                      <li key={index} className="text-gray-600">
+                        {email}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
+
           <div className="lg:w-3/4 w-full flex justify-between gap-8">
             <button
               onClick={() => navigate('/app')}
@@ -130,7 +184,7 @@ const Onboard3 = () => {
               onClick={formik.handleSubmit}
               className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
-              Continue
+              {isloading ? 'saving...' : 'Continue'}
             </button>
           </div>
         </div>

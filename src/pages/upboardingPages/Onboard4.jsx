@@ -15,8 +15,10 @@ import SelectInput from './_components/SelectInput';
 const Onboard4 = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const [isloading, setIsLoading] = useState(false);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const teamSpaceId = Cookies.get('team_space_id');
+  // console.log('Team Space ID:', teamSpaceId);
 
   const formik = useFormik({
     initialValues: {
@@ -34,6 +36,7 @@ const Onboard4 = () => {
     }),
     onSubmit: async values => {
       try {
+        setIsLoading(true);
         const body = {
           team_name: values.team_name,
           work_industry: values.workIndustry,
@@ -41,6 +44,8 @@ const Onboard4 = () => {
           organization_size: values.organizationSize,
           allow_team_discovery: values.allowTeamDiscovery,
         };
+
+        // console.log('Request Body:', body);
 
         const response = await fetch(
           `${BASE_URL}/team/?team_space_id=${teamSpaceId}`,
@@ -55,11 +60,11 @@ const Onboard4 = () => {
 
         if (response.ok) {
           const TeamData = await response.json();
+          // console.log('Team Data:', TeamData);
 
-          const team_id = TeamData.team_id;
-          console.log('Team id:', team_id);
+          // console.log('Team id:', team_id);
 
-          Cookies.set('team_space_id', data.team_id);
+          Cookies.set('team_id', TeamData.team_id);
 
           navigate('/signup/team-invite');
         } else {
@@ -69,6 +74,8 @@ const Onboard4 = () => {
         }
       } catch (error) {
         setErrorMessage('An error occurred. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
     },
   });
@@ -94,12 +101,6 @@ const Onboard4 = () => {
           </p>
 
           <form onSubmit={formik.handleSubmit} className="lg:w-3/4 w-full">
-            {errorMessage && (
-              <div className="lg:w-3/4 w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded">
-                {errorMessage}
-              </div>
-            )}
-
             <FormInput
               label="Team Name"
               name="team_name"
@@ -159,10 +160,15 @@ const Onboard4 = () => {
 
             <button
               type="submit"
-              className=" w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              className=" w-full bg-primary mb-4 text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
-              Submit
+              {isloading ? 'Submitting...' : 'Submit'}
             </button>
+            {errorMessage && (
+              <div className="lg:w-3/4 w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded">
+                {errorMessage}
+              </div>
+            )}
           </form>
         </div>
       </div>

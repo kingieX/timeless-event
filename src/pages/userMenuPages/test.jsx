@@ -11,7 +11,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   // Set your API base URL here
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   // State to capture form inputs
   const [email, setEmail] = useState('');
@@ -23,10 +23,14 @@ const SignUp = () => {
   // Function to check if email exists
   const checkEmailExists = async email => {
     try {
-      const response = await fetch(`${BASE_URL}/user/email?email=${email}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
+      const response = await fetch(
+        `${API_BASE_URL}/user/email?email=${email}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
       if (response.status === 200) {
         return true; // Email already exists
       }
@@ -37,105 +41,11 @@ const SignUp = () => {
     }
   };
 
-  // Function to handle the complete POST request to register the user
-  const handleRegisterUser = async () => {
-    try {
-      setLoading(true);
-
-      const requestBody = {
-        fullname: '', // Fill this as needed
-        role: 'user',
-        reason_for_use: 'work', // Fill this as needed
-        email: email,
-        phone_no: '',
-        is_active: false,
-        provider: '', // Fill this as needed
-        provider_id: '', // Fill this as needed
-        avatar_url: '', // Fill this as needed
-        password: password,
-      };
-
-      // console.log('Request Body:', requestBody);
-
-      // Make POST request to register the user
-      const response = await fetch(`${BASE_URL}/user/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Authorization: `Bearer ${token_id}`, // Pass token_id in the header
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      const responseData = await response.json(); // Parse the response
-      console.log('Server Response:', responseData); // Log the server's response
-
-      if (response.ok) {
-        // If the registration is successful, fetch the user ID using the email
-        // await handlePostRegistration();
-      } else {
-        // If registration fails due to email duplication or another error
-        setError('Email already exist, please input a new email.');
-      }
-    } catch (error) {
-      console.error('Error during registration:', error);
-      setError('An error occurred during registration.');
-    } finally {
-      setLoading(false); // Stop loading
-    }
-  };
-
-  // Function to handle post-registration tasks
-  const handlePostRegistration = async () => {
-    try {
-      // Send GET request to retrieve user data by email
-      const userResponse = await fetch(
-        `${BASE_URL}/user/email?email=${email}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (userResponse.ok) {
-        const userData = await userResponse.json();
-        // console.log('Full User Response Data:', userData); // Log the response for debugging
-
-        // Extract the user_id from the response
-        const userId = userData?.user_id; // Adjust based on the response structure
-
-        // Check if user_id exists
-        if (!userId) {
-          console.error('User ID not found in the response.');
-          setError('User ID not found in the response.');
-          return; // Stop further execution if user_id is missing
-        }
-
-        // Store userId and email in cookies
-        Cookies.set('userId', userId, { secure: true, sameSite: 'Strict' });
-        Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
-
-        // Send OTP to phone number using the userId
-        await handleSendOtp(userId, email);
-
-        // Navigate to the OTP verification page
-        navigate('/otp-verification');
-      } else {
-        setError('Failed to retrieve user after registration.');
-      }
-    } catch (error) {
-      console.error('Error fetching user data after registration:', error);
-      setError('An error occurred after registration.');
-    }
-  };
-
   // Function to send OTP
-  const handleSendOtp = async (userId, email) => {
+  const sendOtp = async email => {
     try {
       const otpResponse = await fetch(
-        `${BASE_URL}/user/resend-otp?user_id=${userId}&email=${email}`,
+        `${API_BASE_URL}/user/send-otp?email=${email}`,
         {
           method: 'POST',
           headers: {
@@ -144,21 +54,21 @@ const SignUp = () => {
         }
       );
 
-      console.log('For sign up verification', email);
-
       if (otpResponse.ok) {
-        setLoading(true);
-        // setShowVerificationMessage(true); // Show verification message
+        console.log(`OTP sent to ${email}`);
+        return true;
       } else {
         setError('Failed to send OTP.');
+        return false;
       }
     } catch (error) {
       console.error('Error sending OTP:', error);
       setError('An error occurred while sending OTP.');
+      return false;
     }
   };
 
-  // Handle normal form submission
+  // Handle form submission
   const handleFormSubmit = async e => {
     e.preventDefault();
     setLoading(true);
@@ -172,29 +82,19 @@ const SignUp = () => {
       return;
     }
 
-    await handleRegisterUser();
-    await handlePostRegistration();
-  };
+    // Store email and password in secure cookies
+    Cookies.set('email', email, { secure: true, sameSite: 'Strict' });
+    Cookies.set('password', password, { secure: true, sameSite: 'Strict' });
 
-  // Handle Google sign-up
-  const handleGoogleSignUp = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/auth/google`, {
-        method: 'GET',
-        credentials: 'include', // Include credentials if needed
-      });
-
-      if (response.ok) {
-        navigate('/verification');
-      } else {
-        setError('Google sign-up failed.');
-      }
-    } catch (err) {
-      setError('Google sign-up error, please try again.');
-    } finally {
+    // Send OTP to the provided email
+    const otpSent = await sendOtp(email);
+    if (!otpSent) {
       setLoading(false);
+      return;
     }
+
+    // Navigate to the OTP verification page
+    navigate('/otp-verification');
   };
 
   // Toggle password visibility

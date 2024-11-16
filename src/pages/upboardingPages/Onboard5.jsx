@@ -7,8 +7,13 @@ import EmailInputForm from '../../components/EmailInputForm';
 import Cookies from 'js-cookie';
 
 const rolesOptions = [
-  { value: 'admin', label: 'Admin' },
-  { value: 'member', label: 'Member' },
+  { value: 'owner', label: 'Owner' },
+  { value: 'manager', label: 'Manager' },
+  { value: 'task_lead', label: 'Team lead' },
+  { value: 'contributor', label: 'Contributor' },
+  { value: 'editor', label: 'Editor' },
+  { value: 'reviewer', label: 'Reviewer' },
+  { value: 'viewer', label: 'Viewer' },
 ];
 
 const inviteOptions = [
@@ -24,11 +29,15 @@ const Onboard5 = () => {
   const [inviteLink, setInviteLink] = useState('');
   const [newPeopleRole, setNewPeopleRole] = useState('');
   const [isInviteSent, setIsInviteSent] = useState(false); // Track whether invites are sent
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false); // State for controlling the modal visibility
 
   const navigate = useNavigate();
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const teamId = Cookies.get('team_id');
+  const userId = Cookies.get('userId');
 
   const handleToggle = () => {
     setInviteLinkEnabled(!inviteLinkEnabled);
@@ -49,15 +58,18 @@ const Onboard5 = () => {
 
     // Create the request body
     const requestBody = {
-      invite_type: activeInviteOption,
+      invite_type: selectedInviteOption,
       enable_link: inviteLinkEnabled,
       contacts: contacts,
       invite_status: 'success',
     };
 
+    console.log('Request Body:', requestBody);
+
     try {
+      setIsLoading(true);
       const response = await axios.post(
-        `${API_BASE_URL}/teamMember/${teamId}`,
+        `${API_BASE_URL}/teamMember/${teamId}/add-team-members-on-signup?user_id=${userId}`,
         requestBody,
         {
           headers: {
@@ -71,14 +83,21 @@ const Onboard5 = () => {
         const inviteLink = response.data.link_address;
         setInviteLink(inviteLink);
         setIsInviteSent(true); // Mark invite as sent
+        // navigate('/app');
+        setShowModal(true); // Show success modal
       }
     } catch (error) {
+      setErrorMessage('Failed to send invites. Please try again.');
       console.error('Error sending invite:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleNext = () => {
-    navigate('/app');
+  // Close modal and redirect to login page
+  const handleLoginRedirect = () => {
+    setShowModal(false);
+    navigate('/login');
   };
 
   return (
@@ -187,14 +206,42 @@ const Onboard5 = () => {
               Skip
             </button>
             <button
-              onClick={isInviteSent ? handleNext : handleSendInvites}
+              onClick={handleSendInvites}
               className="lg:w-1/2 w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
             >
-              {isInviteSent ? 'Next' : 'Send invites'}
+              {isLoading ? 'Sending...' : 'Send invites'}
+            </button>
+          </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="lg:w-3/4 w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded mt-4">
+              {errorMessage}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Success Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg w-96 text-center">
+            <h3 className="text-xl font-semibold mb-4">
+              Your account has been set up successfully!
+            </h3>
+            <p className="mb-4">
+              The invitation links have been sent to the selected contacts.
+              Please log in to continue.
+            </p>
+            <button
+              onClick={handleLoginRedirect}
+              className="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark"
+            >
+              Go to Login
             </button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

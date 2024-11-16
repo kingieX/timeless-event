@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Import useEffect to set the state on component mount
 import { Link, useNavigate } from 'react-router-dom';
 import 'react-phone-input-2/lib/style.css';
 import PhoneInput from 'react-phone-input-2';
@@ -16,8 +16,15 @@ const VerificationPage = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL; // Load the base URL from .env
 
   // Retrieve email and password from cookies
-  // const email = Cookies.get('email');
+  const savedEmail = Cookies.get('email'); // Rename to `savedEmail` for clarity
   const password = Cookies.get('password');
+
+  // Prefill the email state if it exists in cookies when the component mounts
+  useEffect(() => {
+    if (savedEmail) {
+      setEmail(savedEmail); // Set the email value in the state
+    }
+  }, [savedEmail]); // Only run this once when `savedEmail` changes
 
   // Function to handle the complete POST request to register the user
   const handleRegisterUser = async () => {
