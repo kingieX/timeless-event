@@ -18,13 +18,15 @@ const AddTeam = () => {
   const [selectedTeamSpaceId, setSelectedTeamSpaceId] = useState('');
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const accessToken = Cookies.get('access_token'); // Assuming token is stored in cookies
+  const user_id = Cookies.get('user_id');
+  // console.log('User ID:', user_id);
 
   // Fetch linked team spaces when the component mounts
   useEffect(() => {
     const fetchTeamSpaces = async () => {
       try {
         const response = await fetch(
-          'https://api.timelessplanner.com/teamspace/user-linked-team-space',
+          `${BASE_URL}/teamspace/creator?user_id=${user_id}`,
           {
             method: 'GET',
             headers: {
