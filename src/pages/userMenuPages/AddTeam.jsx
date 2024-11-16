@@ -109,7 +109,7 @@ const AddTeam = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold text-center my-4">Add a New Team</h2>
+      <h2 className="text-3xl font-bold text-center my-4">Create a New Team</h2>
 
       <form onSubmit={formik.handleSubmit} className="w-full max-w-lg mx-auto">
         {/* Team Space Dropdown */}

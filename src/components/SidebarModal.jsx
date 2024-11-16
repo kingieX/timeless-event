@@ -23,7 +23,7 @@ const menuGroups = [
       logo: '/image/modal-assets/btn3.svg',
     },
     {
-      name: 'Add a Team',
+      name: 'Create a Team',
       link: 'add-team',
       logo: '/image/modal-assets/btn4.svg',
     },
