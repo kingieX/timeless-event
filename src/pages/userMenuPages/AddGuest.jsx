@@ -182,8 +182,7 @@ const AddGuest = () => {
             </button> */}
             <button
               type="submit"
-              className="w-full 
-              bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
+              className="w-full bg-primary text-black font-semibold py-2 px-4 hover:bg-transparent hover:border hover:border-primary hover:text-primary transition duration-300"
               disabled={isLoading}
             >
               {isLoading ? 'Sending Reminder...' : 'Send Reminder'}
