@@ -168,14 +168,14 @@ const FetchEvent = ({ projectId, project }) => {
                     onClick={() => handleEditEvent(event)}
                     className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
                   >
-                    Edit task
+                    Edit event
                   </li>
 
                   <li
                     onClick={() => handleDeleteEvent(event.event_id)}
                     className="flex w-full items-center space-x-2 p-2 text-red-500 text-sm hover:bg-blue-100 cursor-pointer"
                   >
-                    Delete task
+                    Delete event
                   </li>
                 </ul>
               )}
