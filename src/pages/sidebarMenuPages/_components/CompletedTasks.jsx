@@ -287,7 +287,7 @@ const CompletedTasks = () => {
                 <img
                   src={Logo}
                   alt="empty project"
-                  className="lg:w-2/5 w-3/4 mb-4"
+                  className="lg:w-1/4 w-1/2 mb-4"
                 />
                 <h2 className="lg:text-2xl text-xl font-bold flex items-center">
                   No completed tasks available
