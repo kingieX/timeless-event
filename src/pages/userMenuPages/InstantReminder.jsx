@@ -49,6 +49,7 @@ const InstantReminder = () => {
 
     // If there's only one contact, send it directly
     const finalContacts = contactsString || contacts[0];
+    console.log('finalContacts: ', finalContacts);
 
     const formData = new FormData();
     formData.append('title', title);
@@ -73,6 +74,7 @@ const InstantReminder = () => {
 
       if (response.ok) {
         const result = await response.json();
+        console.log(result);
         setSuccess('Reminder set successfully!');
         setTimeout(() => {
           navigate('/app');
