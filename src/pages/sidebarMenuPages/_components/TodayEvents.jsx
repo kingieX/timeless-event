@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import EventReminderModal from '../workspace/event/_components/EventReminderModal';
 import EditEventModal from '../workspace/event/_components/EditEventModal';
 
-const CompletedEvents = () => {
+const TodayEvents = () => {
   const [showCompletedEvents, setShowCompletedEvents] = useState(true);
   const [events, setEvents] = useState([]); // Renamed to `tasks` for clarity
   const accessToken = Cookies.get('access_token');
@@ -29,7 +29,7 @@ const CompletedEvents = () => {
   useEffect(() => {
     const fetchAllEvents = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/event/events/past`, {
+        const response = await fetch(`${API_BASE_URL}/event/events/today`, {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -105,7 +105,7 @@ const CompletedEvents = () => {
           onClick={toggleTasks}
         >
           <h1 className="lg:text-xl text-sm flex items-center">
-            Completed Events
+            Today's Events
           </h1>
           {showCompletedEvents ? (
             <FaChevronUp className="mr-2 text-slate-600 w-3" />
@@ -235,10 +235,10 @@ const CompletedEvents = () => {
                   className="lg:w-1/4 w-1/2 mb-4"
                 />
                 <h2 className="lg:text-2xl text-xl font-bold flex items-center">
-                  No completed events available
+                  No events available today
                 </h2>
                 <p className="lg:text-lg text-center text-sm text-gray-600">
-                  Complete events to view them here
+                  You have no events scheduled today
                 </p>
               </div>
             )}
@@ -262,4 +262,4 @@ const CompletedEvents = () => {
   );
 };
 
-export default CompletedEvents;
+export default TodayEvents;

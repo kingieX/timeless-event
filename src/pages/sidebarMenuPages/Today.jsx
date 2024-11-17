@@ -3,6 +3,7 @@ import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import Overdue from '../../components/Overdue';
 import TodayTasks from './_components/TodayTasks';
+import TodayEvents from './_components/TodayEvents';
 
 const Today = () => {
   // Get the current date
@@ -26,8 +27,15 @@ const Today = () => {
       </div>
 
       {/* Today's Task Section */}
-      <TodayTasks />
-      {/* <Overdue /> */}
+      <div>
+        <TodayTasks />
+        {/* <Overdue /> */}
+      </div>
+
+      {/* Today's Event Section */}
+      <div>
+        <TodayEvents />
+      </div>
 
       {/* Add Task & Add Event Section */}
       <div className="mt-6 flex flex-col py-4">

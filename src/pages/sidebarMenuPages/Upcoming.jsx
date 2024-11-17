@@ -7,6 +7,7 @@ import { format, addDays, isToday, isTomorrow } from 'date-fns';
 import Overdue from '../../components/Overdue';
 import { FaChevronDown } from 'react-icons/fa';
 import UpcomingTasks from './_components/UpcomingTasks';
+import UpcomingEvents from './_components/UpcomingEvents';
 
 const Upcoming = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -102,11 +103,14 @@ const Upcoming = () => {
         )}
       </div> */}
 
-      {/* overdue */}
+      {/* Upcoming Tasks */}
       <div className="mb-8">
         {/* <Overdue /> */}
         <UpcomingTasks />
       </div>
+
+      {/* Upcoming Events */}
+      <div>{/* <UpcomingEvents /> */}</div>
 
       <div>
         <div>

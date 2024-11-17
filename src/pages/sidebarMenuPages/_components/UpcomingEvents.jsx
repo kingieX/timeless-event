@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import EventReminderModal from '../workspace/event/_components/EventReminderModal';
 import EditEventModal from '../workspace/event/_components/EditEventModal';
 
-const CompletedEvents = () => {
+const UpcomingEvents = () => {
   const [showCompletedEvents, setShowCompletedEvents] = useState(true);
   const [events, setEvents] = useState([]); // Renamed to `tasks` for clarity
   const accessToken = Cookies.get('access_token');
@@ -105,7 +105,7 @@ const CompletedEvents = () => {
           onClick={toggleTasks}
         >
           <h1 className="lg:text-xl text-sm flex items-center">
-            Completed Events
+            Upcoming Events
           </h1>
           {showCompletedEvents ? (
             <FaChevronUp className="mr-2 text-slate-600 w-3" />
@@ -262,4 +262,4 @@ const CompletedEvents = () => {
   );
 };
 
-export default CompletedEvents;
+export default UpcomingEvents;
