@@ -124,8 +124,8 @@ const TodayTasks = () => {
   // Helper function to get status label and color
   const getStatusInfo = status => {
     switch (status) {
-      case 'not_started':
-        return { text: 'Not Started', color: 'bg-slate-200 text-slate-600' };
+      case 'just_started':
+        return { text: 'Just Started', color: 'bg-slate-200 text-slate-600' };
       case 'in_progress':
         return { text: 'In Progress', color: 'bg-blue-200 text-blue-600' };
       case 'completed':
