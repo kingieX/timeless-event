@@ -46,10 +46,15 @@ const AddEvent = () => {
           }));
           setProjects(projectList); // Store the projects
         } else {
-          throw new Error('Failed to fetch projects');
+          // throw new Error('Failed to fetch projects');
+          setError(
+            'Failed to fetch projects, please ensure to create a project before adding event.'
+          );
         }
       } catch (error) {
-        setError(error.message);
+        setError(
+          'Failed to fetch projects, please ensure to create a project before adding event.'
+        );
       }
     };
 
@@ -117,7 +122,11 @@ const AddEvent = () => {
       }
     } catch (error) {
       console.error('Error creating event:', error);
-      setError(error.message);
+      // setError(error.message);
+      // setError('Failed to create event, please try again.');
+      setError(
+        'Failed to fetch projects, please ensure to create a project before adding event.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -280,7 +289,11 @@ const AddEvent = () => {
           </div>
 
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

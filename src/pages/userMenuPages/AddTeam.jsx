@@ -43,7 +43,9 @@ const AddTeam = () => {
           throw new Error('Failed to fetch team spaces');
         }
       } catch (error) {
-        setErrorMessage('An error occurred while fetching team spaces.');
+        setErrorMessage(
+          'An error occurred while fetching workspaces, please create a workspace first.'
+        );
       }
     };
 
@@ -101,10 +103,14 @@ const AddTeam = () => {
           navigate(`/app/workspace/${teamData.team_space_id}`);
         } else {
           const errorData = await response.json();
-          setErrorMessage(errorData.message || 'Failed to create team');
+          setErrorMessage(
+            errorData.message || 'Failed to create team, please try again'
+          );
         }
       } catch (error) {
-        setErrorMessage('An error occurred while creating the team.');
+        setErrorMessage(
+          'An error occurred while creating the team, ensure all fields are filled correctly'
+        );
       } finally {
         setIsLoading(false);
       }
@@ -122,7 +128,7 @@ const AddTeam = () => {
             Select WorkSpace
           </label>
           {teamSpaces.length === 0 ? (
-            <div className="text-red-500">
+            <div className="py-1 px-2 text-center border bborder-gray border-l-4 border-l-red-500 text-red-500">
               You don't have any Workspaces. Please create one first.
             </div>
           ) : (
@@ -227,7 +233,7 @@ const AddTeam = () => {
 
         {/* Error Message */}
         {errorMessage && (
-          <div className="w-full p-2 bg-red-100 text-red-500 border border-red-400 rounded">
+          <div className="w-full p-2 bg-red-100 text-sm text-red-500 border border-l-4 text-center border-red-400 rounded">
             {errorMessage}
           </div>
         )}

@@ -7,6 +7,7 @@ import { FiMoreVertical } from 'react-icons/fi';
 import UpdateAccessModal from '../project/_components/UpdateAccessModal';
 import EditProjectModal from '../project/_components/EditProjectModal';
 import CreateProjectModal from '../project/_components/CreateProjectModal';
+import Logo from '/image/completed.svg';
 
 const FolderDetailPage = () => {
   const { folderId } = useParams();
@@ -283,7 +284,19 @@ const FolderDetailPage = () => {
                     ))}
                   </ul>
                 ) : (
-                  <p>No projects found in this folder.</p>
+                  <div className="w-full flex flex-col justify-center items-center py-8">
+                    <img
+                      src={Logo}
+                      alt="empty project"
+                      className="lg:w-1/4 w-1/2 mb-4"
+                    />
+                    <h2 className="lg:text-2xl text-xl font-bold flex items-center">
+                      No projects found in this folder.
+                    </h2>
+                    <p className="lg:text-lg text-center text-sm text-gray-600">
+                      Create a new project to get started.
+                    </p>
+                  </div>
                 )}
               </div>
             </div>

@@ -45,9 +45,12 @@ const AddTask = () => {
           setProjects(projectList); // Store the projects in state
         } else {
           throw new Error('Failed to fetch projects');
+          setError('Failed to fetch projects');
         }
       } catch (error) {
-        setError(error.message);
+        setError(
+          'Failed to fetch projects, please ensure to create a project before adding task.'
+        );
       }
     };
 
@@ -109,7 +112,10 @@ const AddTask = () => {
       }
     } catch (error) {
       console.error('Error adding task:', error);
-      setError(error.message);
+      // setError(error.message);
+      setError(
+        'Failed to fetch projects, please ensure to create a project before adding task.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -278,7 +284,11 @@ const AddTask = () => {
           </div>
 
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

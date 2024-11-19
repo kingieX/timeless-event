@@ -152,7 +152,9 @@ const FolderList = () => {
           ))}
         </ul>
       ) : (
-        <p>No folders found.</p>
+        <div className="w-full py-2 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+          <p className="text-red-500 text-center">No folders found.</p>
+        </div>
       )}
 
       {/* Render the AddUsersModal if usersToAdd is set */}

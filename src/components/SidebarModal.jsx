@@ -39,40 +39,40 @@ const menuGroups = [
     },
   ],
   [
-    {
-      name: 'Activity Log',
-      link: 'activity-log',
-      logo: '/image/modal-assets/btn7.svg',
-    },
+    // {
+    //   name: 'Activity Log',
+    //   link: 'activity-log',
+    //   logo: '/image/modal-assets/btn7.svg',
+    // },
     // { name: 'Print', link: 'print', logo: '/image/modal-assets/btn8.svg' }, // Print menu item
-    {
-      name: 'Resources',
-      link: '#',
-      logo: '/image/modal-assets/btn9.svg',
-      subMenu: [
-        {
-          name: 'Contact Support',
-          link: 'contact-support',
-          logo: '/image/modal-assets/btn10.svg',
-        },
-        { name: 'FAQs', link: 'faqs', logo: '/image/modal-assets/btn11.svg' },
-        {
-          name: 'Integrations',
-          link: 'integrations',
-          logo: '/image/modal-assets/btn12.svg',
-        },
-        {
-          name: 'User guide',
-          link: 'user-guide',
-          logo: '/image/modal-assets/btn13.svg',
-        },
-        {
-          name: 'Download app',
-          link: 'download-app',
-          logo: '/image/modal-assets/btn14.svg',
-        },
-      ],
-    },
+    // {
+    //   name: 'Resources',
+    //   link: '#',
+    //   logo: '/image/modal-assets/btn9.svg',
+    //   subMenu: [
+    //     {
+    //       name: 'Contact Support',
+    //       link: 'contact-support',
+    //       logo: '/image/modal-assets/btn10.svg',
+    //     },
+    //     { name: 'FAQs', link: 'faqs', logo: '/image/modal-assets/btn11.svg' },
+    //     {
+    //       name: 'Integrations',
+    //       link: 'integrations',
+    //       logo: '/image/modal-assets/btn12.svg',
+    //     },
+    //     {
+    //       name: 'User guide',
+    //       link: 'user-guide',
+    //       logo: '/image/modal-assets/btn13.svg',
+    //     },
+    //     {
+    //       name: 'Download app',
+    //       link: 'download-app',
+    //       logo: '/image/modal-assets/btn14.svg',
+    //     },
+    //   ],
+    // },
   ],
   [
     // {

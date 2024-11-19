@@ -103,8 +103,8 @@ const ShareMemberModal = ({ projectId, teamId, onClose }) => {
         <h2 className="text-xl font-bold mb-4">Share Project Members</h2>
 
         <form onSubmit={handleSubmit}>
-          {teamMembers.map(member => (
-            <div key={member.team_member_id} className="mb-4">
+          {teamMembers.map((member, index) => (
+            <div key={index} className="mb-4">
               <label className="block text-gray-700 mb-2">
                 {member.user.fullname}
               </label>
@@ -124,7 +124,6 @@ const ShareMemberModal = ({ projectId, teamId, onClose }) => {
               </select>
             </div>
           ))}
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -142,8 +141,11 @@ const ShareMemberModal = ({ projectId, teamId, onClose }) => {
               {isLoading ? 'Sharing...' : 'Share Members'}
             </button>
           </div>
-
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

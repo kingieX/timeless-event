@@ -113,7 +113,7 @@ const WorkspaceDetailPage = () => {
         } catch (error) {
           console.error('Error fetching teams data:', error);
           setTeamsError(
-            'Failed to load teams for this workspace, no team found!',
+            'No team found! Create a team to get started.',
             error.message
           );
         } finally {
@@ -265,7 +265,9 @@ const WorkspaceDetailPage = () => {
           {teamsLoading ? (
             <p>Loading teams...</p>
           ) : teamsError ? (
-            <p className="text-red-500">{teamsError}</p>
+            <div className="w-full py-2 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center">{teamsError}</p>
+            </div>
           ) : (
             teamsData.map((team, index) => (
               <div

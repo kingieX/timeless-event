@@ -144,7 +144,6 @@ const AddUsersModal = ({ folderId, onClose }) => {
               </button>
             </div>
           ))}
-
           <button
             type="button"
             onClick={handleAddUserInput}
@@ -153,7 +152,6 @@ const AddUsersModal = ({ folderId, onClose }) => {
           >
             Add Another User
           </button>
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -171,8 +169,11 @@ const AddUsersModal = ({ folderId, onClose }) => {
               {isLoading ? 'Adding...' : 'Add Users'}
             </button>
           </div>
-
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

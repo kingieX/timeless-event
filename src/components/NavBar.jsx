@@ -18,10 +18,11 @@ const NavBar = () => {
 
   // Dynamic links data
   const links = [
+    { to: '/', text: 'Home' },
     { to: '/features', text: 'Features' },
-    { to: '/resources', text: 'Resources' },
+    // { to: '/resources', text: 'Resources' },
     { to: '/pricing', text: 'Pricing' },
-    { to: '/upgrade', text: 'Upgrade to Premium' },
+    // { to: '/upgrade', text: 'Upgrade to Premium' },
   ];
 
   const buttons = [

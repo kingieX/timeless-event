@@ -123,7 +123,6 @@ const InstantReminder = () => {
               disabled={isLoading}
             />
           </div>
-
           {/* Icon */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Icon</label>
@@ -138,7 +137,6 @@ const InstantReminder = () => {
               <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
             )}
           </div>
-
           {/* Message */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Message</label>
@@ -150,7 +148,6 @@ const InstantReminder = () => {
               disabled={isLoading}
             />
           </div>
-
           {/* Medium (SMS, Email, WhatsApp) */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Medium</label>
@@ -165,7 +162,6 @@ const InstantReminder = () => {
               <option value="whatsapp">WhatsApp</option>
             </select>
           </div>
-
           {/* Contacts - Dynamically add contact inputs */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">
@@ -199,7 +195,6 @@ const InstantReminder = () => {
               </div>
             ))}
           </div>
-
           {/* Media Type */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Media Type</label>
@@ -215,7 +210,6 @@ const InstantReminder = () => {
               <option value="document">Document</option>
             </select>
           </div>
-
           {/* Media File */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Media File</label>
@@ -232,7 +226,6 @@ const InstantReminder = () => {
               </p>
             )}
           </div>
-
           <div className="w-full flex mb-4">
             <button
               type="submit"
@@ -242,9 +235,12 @@ const InstantReminder = () => {
               {isLoading ? 'Setting Reminder...' : 'Set Reminder'}
             </button>
           </div>
-
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>
