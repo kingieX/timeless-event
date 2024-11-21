@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
     if (isTokenExpired()) {
       Cookies.remove('access_token');
       Cookies.remove('access_token_expiration');
-      navigate('/login');
+      navigate('/');
     }
   }, [navigate]);
 

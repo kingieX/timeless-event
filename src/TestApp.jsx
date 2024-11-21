@@ -1,3 +1,4 @@
+// import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ScrollToTop from './ScrollToTop';
 
@@ -83,7 +84,7 @@ import EventDetailPage from './pages/sidebarMenuPages/workspace/event/EventDetai
 import SubtaskDetailPage from './pages/sidebarMenuPages/workspace/subtask/SubtaskDetailPage';
 import PersonalProjectsPage from './pages/sidebarMenuPages/Personal-projects/PersonalProjects';
 import NetworkStatus from './NetworkErrorPage';
-import AuthProvider from './withAuth';
+import AuthProvider from './AuthProvider';
 
 const App = () => {
   return (
@@ -121,7 +122,7 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/success" element={<SuccessPage />} />
 
-          {/* Invite page */}
+          {/* onvite page */}
           <Route path="/invite/:team_id/:invite_id" element={<InvitePage />} />
           <Route path="/team/user-register" element={<RegistrationPage />} />
           <Route
@@ -131,17 +132,13 @@ const App = () => {
           <Route path="/team/send-otp" element={<SendOTP />} />
           <Route path="/team/success-page" element={<TeamSuccessPage />} />
 
-          {/* Dashboard and AuthProvider wrapped around only specific routes */}
-          <Route
-            path="/app/*"
-            element={
-              <AuthProvider>
-                <Dashboard />
-              </AuthProvider>
-            }
-          >
+          {/* Outlet route */}
+          <Route path="/app/*" element={<Dashboard />}>
             {/* Default content to render when just "/dashboard" is accessed */}
             <Route index element={<MainContent />} />
+
+            {/* notificatio */}
+            <Route path="notification" element={<Notification />} />
 
             {/* Sidebar menus routes */}
             <Route path="add-event" element={<AddEvent />} />
