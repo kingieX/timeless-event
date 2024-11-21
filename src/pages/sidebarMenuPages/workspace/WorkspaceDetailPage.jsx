@@ -25,6 +25,9 @@ const WorkspaceDetailPage = () => {
   const [isTeamCreationModal, setIsTeamCreationModal] = useState(false);
   const menuRef = useRef(null); // Consolidated ref for both menu and dropdown
 
+  const [searchQuery, setSearchQuery] = useState(''); // Added state for search query
+  const [filteredTeams, setFilteredTeams] = useState([]); // Filtered teams
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [isTeamOptionsMenuOpen, setIsTeamOptionsMenuOpen] = useState(false);
@@ -106,7 +109,9 @@ const WorkspaceDetailPage = () => {
             }
           );
           setTeamsData(response.data); // Set the fetched teams data
-          console.log('Teams data:', response.data); // Log the teams data to console
+          setFilteredTeams(response.data); // Initially, display all teams
+
+          // console.log('Teams data:', response.data); // Log the teams data to console
         } catch (error) {
           if (error.response && error.response.status === 404) {
             // Handle 404 (no teams found) separately
@@ -125,6 +130,21 @@ const WorkspaceDetailPage = () => {
       fetchTeamsData();
     }
   }, [workspaceData, access_token]); // Re-fetch when workspaceData or access_token changes
+
+  // search query for teams
+  useEffect(() => {
+    // Function to filter teams and folders based on searchQuery
+    const filterTeamsAndFolders = () => {
+      // Filter teams
+      const filteredTeamsData = teamsData.filter(team =>
+        team.team_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      setFilteredTeams(filteredTeamsData);
+    };
+
+    filterTeamsAndFolders();
+  }, [searchQuery, teamsData]);
 
   // Function to open the modal
   const openEditModal = () => setIsEditModalOpen(true);
@@ -251,6 +271,8 @@ const WorkspaceDetailPage = () => {
             type="search"
             className="flex w-full outline-none bg-transparent px-4"
             placeholder="Search teams"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
           />
         </div>
 
@@ -267,12 +289,13 @@ const WorkspaceDetailPage = () => {
             <div className="w-full py-2 px-2 border border-gray my-4 border-l-4 border-l-red-500">
               <p className="text-red-500 text-center">{teamsError}</p>
             </div>
+          ) : filteredTeams.length === 0 ? (
+            <div className="w-full py-2 italic px-4 text-center text-gray-500">
+              <p>No such team available in this workspace.</p>
+            </div>
           ) : (
-            teamsData.map((team, index) => (
-              <div
-                key={team.team_id}
-                // className="flex justify-between items-center border rounded-lg p-4"
-              >
+            filteredTeams.map((team, index) => (
+              <div key={team.team_id}>
                 <div className="w-full flex justify-between items-center border rounded-lg">
                   <Link
                     to={`/app/workspace/${workspaceData.team_space_id}/team/${team.team_id}`}

@@ -187,7 +187,11 @@ const FetchEvent = ({ projectId, project }) => {
           ))}
         </ul>
       ) : (
-        <p className="px-8">No events found for this project.</p>
+        <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+          <p className="text-red-500 text-center">
+            No events found for this project.
+          </p>
+        </div>
       )}
 
       {/* Render the EventReminderModal if reminder is set */}

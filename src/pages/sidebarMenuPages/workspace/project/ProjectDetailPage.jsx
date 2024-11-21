@@ -11,6 +11,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import CreateEventModal from '../event/_components/CreateEventModal';
 import FetchEvent from './_components/FetchEvent';
 import axios from 'axios';
+import Logo from '/image/completed.svg';
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
@@ -254,7 +255,19 @@ const ProjectDetailPage = () => {
             </div>
           </>
         ) : (
-          <p className="text-center">No project found with the given ID.</p>
+          <div className="w-full flex flex-col justify-center items-center py-8">
+            <img
+              src={Logo}
+              alt="empty project"
+              className="lg:w-1/4 w-1/2 mb-4"
+            />
+            <h2 className="lg:text-2xl text-xl font-bold flex items-center">
+              No projects found.
+            </h2>
+            <p className="lg:text-lg text-center text-sm text-gray-600">
+              Create a new project to get started.
+            </p>
+          </div>
         )}
       </div>
 
