@@ -84,7 +84,6 @@ const EditProjectModal = ({ project, onClose, onUpdate }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Description</label>
             <textarea
@@ -95,7 +94,6 @@ const EditProjectModal = ({ project, onClose, onUpdate }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Color</label>
             <select
@@ -110,7 +108,6 @@ const EditProjectModal = ({ project, onClose, onUpdate }) => {
               <option value="yellow">Yellow</option>
             </select>
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Access Level</label>
             <select
@@ -125,7 +122,6 @@ const EditProjectModal = ({ project, onClose, onUpdate }) => {
               <option value="team_only">Team Only</option>
             </select>
           </div>
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -143,9 +139,12 @@ const EditProjectModal = ({ project, onClose, onUpdate }) => {
               {isLoading ? 'Updating...' : 'Update Project'}
             </button>
           </div>
-
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

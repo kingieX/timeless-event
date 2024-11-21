@@ -59,6 +59,7 @@ const Dashboard = () => {
         const data = await response.json(); // Parse JSON response
         // console.log('Fetched data:', data);
         setWorkspaces(data); // Set the workspaces from API
+        // window.location.reload();
       }
 
       // save workspace id in cookies

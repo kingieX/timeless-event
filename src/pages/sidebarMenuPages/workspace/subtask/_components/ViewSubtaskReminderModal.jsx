@@ -89,8 +89,11 @@ const ViewSubtaskReminderModal = ({ subtaskId, onClose }) => {
         <h2 className="text-xl font-bold mb-4">View Reminders</h2>
 
         {isLoading && <p>Loading reminders...</p>}
-        {error && <p className="text-red-500">{error}</p>}
-
+        {error && (
+          <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+            <p className="text-red-500 text-center text-sm">{error}</p>
+          </div>
+        )}
         {/* List of reminder titles */}
         {!isLoading && !error && reminders.length > 0 ? (
           <ul className="space-y-2">
@@ -118,7 +121,7 @@ const ViewSubtaskReminderModal = ({ subtaskId, onClose }) => {
             ))}
           </ul>
         ) : (
-          <p>No reminders found for this task.</p>
+          <p className="text-center">No reminders found for this task.</p>
         )}
 
         <div className="flex justify-end mt-4">

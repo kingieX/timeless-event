@@ -8,6 +8,7 @@ import UpdateAccessModal from '../project/_components/UpdateAccessModal';
 import EditProjectModal from '../project/_components/EditProjectModal';
 import CreateProjectModal from '../project/_components/CreateProjectModal';
 import Logo from '/image/completed.svg';
+import ShareMemberModal from '../project/_components/ShareMemberModal';
 
 const FolderDetailPage = () => {
   const { folderId } = useParams();
@@ -17,7 +18,9 @@ const FolderDetailPage = () => {
   const [showDropdown, setShowDropdown] = useState(null); // Track which dropdown is open
   const dropdownRef = useRef(null);
   const [projects, setProjects] = useState([]);
+  const [members, setMembers] = useState([]);
   const [projectToUpdate, setProjectToUpdate] = useState(null);
+  const [shareMember, setShareMember] = useState(null);
   const [editProject, setEditProject] = useState(null);
   const [createProject, setCreateProject] = useState(null);
 
@@ -39,7 +42,8 @@ const FolderDetailPage = () => {
         );
         setFolder(response.data);
         setProjects(response.data.projects);
-        // console.log('Fetched folder details:', response.data);
+        setMembers(response.data.shared_users);
+        console.log('Fetched folder details:', response.data.shared_users);
       } catch (error) {
         setError('Error fetching folder details, reload page.');
         console.error('Error fetching folder details:', error);
@@ -79,6 +83,11 @@ const FolderDetailPage = () => {
     setProjectToUpdate(projectId);
   };
 
+  // logic to handle share with members
+  const handleShare = projectId => {
+    setShareMember(projectId);
+  };
+
   // logic to handle Edit project
   const handleEditProject = project => {
     setEditProject(project);
@@ -103,7 +112,12 @@ const FolderDetailPage = () => {
   };
 
   if (loading) return <p className="px-8">Loading...</p>;
-  if (error) return <p className="text-red-500 px-8">{error}</p>;
+  if (error)
+    return (
+      <div className="w-full py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center">{error}</p>
+      </div>
+    );
 
   return (
     <>
@@ -256,12 +270,12 @@ const FolderDetailPage = () => {
                               Update project access
                             </li>
 
-                            <li
-                              onClick={() => handleAddUsers(project.project_id)} // Pass folder ID here
+                            {/* <li
+                              onClick={() => handleShare(project.project_id)} // Pass folder ID here
                               className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
                             >
                               Share with members
-                            </li>
+                            </li> */}
 
                             <li
                               onClick={() => handleEditProject(project)}
@@ -302,7 +316,7 @@ const FolderDetailPage = () => {
             </div>
           </>
         ) : (
-          <p>No folder data found.</p>
+          <p className="text-center">No folder data found.</p>
         )}
 
         {/* Render the CreateProjectModal if createProject is set */}
@@ -318,6 +332,15 @@ const FolderDetailPage = () => {
           <UpdateAccessModal
             projectId={projectToUpdate} // Pass the project
             onClose={() => setProjectToUpdate(null)} // Close modal on close
+          />
+        )}
+
+        {/* Render the ShareMemberModal if shareMember is set */}
+        {shareMember && (
+          <ShareMemberModal
+            projectId={shareMember} // Pass the project ID
+            members={members}
+            onClose={() => setShareMember(null)} // Close modal on close
           />
         )}
 

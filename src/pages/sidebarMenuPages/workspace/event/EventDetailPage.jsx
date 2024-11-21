@@ -103,7 +103,11 @@ const EventDetailPage = () => {
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return (
+      <div className="w-full py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center text-sm">{error}</p>
+      </div>
+    );
   }
 
   return (
@@ -221,7 +225,7 @@ const EventDetailPage = () => {
             </div>
           </>
         ) : (
-          <p>No event found with the given ID.</p>
+          <p className="text-center">No event found with the given ID.</p>
         )}
       </div>
     </>

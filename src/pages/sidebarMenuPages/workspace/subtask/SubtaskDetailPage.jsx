@@ -108,7 +108,11 @@ const SubtaskDetailPage = () => {
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>; // Display error message
+    return (
+      <div className="w-fullpy-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center text-sm">{error}</p>
+      </div>
+    ); // Display error message
   }
 
   return (
@@ -228,7 +232,7 @@ const SubtaskDetailPage = () => {
             </div>
           </div>
         ) : (
-          <p>No subtask found with the given ID.</p>
+          <p className="text-center">No subtask found with the given ID.</p>
         )}
       </div>
       {/* Render the ViewSubtaskReminderModal if viewReminder is set */}

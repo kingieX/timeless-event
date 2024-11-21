@@ -53,12 +53,20 @@ const InstantReminder = () => {
 
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('icon', icon); // Include icon file directly
     formData.append('message', message);
     formData.append('medium', medium);
-    formData.append('media_type', mediaType);
-    formData.append('media_url', mediaUrl); // Include media file directly
     formData.append('contacts', finalContacts); // Send the final contacts (either one or comma-separated)
+
+    // Conditionally append 'icon' field if medium is not 'sms' and an icon is selected
+    if (medium !== 'sms' && icon) {
+      formData.append('icon', icon); // Include icon file only if medium is not 'sms'
+    }
+
+    // Conditionally append 'media_type' and 'media_url' if medium is not 'sms' and media is selected
+    if (medium !== 'sms' && mediaType && mediaUrl) {
+      formData.append('media_type', mediaType);
+      formData.append('media_url', mediaUrl);
+    }
 
     try {
       const response = await fetch(
@@ -123,20 +131,24 @@ const InstantReminder = () => {
               disabled={isLoading}
             />
           </div>
-          {/* Icon */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Icon</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleIconChange}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            />
-            {icon && (
-              <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
-            )}
-          </div>
+
+          {/* Conditionally render the Icon input */}
+          {medium !== 'sms' && (
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Icon</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleIconChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                disabled={isLoading}
+              />
+              {icon && (
+                <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
+              )}
+            </div>
+          )}
+
           {/* Message */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Message</label>
@@ -148,6 +160,7 @@ const InstantReminder = () => {
               disabled={isLoading}
             />
           </div>
+
           {/* Medium (SMS, Email, WhatsApp) */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Medium</label>
@@ -162,6 +175,7 @@ const InstantReminder = () => {
               <option value="whatsapp">WhatsApp</option>
             </select>
           </div>
+
           {/* Contacts - Dynamically add contact inputs */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">
@@ -195,37 +209,43 @@ const InstantReminder = () => {
               </div>
             ))}
           </div>
-          {/* Media Type */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Media Type</label>
-            <select
-              value={mediaType}
-              onChange={e => setMediaType(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            >
-              <option value="image">Image</option>
-              <option value="video">Video</option>
-              <option value="audio">Audio</option>
-              <option value="document">Document</option>
-            </select>
-          </div>
-          {/* Media File */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Media File</label>
-            <input
-              type="file"
-              accept="image/*,video/*,audio/*,.pdf"
-              onChange={handleMediaChange}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            />
-            {mediaUrl && (
-              <p className="mt-2 text-gray-600">
-                Media selected: {mediaUrl.name}
-              </p>
-            )}
-          </div>
+
+          {/* Conditionally render Media Type and Media File inputs */}
+          {medium !== 'sms' && (
+            <>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Media Type</label>
+                <select
+                  value={mediaType}
+                  onChange={e => setMediaType(e.target.value)}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  disabled={isLoading}
+                >
+                  <option value="image">Image</option>
+                  <option value="video">Video</option>
+                  <option value="audio">Audio</option>
+                  <option value="document">Document</option>
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Media File</label>
+                <input
+                  type="file"
+                  accept="image/*,video/*,audio/*,.pdf"
+                  onChange={handleMediaChange}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  disabled={isLoading}
+                />
+                {mediaUrl && (
+                  <p className="mt-2 text-gray-600">
+                    Media selected: {mediaUrl.name}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+
           <div className="w-full flex mb-4">
             <button
               type="submit"
@@ -235,6 +255,7 @@ const InstantReminder = () => {
               {isLoading ? 'Setting Reminder...' : 'Set Reminder'}
             </button>
           </div>
+
           {/* Display Success or Error Messages */}
           {error && (
             <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">

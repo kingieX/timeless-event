@@ -8,7 +8,9 @@ import EditFolderModal from './EditFolderModal'; // Import EditFolderModal
 import ShareFolderModal from './ShareFolderModal';
 import AddUsersModal from './AddUsersModal';
 
-const FolderList = () => {
+const FolderList = ({ workspaceId }) => {
+  // console.log('workspaceId:', workspaceId);
+
   const [folders, setFolders] = useState([]);
   const [error, setError] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null); // Track which dropdown is open
@@ -19,28 +21,36 @@ const FolderList = () => {
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const accessToken = Cookies.get('access_token');
+  // console.log(accessToken);
 
   useEffect(() => {
     const fetchFolders = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/folder/folders/user`,
+          `${API_BASE_URL}/folder/teamspace/${workspaceId}/folders`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-        setFolders(response.data);
+        setFolders(response.data); // Set the fetched folders data
         console.log('Fetched folders:', response.data);
       } catch (err) {
-        console.error('Error fetching folders:', err);
-        setError('Failed to fetch folders. Please try again.');
+        if (err.response && err.response.status === 404) {
+          // Handle 404 (no folders found) separately
+          console.log('No folders found for this workspace.');
+          setError('No folders found. Create a folder to get started.');
+        } else {
+          // Handle any other errors
+          console.error('Error fetching folders:', err);
+          setError('Failed to fetch folders. Please try again.');
+        }
       }
     };
 
     fetchFolders();
-  }, []);
+  }, [workspaceId, accessToken]);
 
   // function to close deopdown when clicked outside of the page
   useEffect(() => {
@@ -90,7 +100,11 @@ const FolderList = () => {
   };
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center text-sm">{error}</p>
+      </div>
+    );
   }
 
   return (

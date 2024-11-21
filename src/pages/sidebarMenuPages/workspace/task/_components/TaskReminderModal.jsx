@@ -50,11 +50,20 @@ const TaskReminderModal = ({ taskId, onClose }) => {
 
     const formData = new FormData();
     formData.append('title', title);
-    formData.append('icon', icon); // Include icon file directly
     formData.append('message', message);
     formData.append('medium', medium);
-    formData.append('media_type', mediaType);
-    formData.append('media_url', mediaUrl); // Include media file directly
+
+    // Conditionally append 'icon' field if medium is not 'sms' and an icon is selected
+    if (medium !== 'sms' && icon) {
+      formData.append('icon', icon); // Include icon file only if medium is not 'sms'
+    }
+
+    // Conditionally append 'media_type' and 'media_url' if medium is not 'sms' and media is selected
+    if (medium !== 'sms' && mediaType && mediaUrl) {
+      formData.append('media_type', mediaType);
+      formData.append('media_url', mediaUrl);
+    }
+
     formData.append('reminder_times', JSON.stringify(reminderTimes)); // Send reminder times as a JSON string
 
     try {
@@ -107,19 +116,21 @@ const TaskReminderModal = ({ taskId, onClose }) => {
           </div>
 
           {/* Icon */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Icon</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleIconChange}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            />
-            {icon && (
-              <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
-            )}
-          </div>
+          {medium !== 'sms' && (
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Icon</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleIconChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                disabled={isLoading}
+              />
+              {icon && (
+                <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
+              )}
+            </div>
+          )}
 
           {/* Message */}
           <div className="mb-4">
@@ -150,38 +161,43 @@ const TaskReminderModal = ({ taskId, onClose }) => {
             </select>
           </div>
 
-          {/* Media Type */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Media Type</label>
-            <select
-              value={mediaType}
-              onChange={e => setMediaType(e.target.value)}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            >
-              <option value="image">Image</option>
-              <option value="video">Video</option>
-              <option value="audio">Audio</option>
-              <option value="document">Document</option>
-            </select>
-          </div>
+          {/* Conditionally render Media Type and Media File inputs */}
+          {medium !== 'sms' && (
+            <>
+              {/* Media Type */}
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Media Type</label>
+                <select
+                  value={mediaType}
+                  onChange={e => setMediaType(e.target.value)}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  disabled={isLoading}
+                >
+                  <option value="image">Image</option>
+                  <option value="video">Video</option>
+                  <option value="audio">Audio</option>
+                  <option value="document">Document</option>
+                </select>
+              </div>
 
-          {/* Media File */}
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Media File</label>
-            <input
-              type="file"
-              accept="image/*,video/*,audio/*,.pdf"
-              onChange={handleMediaChange}
-              className="border border-gray-300 p-2 rounded w-full"
-              disabled={isLoading}
-            />
-            {mediaUrl && (
-              <p className="mt-2 text-gray-600">
-                Media selected: {mediaUrl.name}
-              </p>
-            )}
-          </div>
+              {/* Media File */}
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Media File</label>
+                <input
+                  type="file"
+                  accept="image/*,video/*,audio/*,.pdf"
+                  onChange={handleMediaChange}
+                  className="border border-gray-300 p-2 rounded w-full"
+                  disabled={isLoading}
+                />
+                {mediaUrl && (
+                  <p className="mt-2 text-gray-600">
+                    Media selected: {mediaUrl.name}
+                  </p>
+                )}
+              </div>
+            </>
+          )}
 
           {/* Reminder Times */}
           <div className="mb-4">

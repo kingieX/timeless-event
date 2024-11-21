@@ -103,7 +103,11 @@ const FetchEvent = ({ projectId, project }) => {
   }
 
   if (error) {
-    return <div className="text-red-500 text-center">{error}</div>;
+    return (
+      <div className="w-full py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center">{error}</p>
+      </div>
+    );
   }
 
   return (

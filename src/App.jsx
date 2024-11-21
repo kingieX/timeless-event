@@ -84,6 +84,7 @@ import EventDetailPage from './pages/sidebarMenuPages/workspace/event/EventDetai
 import SubtaskDetailPage from './pages/sidebarMenuPages/workspace/subtask/SubtaskDetailPage';
 import PersonalProjectsPage from './pages/sidebarMenuPages/Personal-projects/PersonalProjects';
 import NetworkStatus from './NetworkErrorPage';
+import AuthProvider from './withAuth';
 
 const App = () => {
   return (
@@ -91,133 +92,138 @@ const App = () => {
       {/* Include this line to apply the scroll behavior */}
       <ScrollToTop offset={50} />
       <NetworkStatus>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Signup />} />
-          {/* login process */}
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/loginverification"
-            element={<LoginVerificationPage />}
-          />
-
-          <Route path="/features" element={<Features />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/upgrade" element={<Upgrade />} />
-
-          {/* Onborading routes */}
-          <Route path="/signup/onboard" element={<Onboard1 />} />
-          <Route path="/signup/customize-experience" element={<Onboard2 />} />
-          <Route path="/signup/create-workspace" element={<Onboard3 />} />
-          <Route path="/signup/create-team" element={<Onboard4 />} />
-          <Route path="/signup/team-invite" element={<Onboard5 />} />
-          <Route path="/verification" element={<VerificationPage />} />
-
-          {/* Reset Password */}
-          <Route path="/forgot-password" element={<ForgottenPassword />} />
-          <Route path="/otp-verification" element={<VerifyOTP />} />
-          <Route path="/verify" element={<PasswordResetVerification />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/success" element={<SuccessPage />} />
-
-          {/* onvite page */}
-          <Route path="/invite/:team_id/:invite_id" element={<InvitePage />} />
-          <Route path="/team/user-register" element={<RegistrationPage />} />
-          <Route
-            path="/team/user-verification"
-            element={<UserVerification />}
-          />
-          <Route path="/team/send-otp" element={<SendOTP />} />
-          <Route path="/team/success-page" element={<TeamSuccessPage />} />
-
-          {/* Outlet route */}
-          <Route path="/app/*" element={<Dashboard />}>
-            {/* Default content to render when just "/dashboard" is accessed */}
-            <Route index element={<MainContent />} />
-
-            {/* notificatio */}
-            <Route path="notification" element={<Notification />} />
-
-            {/* Sidebar menus routes */}
-            <Route path="add-event" element={<AddEvent />} />
-            <Route path="add-task" element={<AddTask />} />
-            <Route path="search" element={<Search />} />
-            <Route path="completed" element={<Completed />} />
-            <Route path="inbox/user-messages" element={<UserMessage />} />
-            <Route path="inbox/team-messages" element={<TeamMessage />} />
-            <Route path="inbox/vendor-messages" element={<VendorMessage />} />
-            <Route path="inbox/rsvp-tracking" element={<RsvpTracking />} />
-            <Route path="today" element={<Today />} />
-            <Route path="upcoming" element={<Upcoming />} />
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<Signup />} />
+            {/* login process */}
+            <Route path="/login" element={<Login />} />
             <Route
-              path="personal-projects"
-              element={<PersonalProjectsPage />}
+              path="/loginverification"
+              element={<LoginVerificationPage />}
             />
 
-            {/* Workspace routes */}
-            <Route path="workspace" element={<WorkspacePage />} />
-            <Route
-              path="workspace/:workspaceId"
-              element={<WorkspaceDetailPage />}
-            />
+            <Route path="/features" element={<Features />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/upgrade" element={<Upgrade />} />
 
-            {/* Team routes */}
-            <Route
-              path="workspace/:workspaceId/team/:teamId"
-              element={<TeamDetailPage />}
-            />
+            {/* Onborading routes */}
+            <Route path="/signup/onboard" element={<Onboard1 />} />
+            <Route path="/signup/customize-experience" element={<Onboard2 />} />
+            <Route path="/signup/create-workspace" element={<Onboard3 />} />
+            <Route path="/signup/create-team" element={<Onboard4 />} />
+            <Route path="/signup/team-invite" element={<Onboard5 />} />
+            <Route path="/verification" element={<VerificationPage />} />
 
-            {/* Folder routes */}
-            <Route
-              path="workspace/:workspaceId/folders/:folderId"
-              element={<FolderDetailPage />}
-            />
+            {/* Reset Password */}
+            <Route path="/forgot-password" element={<ForgottenPassword />} />
+            <Route path="/otp-verification" element={<VerifyOTP />} />
+            <Route path="/verify" element={<PasswordResetVerification />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/success" element={<SuccessPage />} />
 
-            {/* Project route */}
+            {/* onvite page */}
             <Route
-              path="workspace/:workspaceId/folders/:folderId/projects/:projectId"
-              element={<ProjectDetailPage />}
+              path="/invite/:team_id/:invite_id"
+              element={<InvitePage />}
             />
-
-            {/* Task route */}
+            <Route path="/team/user-register" element={<RegistrationPage />} />
             <Route
-              path="workspace/:workspaceId/folders/:folderId/projects/:projectId/tasks/:taskId"
-              element={<TaskDetailPage />}
+              path="/team/user-verification"
+              element={<UserVerification />}
             />
+            <Route path="/team/send-otp" element={<SendOTP />} />
+            <Route path="/team/success-page" element={<TeamSuccessPage />} />
 
-            {/* Sub Task route */}
-            <Route
-              path="workspace/folders/projects/tasks/:taskId/subtasks/:subTaskId"
-              element={<SubtaskDetailPage />}
-            />
+            {/* Outlet route */}
+            <Route path="/app/*" element={<Dashboard />}>
+              {/* Default content to render when just "/dashboard" is accessed */}
+              <Route index element={<MainContent />} />
 
-            {/* Event route */}
-            <Route
-              path="workspace/:workspaceId/folders/:folderId/projects/:projectId/events/:eventId"
-              element={<EventDetailPage />}
-            />
+              {/* notificatio */}
+              <Route path="notification" element={<Notification />} />
 
-            {/* userMenu routes */}
-            <Route path="tasks" element={<Task />} />
-            <Route path="events" element={<Event />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="add-team" element={<AddTeam />} />
-            <Route path="add-guest" element={<AddGuest />} />
-            <Route path="instant-reminder" element={<InstantReminder />} />
-            <Route path="activity-log" element={<ActivityLog />} />
-            <Route path="print" element={<Print />} />
-            <Route path="contact-support" element={<ContactSupport />} />
-            <Route path="faqs" element={<FAQs />} />
-            <Route path="integrations" element={<Integrations />} />
-            <Route path="user-guide" element={<UserGuide />} />
-            <Route path="download-app" element={<DownloadApp />} />
-            <Route path="whats-new" element={<WhatsNew />} />
-            <Route path="upgrade-team" element={<UpgradeTeam />} />
-            <Route path="sync" element={<Sync />} />
-            <Route path="log-out" element={<LogOut />} />
-          </Route>
-        </Routes>
+              {/* Sidebar menus routes */}
+              <Route path="add-event" element={<AddEvent />} />
+              <Route path="add-task" element={<AddTask />} />
+              <Route path="search" element={<Search />} />
+              <Route path="completed" element={<Completed />} />
+              <Route path="inbox/user-messages" element={<UserMessage />} />
+              <Route path="inbox/team-messages" element={<TeamMessage />} />
+              <Route path="inbox/vendor-messages" element={<VendorMessage />} />
+              <Route path="inbox/rsvp-tracking" element={<RsvpTracking />} />
+              <Route path="today" element={<Today />} />
+              <Route path="upcoming" element={<Upcoming />} />
+              <Route
+                path="personal-projects"
+                element={<PersonalProjectsPage />}
+              />
+
+              {/* Workspace routes */}
+              <Route path="workspace" element={<WorkspacePage />} />
+              <Route
+                path="workspace/:workspaceId"
+                element={<WorkspaceDetailPage />}
+              />
+
+              {/* Team routes */}
+              <Route
+                path="workspace/:workspaceId/team/:teamId"
+                element={<TeamDetailPage />}
+              />
+
+              {/* Folder routes */}
+              <Route
+                path="workspace/:workspaceId/folders/:folderId"
+                element={<FolderDetailPage />}
+              />
+
+              {/* Project route */}
+              <Route
+                path="workspace/:workspaceId/folders/:folderId/projects/:projectId"
+                element={<ProjectDetailPage />}
+              />
+
+              {/* Task route */}
+              <Route
+                path="workspace/:workspaceId/folders/:folderId/projects/:projectId/tasks/:taskId"
+                element={<TaskDetailPage />}
+              />
+
+              {/* Sub Task route */}
+              <Route
+                path="workspace/folders/projects/tasks/:taskId/subtasks/:subTaskId"
+                element={<SubtaskDetailPage />}
+              />
+
+              {/* Event route */}
+              <Route
+                path="workspace/:workspaceId/folders/:folderId/projects/:projectId/events/:eventId"
+                element={<EventDetailPage />}
+              />
+
+              {/* userMenu routes */}
+              <Route path="tasks" element={<Task />} />
+              <Route path="events" element={<Event />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="add-team" element={<AddTeam />} />
+              <Route path="add-guest" element={<AddGuest />} />
+              <Route path="instant-reminder" element={<InstantReminder />} />
+              <Route path="activity-log" element={<ActivityLog />} />
+              <Route path="print" element={<Print />} />
+              <Route path="contact-support" element={<ContactSupport />} />
+              <Route path="faqs" element={<FAQs />} />
+              <Route path="integrations" element={<Integrations />} />
+              <Route path="user-guide" element={<UserGuide />} />
+              <Route path="download-app" element={<DownloadApp />} />
+              <Route path="whats-new" element={<WhatsNew />} />
+              <Route path="upgrade-team" element={<UpgradeTeam />} />
+              <Route path="sync" element={<Sync />} />
+              <Route path="log-out" element={<LogOut />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </NetworkStatus>
     </Router>
   );

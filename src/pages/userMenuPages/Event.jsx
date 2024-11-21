@@ -17,6 +17,9 @@ const Events = () => {
   const [showCompletedEvents, setShowCompletedEvents] = useState(true);
   const [events, setEvents] = useState([]); // Renamed to `tasks` for clarity
   const accessToken = Cookies.get('access_token');
+  // const expiredTime = Cookies.get('access_token_expiration');
+  // console.log('expiredTime: ', expiredTime);
+
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [eventcount, setEventCount] = useState(0);

@@ -7,7 +7,11 @@ import axios from 'axios';
 import ShareMemberModal from './ShareMemberModal';
 
 const ProjectSettings = forwardRef(
-  ({ projectId, project, projectName, onProjectUpdated }, ref) => {
+  (
+    { sharedMembers, projectId, project, projectName, onProjectUpdated },
+    ref
+  ) => {
+    // console.log('members details:', sharedMembers);
     const [showDropdown, setShowDropdown] = useState(false);
 
     const [projectToUpdate, setProjectToUpdate] = useState(null);
@@ -74,12 +78,12 @@ const ProjectSettings = forwardRef(
             Update project access
           </li>
 
-          <li
+          {/* <li
             onClick={() => handleShare(project.project_id)} // Pass folder ID here
             className="flex w-full items-center space-x-2 p-2 text-sm hover:bg-blue-100 cursor-pointer"
           >
             Share with members
-          </li>
+          </li> */}
 
           <li
             onClick={() => handleEditProject(project)}
@@ -116,7 +120,7 @@ const ProjectSettings = forwardRef(
         {shareMember && (
           <ShareMemberModal
             projectId={shareMember} // Pass the project
-            teamId={project.team_id}
+            members={sharedMembers}
             onClose={() => setShareMember(null)} // Close modal on close
           />
         )}

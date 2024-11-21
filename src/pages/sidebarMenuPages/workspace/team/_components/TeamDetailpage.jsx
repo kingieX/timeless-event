@@ -7,9 +7,12 @@ import { CiSettings } from 'react-icons/ci';
 import TeamOptionsMenu from '../../_components/TeamOptionsMenu';
 import Settings from './_components/Settings';
 import CreateProjectModal from '../../project/_components/CreateProjectModal';
+import Logo from '/image/Members.svg';
 
 function TeamDetailPage() {
   const { teamId } = useParams();
+  // console.log(teamId);
+
   const [team, setTeam] = useState(null);
   const [membersDetail, setMembersDetail] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +36,8 @@ function TeamDetailPage() {
           },
         });
         setTeam(response.data);
-        console.log('Fetched team details:', response.data);
+        setMembersDetail(response.data.members);
+        console.log('Fetched team details:', response.data.members);
       } catch (error) {
         setError('Error fetching team details, reload page.');
         console.error('Error fetching team details:', error);
@@ -44,7 +48,7 @@ function TeamDetailPage() {
     fetchTeamDetails();
   }, [teamId]);
 
-  // Fetch member details
+  // // Fetch member details
   // useEffect(() => {
   //   const fetchMembersDetails = async () => {
   //     if (!team) return; // Ensure team data is available
@@ -61,7 +65,10 @@ function TeamDetailPage() {
 
   //       const responses = await Promise.all(memberRequests);
   //       setMembersDetail(responses.map(response => response.data));
-  //       console.log('Fetched member details:', responses);
+  //       console.log(
+  //         'Fetched member details:',
+  //         responses.map(response => response.data)
+  //       );
   //     } catch (error) {
   //       setError('Error fetching member details, reload page.');
   //       console.error('Error fetching member details:', error);
@@ -102,7 +109,12 @@ function TeamDetailPage() {
   };
 
   if (loading) return <p className="px-8">Loading...</p>;
-  if (error) return <p className="text-red-500 px-8">{error}</p>;
+  if (error)
+    return (
+      <div className="w-full py-2 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center">{error}</p>
+      </div>
+    );
 
   return (
     <>
@@ -166,22 +178,24 @@ function TeamDetailPage() {
               </div>
 
               {/* sub titles */}
-              <div className="flex lg:flex-row flex-col lg:items-center items-start lg:gap-2 text-sm text-slate-700">
-                <p>
-                  <span className="font-semibold">Industry: </span>
-                  {team.work_industry}
-                </p>
-                <p className="lg:block hidden"> • </p>
-                <p>
-                  <span className="font-semibold">Organization Size: </span>
-                  {team.organization_size}
-                </p>
-                <p className="lg:block hidden"> • </p>
+              <div className="flex flex-col items-start text-sm text-slate-700">
+                <div className="flex space-x-2">
+                  <p>
+                    <span className="font-semibold">Industry: </span>
+                    {team.work_industry}
+                  </p>
+                  <p className="lg:block hidden"> • </p>
+                  <p>
+                    <span className="font-semibold">Organization Size: </span>
+                    {team.organization_size}
+                  </p>
+                </div>
+                {/* <p className="lg:block hidden"> • </p> */}
                 <p>
                   <span className="font-semibold">Work Type: </span>
                   {team.user_work_type}
                 </p>
-                <p className="lg:block hidden"> • </p>
+                {/* <p className="lg:block hidden"> • </p> */}
                 <p>
                   <span className="font-semibold">Created on: </span>
                   {new Date(team.created_at).toLocaleString('en-US', {
@@ -211,30 +225,73 @@ function TeamDetailPage() {
                 <h2 className="text-lg font-semibold">
                   Members ({team.members.length})
                 </h2>
-                {/* <div className="flex gap-2">
-                  {membersDetail.map(member => (
-                    <div
-                      key={member.user_id}
-                      className="flex items-center space-x-2"
-                    >
-                      <p>{member.user_name}</p>
-                    </div>
-                  ))}
-                </div> */}
+                {membersDetail.length > 0 ? (
+                  <ul className="py-2 mb-12 grid lg:grid-cols-1 grid-cols-1">
+                    {membersDetail.map((member, index) => (
+                      <div
+                        key={index}
+                        className="relative w-full flex items-center space-x-2"
+                      >
+                        <div className="relative w-full flex justify-between items-center border-b border-gray p-2 hover:bg-blue-50">
+                          <div className="flex flex-col gap-1">
+                            {/* <p>{member.contacts}</p> */}
+                            <h1 className="lg:text-lg text-xs font-">
+                              <span className="font-semibold">Contact: </span>
+                              {member.contacts}
+                            </h1>
+                            <div className="flex space-x-2 text-xs text-primar">
+                              <p>
+                                <span className="font-semibold">
+                                  Invite Status:{' '}
+                                </span>
+                                {member.invite_status}
+                              </p>
+                              <p>
+                                <span className="font-semibold">
+                                  Invite type:{' '}
+                                </span>
+                                {member.invite_type}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="w-full flex flex-col justify-center items-center py-8">
+                    <img
+                      src={Logo}
+                      alt="empty project"
+                      className="lg:w-1/4 w-1/2 mb-4"
+                    />
+                    <h2 className="lg:text-2xl text-xl font-bold flex items-center">
+                      No members available
+                    </h2>
+                    <p className="lg:text-lg text-center text-sm text-gray-600">
+                      Members are required to join and start working on
+                      projects, add a member in settings.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </>
         ) : (
-          <p>No Team data found.</p>
+          <div className="w-full py-2 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+            <p className="text-red-500 text-center text-sm">
+              No Team data found.
+            </p>
+          </div>
         )}
 
         {/* Render the CreateProjectModal if createProject is set */}
-        {createProject && (
+        {/* {createProject && (
           <CreateProjectModal
             teamId={createProject}
             onClose={() => setCreateProject(null)}
           />
-        )}
+        )} */}
       </div>
     </>
   );

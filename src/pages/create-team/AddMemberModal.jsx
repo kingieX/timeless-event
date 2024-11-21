@@ -59,7 +59,7 @@ const AddMemberModal = ({ onClose, teamId, teamName }) => {
       );
 
       setSuccessMessage('Invites sent successfully!');
-      console.log('Invite Sent:', response.data);
+      // console.log('Invite Sent:', response.data);
 
       // Delay modal close by 2 seconds to give feedback
       setTimeout(() => {
@@ -150,9 +150,10 @@ const AddMemberModal = ({ onClose, teamId, teamName }) => {
               {successMessage}
             </div>
           )}
+
           {errorMessage && (
-            <div className="mt-4 text-red-500 font-semibold">
-              {errorMessage}
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{errorMessage}</p>
             </div>
           )}
 

@@ -233,6 +233,7 @@ const AddTeamModal = ({
                   {errorMessage}
                 </div>
               )}
+
               {/* Display success message */}
               {message && (
                 <div className="text-center w-full mb-4 p-2 bg-green-100 text-green-500 border border-green-400 rounded mt-4">

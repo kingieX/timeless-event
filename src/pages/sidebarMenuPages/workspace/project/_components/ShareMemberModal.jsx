@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 
-const ShareMemberModal = ({ projectId, teamId, onClose }) => {
-  const [teamMembers, setTeamMembers] = useState([]);
+const ShareMemberModal = ({ projectId, members, onClose }) => {
+  // console.log('Members: ', members);
+
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [accessLevels] = useState([
     'owner',
@@ -18,29 +19,6 @@ const ShareMemberModal = ({ projectId, teamId, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
-
-  // Fetch team members on mount
-  useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/teamMember/${teamId}/members`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setTeamMembers(data);
-      } catch (error) {
-        console.error('Error fetching team members:', error);
-        setError('Failed to load team members.');
-      }
-    };
-
-    fetchTeamMembers();
-  }, [API_BASE_URL, teamId, accessToken]);
 
   const handleMemberChange = (memberId, accessLevel) => {
     setSelectedMembers(prev => {
@@ -103,27 +81,35 @@ const ShareMemberModal = ({ projectId, teamId, onClose }) => {
         <h2 className="text-xl font-bold mb-4">Share Project Members</h2>
 
         <form onSubmit={handleSubmit}>
-          {teamMembers.map((member, index) => (
-            <div key={index} className="mb-4">
-              <label className="block text-gray-700 mb-2">
-                {member.user.fullname}
-              </label>
-              <select
-                onChange={e =>
-                  handleMemberChange(member.team_member_id, e.target.value)
-                }
-                className="border border-gray-300 p-2 rounded w-full"
-                disabled={isLoading}
-              >
-                <option value="">Select Access Level</option>
-                {accessLevels.map(level => (
-                  <option key={level} value={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
+          {/* If no shared users exist, show a message */}
+          {members && members.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No members to share with.
+            </p>
+          ) : (
+            members.map((member, index) => (
+              <div key={index} className="mb-4">
+                <label className="block text-gray-700 mb-2">
+                  {member.fullname}
+                </label>
+                <select
+                  onChange={e =>
+                    handleMemberChange(member.team_member_id, e.target.value)
+                  }
+                  className="border border-gray-300 p-2 rounded w-full"
+                  disabled={isLoading}
+                >
+                  <option value="">Select Access Level</option>
+                  {accessLevels.map(level => (
+                    <option key={level} value={level}>
+                      {level}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))
+          )}
+
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -141,6 +127,7 @@ const ShareMemberModal = ({ projectId, teamId, onClose }) => {
               {isLoading ? 'Sharing...' : 'Share Members'}
             </button>
           </div>
+
           {error && (
             <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
               <p className="text-red-500 text-center text-sm">{error}</p>

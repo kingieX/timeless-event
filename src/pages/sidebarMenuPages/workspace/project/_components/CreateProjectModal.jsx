@@ -76,7 +76,6 @@ const CreateProjectModal = ({ onClose, folderId, teamId }) => {
               disabled={isLoading}
             />
           </div>
-
           {/* Description */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Description</label>
@@ -88,7 +87,6 @@ const CreateProjectModal = ({ onClose, folderId, teamId }) => {
               disabled={isLoading}
             />
           </div>
-
           {/* Color */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Color</label>
@@ -104,7 +102,6 @@ const CreateProjectModal = ({ onClose, folderId, teamId }) => {
               <option value="yellow">Yellow</option>
             </select>
           </div>
-
           {/* Access Level */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Access Level</label>
@@ -120,7 +117,6 @@ const CreateProjectModal = ({ onClose, folderId, teamId }) => {
               <option value="team_only">Team Only</option>
             </select>
           </div>
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -138,9 +134,12 @@ const CreateProjectModal = ({ onClose, folderId, teamId }) => {
               {isLoading ? 'Creating...' : 'Create Project'}
             </button>
           </div>
-
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

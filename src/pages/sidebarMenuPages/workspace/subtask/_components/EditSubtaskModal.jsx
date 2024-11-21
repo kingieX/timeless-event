@@ -77,7 +77,6 @@ const EditSubtaskModal = ({ subtask, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           {/* Frequency Field */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Frequency</label>
@@ -94,7 +93,6 @@ const EditSubtaskModal = ({ subtask, onClose }) => {
               <option value="Yearly">Yearly</option>
             </select>
           </div>
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -112,9 +110,12 @@ const EditSubtaskModal = ({ subtask, onClose }) => {
               {isLoading ? 'Updating...' : 'Update Subtask'}
             </button>
           </div>
-
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}{' '}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

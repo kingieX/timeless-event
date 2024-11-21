@@ -57,6 +57,9 @@ const Login = () => {
           throw new Error('Missing user ID or tokens in the server response.');
         }
 
+        const expirationTime = new Date().getTime() + 12 * 60 * 60 * 1000; // 12 hours
+        Cookies.set('access_token_expiration', expirationTime);
+
         // Store tokens and userId in secure cookies
         Cookies.set('access_token', access_token, {
           secure: true,

@@ -75,9 +75,12 @@ const WorkspaceDetailPage = () => {
           throw new Error('Network response was not ok');
         }
 
-        const data = await response.json(); // Parse the response as JSON
-        setWorkspaceData(data); // Set the data from the API
-        // console.log('Workspace detail:', data);
+        if (response.ok) {
+          const data = await response.json(); // Parse the response as JSON
+          setWorkspaceData(data); // Set the data from the API
+          // console.log('Workspace detail:', data);
+          // window.location.reload();
+        }
       } catch (error) {
         console.error('Error fetching workspace data:', error);
         setError('Failed to load workspace details.');
@@ -89,7 +92,6 @@ const WorkspaceDetailPage = () => {
     fetchWorkspaceData();
   }, [workspaceId, access_token]);
 
-  // Fetch teams assigned to this workspace once the workspace data is available
   useEffect(() => {
     if (workspaceData && workspaceData.team_space_id) {
       const fetchTeamsData = async () => {
@@ -103,19 +105,18 @@ const WorkspaceDetailPage = () => {
               },
             }
           );
-
           setTeamsData(response.data); // Set the fetched teams data
-
-          if (response.status === 404) {
-            setTeamsError('No teams found for this workspace, create a team!');
-          }
           console.log('Teams data:', response.data); // Log the teams data to console
         } catch (error) {
-          console.error('Error fetching teams data:', error);
-          setTeamsError(
-            'No team found! Create a team to get started.',
-            error.message
-          );
+          if (error.response && error.response.status === 404) {
+            // Handle 404 (no teams found) separately
+            console.log('No teams found for this workspace.');
+            setTeamsError('No teams found. Create a team to get started.');
+          } else {
+            // Handle other errors (e.g., network issues)
+            console.error('Error fetching teams data:', error);
+            setTeamsError('Failed to fetch teams. Please try again.');
+          }
         } finally {
           setTeamsLoading(false); // End teams loading state
         }
@@ -123,9 +124,7 @@ const WorkspaceDetailPage = () => {
 
       fetchTeamsData();
     }
-  }, [workspaceData, access_token]);
-
-  // Routes to handle GET request for folders
+  }, [workspaceData, access_token]); // Re-fetch when workspaceData or access_token changes
 
   // Function to open the modal
   const openEditModal = () => setIsEditModalOpen(true);
@@ -240,7 +239,7 @@ const WorkspaceDetailPage = () => {
             </div>
           </>
         ) : (
-          <p>No workspace data found.</p>
+          <p className="text-center">No workspace data found.</p>
         )}
       </div>
 
@@ -336,7 +335,7 @@ const WorkspaceDetailPage = () => {
 
         {/* Map teams goes here... */}
         <div className="">
-          <FolderList />
+          <FolderList workspaceId={workspaceId} />
         </div>
       </div>
 

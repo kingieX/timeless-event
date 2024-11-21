@@ -83,7 +83,6 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Description</label>
             <textarea
@@ -94,7 +93,6 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Priority</label>
             <select
@@ -110,7 +108,6 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               ))}
             </select>
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Access Level</label>
             <select
@@ -125,7 +122,6 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               <option value="team_only">Team Only</option>
             </select>
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Status</label>
             <select
@@ -140,7 +136,6 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               <option value="cancelled">Cancelled</option>
             </select>
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Due Date</label>
             <input
@@ -152,7 +147,6 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -170,9 +164,12 @@ const CreateTaskModal = ({ projectId, onClose }) => {
               {isLoading ? 'Creating...' : 'Create Task'}
             </button>
           </div>
-
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

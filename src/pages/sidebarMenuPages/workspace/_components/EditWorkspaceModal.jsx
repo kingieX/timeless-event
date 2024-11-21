@@ -153,7 +153,9 @@ const EditWorkspaceModal = ({ workspaceData, onClose, onUpdate }) => {
           {message && (
             <p
               className={
-                message.includes('error') ? 'text-red-500' : 'text-green-500'
+                message.includes('error')
+                  ? 'py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500'
+                  : 'text-green-500'
               }
             >
               {message}

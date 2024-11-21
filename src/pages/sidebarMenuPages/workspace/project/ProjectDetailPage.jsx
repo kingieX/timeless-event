@@ -10,6 +10,7 @@ import ProjectSettings from './_components/ProjectSettings';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import CreateEventModal from '../event/_components/CreateEventModal';
 import FetchEvent from './_components/FetchEvent';
+import axios from 'axios';
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
@@ -19,6 +20,8 @@ const ProjectDetailPage = () => {
   const [error, setError] = useState('');
   const accessToken = Cookies.get('access_token');
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const [sharedMembers, setSharedMembers] = useState([]); // State to store shared members from folder
 
   const [createTask, setCreateTask] = useState(null);
   const [createEvent, setCreateEvent] = useState(null);
@@ -55,6 +58,8 @@ const ProjectDetailPage = () => {
         const data = await response.json();
         setProject(data);
         // console.log('Project details:', data);
+
+        fetchFolderDetails(data.folder_id);
       } catch (error) {
         console.error('Error fetching project details:', error);
         setError(error.message);
@@ -65,6 +70,27 @@ const ProjectDetailPage = () => {
 
     fetchProjectDetails();
   }, [projectId, accessToken, API_BASE_URL]);
+
+  // Route to fetch Folder details using the folder_id from the project
+  const fetchFolderDetails = async folderId => {
+    // console.log('Folder id neede to fetch folder details: ', folderId);
+
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/folder/${folderId}/retrieve-folder-by-id`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setSharedMembers(response.data.shared_users); // Set shared_users from folder
+      console.log('Fetched folder details:', response.data.shared_users);
+    } catch (error) {
+      setError('Error fetching folder details, reload page.');
+      console.error('Error fetching folder details:', error);
+    }
+  };
 
   // logic to create task
   const handleCreateTask = projectId => {
@@ -105,7 +131,11 @@ const ProjectDetailPage = () => {
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return (
+      <div className="w-full py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+        <p className="text-red-500 text-center">{error}</p>
+      </div>
+    );
   }
 
   return (
@@ -168,6 +198,7 @@ const ProjectDetailPage = () => {
               projectId={project.project_id}
               projectName={project.project_name}
               project={project}
+              sharedMembers={sharedMembers} // Pass shared members as prop
             />
           )}
         </div>
@@ -223,7 +254,7 @@ const ProjectDetailPage = () => {
             </div>
           </>
         ) : (
-          <p>No project found with the given ID.</p>
+          <p className="text-center">No project found with the given ID.</p>
         )}
       </div>
 

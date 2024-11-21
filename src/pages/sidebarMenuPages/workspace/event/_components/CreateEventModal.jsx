@@ -83,7 +83,6 @@ const CreateEventModal = ({ projectId, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Description</label>
             <textarea
@@ -94,7 +93,6 @@ const CreateEventModal = ({ projectId, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="w-full gap-4 flex">
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Event Date</label>
@@ -120,7 +118,6 @@ const CreateEventModal = ({ projectId, onClose }) => {
               />
             </div>
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Location</label>
             <input
@@ -132,7 +129,6 @@ const CreateEventModal = ({ projectId, onClose }) => {
               disabled={isLoading}
             />
           </div>
-
           <div className="mb-4 flex items-center">
             <input
               type="checkbox"
@@ -142,7 +138,6 @@ const CreateEventModal = ({ projectId, onClose }) => {
             />
             <label className="text-gray-700">Is this event virtual?</label>
           </div>
-
           <div className="flex justify-end mb-4">
             <button
               type="button"
@@ -160,9 +155,12 @@ const CreateEventModal = ({ projectId, onClose }) => {
               {isLoading ? 'Creating...' : 'Create Event'}
             </button>
           </div>
-
           {/* Display Success or Error Messages */}
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && (
+            <div className="py-1 px-2 border border-gray my-4 border-l-4 border-l-red-500">
+              <p className="text-red-500 text-center text-sm">{error}</p>
+            </div>
+          )}
           {success && <p className="text-green-500 text-center">{success}</p>}
         </form>
       </div>

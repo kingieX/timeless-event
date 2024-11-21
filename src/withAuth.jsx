@@ -2,23 +2,26 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-const withAuth = WrappedComponent => {
-  const AuthHOC = props => {
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      const accessToken = Cookies.get('access_token');
-
-      // Check if the token exists and is valid (you can customize this check)
-      if (!accessToken) {
-        navigate('/login'); // Redirect to the login page if the token is expired or missing
-      }
-    }, [navigate]);
-
-    return <WrappedComponent {...props} />;
-  };
-
-  return AuthHOC;
+// Utility function to check if the token is expired
+const isTokenExpired = () => {
+  const expirationTime = Cookies.get('access_token_expiration');
+  const currentTime = new Date().getTime();
+  return !expirationTime || currentTime > expirationTime;
 };
 
-export default withAuth;
+const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If the token is expired, redirect to login page
+    if (isTokenExpired()) {
+      Cookies.remove('access_token');
+      Cookies.remove('access_token_expiration');
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  return <>{children}</>;
+};
+
+export default AuthProvider;
