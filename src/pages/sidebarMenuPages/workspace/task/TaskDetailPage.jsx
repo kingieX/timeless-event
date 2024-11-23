@@ -16,6 +16,8 @@ const TaskDetailPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const accessToken = Cookies.get('access_token');
+  // console.log(accessToken);
+
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [createSubtask, setCreateSubtask] = useState(null);

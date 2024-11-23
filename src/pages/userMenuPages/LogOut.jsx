@@ -91,13 +91,13 @@ const Logout = () => {
       console.error('Error during logout:', error);
     } finally {
       setIsLoading(false); // Hide loading state after logout
-      Cookies.remove('access_token'); // Remove access token from cookies
-      Cookies.remove('token_id'); // Remove token ID from cookies
-      Cookies.remove('refresh_token'); // Remove refresh token from cookies
-      Cookies.remove('email'); // Remove email from cookies
-      Cookies.remove('userId'); // Remove user ID from cookies
-      Cookies.remove('fullname'); // Remove full name from cookies
-      Cookies.remove('phone_no'); // Remove phone number from cookies
+      // Cookies.remove('access_token'); // Remove access token from cookies
+      // Cookies.remove('token_id'); // Remove token ID from cookies
+      // Cookies.remove('refresh_token'); // Remove refresh token from cookies
+      // Cookies.remove('email'); // Remove email from cookies
+      // Cookies.remove('userId'); // Remove user ID from cookies
+      // Cookies.remove('fullname'); // Remove full name from cookies
+      // Cookies.remove('phone_no'); // Remove phone number from cookies
     }
   };
 

@@ -8,7 +8,7 @@ const NetworkErrorPage = () => (
       <div className="flex justify-center mb-4">
         <img
           src={ErrorImage}
-          alt="Under Construction"
+          alt="Network Error"
           className="w-full  h-1/2 bouncing-image"
         />
       </div>

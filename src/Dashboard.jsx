@@ -20,6 +20,9 @@ const Dashboard = () => {
   const user_id = Cookies.get('user_id'); // Assuming you have user_id stored in cookies
   const access_token = Cookies.get('access_token'); // Assuming access_token is stored in cookies
 
+  // console.log('User Id: ', user_id);
+  // console.log('Access token: ', access_token);
+
   const userData = {
     username: fullname,
     profileImage: '',

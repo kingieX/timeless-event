@@ -7,7 +7,7 @@ const InstantReminder = () => {
   const [icon, setIcon] = useState(''); // Icon file
   const [message, setMessage] = useState('');
   const [medium, setMedium] = useState('sms');
-  const [mediaType, setMediaType] = useState('');
+  const [mediaType, setMediaType] = useState('image');
   const [mediaUrl, setMediaUrl] = useState(''); // Media file URL
   const [contacts, setContacts] = useState(['']); // Array of individual contacts
   const [isLoading, setIsLoading] = useState(false);
@@ -67,6 +67,17 @@ const InstantReminder = () => {
       formData.append('media_type', mediaType);
       formData.append('media_url', mediaUrl);
     }
+
+    // Log the data that is being sent before making the request
+    console.log('FormData being sent:', {
+      title,
+      message,
+      medium,
+      contacts: finalContacts,
+      icon: icon ? icon.name : null,
+      media_type: mediaType,
+      media_url: mediaUrl,
+    });
 
     try {
       const response = await fetch(
@@ -132,23 +143,6 @@ const InstantReminder = () => {
             />
           </div>
 
-          {/* Conditionally render the Icon input */}
-          {medium !== 'sms' && (
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Icon</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleIconChange}
-                className="border border-gray-300 p-2 rounded w-full"
-                disabled={isLoading}
-              />
-              {icon && (
-                <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
-              )}
-            </div>
-          )}
-
           {/* Message */}
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Message</label>
@@ -209,6 +203,23 @@ const InstantReminder = () => {
               </div>
             ))}
           </div>
+
+          {/* Conditionally render the Icon input */}
+          {medium !== 'sms' && (
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Icon</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleIconChange}
+                className="border border-gray-300 p-2 rounded w-full"
+                disabled={isLoading}
+              />
+              {icon && (
+                <p className="mt-2 text-gray-600">Icon selected: {icon.name}</p>
+              )}
+            </div>
+          )}
 
           {/* Conditionally render Media Type and Media File inputs */}
           {medium !== 'sms' && (

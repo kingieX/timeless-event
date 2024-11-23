@@ -60,6 +60,8 @@ const ResetPassword = () => {
     } catch (error) {
       setErrorMessage('An error occurred. Please try again.');
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

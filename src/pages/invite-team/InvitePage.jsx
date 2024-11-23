@@ -77,9 +77,7 @@ const InvitePage = () => {
 
       <div className="flex flex-col items-center justify-center lg:mt-24 mt-16">
         <div className="bg-white p-8 rounded-lg lg:shadow-md w-full max-w-md">
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            Join the Team Invitation
-          </h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">Join Team</h2>
 
           {successMessage ? (
             <p className="text-green-500 text-center mb-4">{successMessage}</p>
