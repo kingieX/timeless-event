@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import SubtaskReminderModal from './SubtaskReminderModal';
 import EditSubtaskModal from './EditSubtaskModal';
 import UpdateSubtaskStatusModal from './UpdateSubtaskStatusModal';
+import AssignUserModal from './AssignUserModal';
 
 const SubtaskSettings = forwardRef(({ subtask }, ref) => {
   //   console.log('subtask details:', subtask);
@@ -140,12 +141,12 @@ const SubtaskSettings = forwardRef(({ subtask }, ref) => {
       )}
 
       {/* Render the AssignUserModal if assignUser is set */}
-      {/* {assignUser && (
+      {assignUser && (
         <AssignUserModal
           subTaskId={assignUser}
           onClose={() => setAssignUser(null)}
         />
-      )} */}
+      )}
       {/* // Render the EditSubtaskModal if editSubtask is set */}
       {editSubtask && (
         <EditSubtaskModal

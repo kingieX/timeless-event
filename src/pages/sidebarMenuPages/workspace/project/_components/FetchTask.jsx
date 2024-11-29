@@ -8,6 +8,7 @@ import UpdatePriorityModal from '../../task/_components/UpdatePriorityModal';
 import EditTaskModal from '../../task/_components/EditTaskModal';
 import axios from 'axios';
 import TaskReminderModal from '../../task/_components/TaskReminderModal';
+import AddMemberModal from '../../task/_components/AddMemberModal';
 
 const FetchTask = ({ projectId, project }) => {
   const [tasks, setTasks] = useState([]);
@@ -24,6 +25,7 @@ const FetchTask = ({ projectId, project }) => {
   const [taskToUpdate, setTaskToUpdate] = useState(null);
   const [taskStatus, setTaskStatus] = useState(null);
   const [taskPriority, setTaskPriority] = useState(null);
+  const [addUsers, setAddUsers] = useState(null);
   const [editTask, setEditTask] = useState(null);
 
   useEffect(() => {
@@ -83,6 +85,11 @@ const FetchTask = ({ projectId, project }) => {
   // logic to handle Update task access
   const handleUpdateAccess = task => {
     setTaskToUpdate(task);
+  };
+
+  // logic to handle assign users
+  const handleAddUsers = taskId => {
+    setAddUsers(taskId);
   };
 
   // logic to handle update task status
@@ -264,6 +271,14 @@ const FetchTask = ({ projectId, project }) => {
         <UpdatePriorityModal
           taskId={taskPriority} // Pass the task
           onClose={() => setTaskPriority(null)} // Close modal on close
+        />
+      )}
+
+      {/* Render the AddUserModal if addUsers is set */}
+      {addUsers && (
+        <AddMemberModal
+          taskId={addUsers} // Pass the task
+          onClose={() => setAddUsers(null)} // Close modal on close
         />
       )}
 

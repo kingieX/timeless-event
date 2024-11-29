@@ -24,6 +24,7 @@ function TeamDetailPage() {
 
   const API_BASE_URL = import.meta.env.VITE_BASE_URL;
   const accessToken = Cookies.get('access_token');
+  // console.log(accessToken);
 
   // Fetch team details
   useEffect(() => {

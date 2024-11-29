@@ -95,21 +95,26 @@ const WorkspaceDetailPage = () => {
     fetchWorkspaceData();
   }, [workspaceId, access_token]);
 
+  // Get Team details
   useEffect(() => {
     if (workspaceData && workspaceData.team_space_id) {
       const fetchTeamsData = async () => {
         setTeamsLoading(true); // Set teams loading state
         try {
           const response = await axios.get(
-            `${API_BASE_URL}/team/${workspaceData.team_space_id}/teamspace`,
+            // `${API_BASE_URL}/team/${workspaceData.team_space_id}/teamspace`,
+            `${API_BASE_URL}/team/${workspaceData.team_space_id}/get-all-teams-in-teamspace`,
             {
               headers: {
                 Authorization: `Bearer ${access_token}`,
               },
             }
           );
+
           setTeamsData(response.data); // Set the fetched teams data
           setFilteredTeams(response.data); // Initially, display all teams
+
+          // console.log('team data: ', response.data);
 
           // console.log('Teams data:', response.data); // Log the teams data to console
         } catch (error) {

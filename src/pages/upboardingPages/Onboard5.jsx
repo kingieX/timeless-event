@@ -69,7 +69,7 @@ const Onboard5 = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${API_BASE_URL}/teamMember/${teamId}/add-team-members-on-signup?user_id=${userId}`,
+        `${API_BASE_URL}/teamMember/add-team-members-on-signup?user_id=${userId}&team_id=${teamId}`,
         // `${API_BASE_URL}/teamMember/${teamId}`,
         requestBody,
         {

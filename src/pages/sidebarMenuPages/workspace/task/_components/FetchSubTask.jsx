@@ -6,6 +6,7 @@ import EditSubtaskModal from '../../subtask/_components/EditSubtaskModal';
 import UpdateSubtaskStatusModal from '../../subtask/_components/UpdateSubtaskStatusModal';
 import SubtaskReminderModal from '../../subtask/_components/SubtaskReminderModal';
 import { Link } from 'react-router-dom';
+import AssignUserModal from '../../subtask/_components/AssignUserModal';
 
 const FetchSubTask = ({ taskId }) => {
   const [tasks, setTasks] = useState([]);
@@ -209,12 +210,12 @@ const FetchSubTask = ({ taskId }) => {
       )}
 
       {/* Render the AssignUserModal if assignUser is set */}
-      {/* {assignUser && (
+      {assignUser && (
         <AssignUserModal
           subTaskId={assignUser}
           onClose={() => setAssignUser(null)}
         />
-      )} */}
+      )}
       {/* // Render the EditSubtaskModal if editSubtask is set */}
       {editSubtask && (
         <EditSubtaskModal
