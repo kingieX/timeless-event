@@ -35,7 +35,7 @@ const FolderList = ({ workspaceId }) => {
           }
         );
         setFolders(response.data); // Set the fetched folders data
-        // console.log('Fetched folders:', response.data);
+        console.log('Fetched folders:', response.data);
       } catch (err) {
         if (err.response && err.response.status === 404) {
           // Handle 404 (no folders found) separately

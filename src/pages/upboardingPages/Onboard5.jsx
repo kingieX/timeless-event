@@ -39,6 +39,9 @@ const Onboard5 = () => {
   const teamId = Cookies.get('team_id');
   const userId = Cookies.get('userId');
 
+  // console.log('Team ID:', teamId);
+  // console.log('User ID:', userId);
+
   const handleToggle = () => {
     setInviteLinkEnabled(!inviteLinkEnabled);
   };
