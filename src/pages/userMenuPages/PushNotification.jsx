@@ -2,9 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
+const accessToken = Cookies.get('access_token');
 
 // Helper function to fetch the VAPID public key
 const fetchVapidPublicKey = async accessToken => {
+  if (!accessToken) {
+    console.error('Access token not found');
+    return null;
+  }
+
+  //   console.log('accessToken:', accessToken);
+
   try {
     const response = await fetch(`${API_BASE_URL}/subscribe/vapid-public-key`, {
       method: 'GET',
@@ -13,6 +21,7 @@ const fetchVapidPublicKey = async accessToken => {
       },
     });
     const data = await response.json();
+    console.log('Received VAPID Public Key:', data.public_key); // Log the public key
     return data.public_key;
   } catch (error) {
     console.error('Error fetching VAPID public key:', error);
@@ -21,32 +30,72 @@ const fetchVapidPublicKey = async accessToken => {
 };
 
 // Helper function to register a service worker
-const registerServiceWorker = async vapidPublicKey => {
+const registerServiceWorker = async (
+  serviceWorkerUrl,
+  vapidPublicKey,
+  apiEndpoint,
+  accessToken
+) => {
   if ('serviceWorker' in navigator && 'PushManager' in window) {
+    console.log('Service Worker and Push are supported.');
+
     try {
-      const swReg =
-        await navigator.serviceWorker.register('/service-worker.js');
+      const swReg = await navigator.serviceWorker.register(serviceWorkerUrl);
       console.log('Service Worker registered:', swReg);
-      await subscribeUser(swReg, vapidPublicKey);
+      await subscribeUser(swReg, vapidPublicKey, apiEndpoint, accessToken);
     } catch (error) {
       console.error('Service Worker registration failed:', error);
     }
   } else {
     console.warn('Service Worker or PushManager not supported.');
   }
+  //   if ('serviceWorker' in navigator && 'PushManager' in window) {
+  //     console.log('Service Worker and Push are supported.');
+
+  //     navigator.serviceWorker
+  //       .register('http://localhost:5173/service_worker.js')
+  //       .then(function (swReg) {
+  //         console.log('Service Worker is registered', swReg);
+  //         subscribeUser(swReg, vapidPublicKey, apiEndpoint, accessToken); // Pass access_token and user_id
+  //       })
+  //       .catch(function (error) {
+  //         console.error('Service Worker Registration failed:', error);
+  //       });
+  //   } else {
+  //     console.warn('Push messaging is not supported');
+  //   }
 };
 
 // Helper function to subscribe the user to push notifications
-const subscribeUser = async (swRegistration, vapidPublicKey) => {
+const subscribeUser = async (
+  swRegistration,
+  vapidPublicKey,
+  apiEndpoint,
+  accessToken
+) => {
   const applicationServerKey = urlB64ToUint8Array(vapidPublicKey);
+  //   console.log('swRegistration: ', swRegistration);
+  //   console.log('vapidPublicKey: ', vapidPublicKey);
+  //   console.log('apiEndpoint: ', apiEndpoint);
+  //   console.log('accessToken: ', accessToken);
+
+  if (!applicationServerKey) {
+    console.log('No vapidPublicKey for the server');
+  }
+
   try {
     const subscription = await swRegistration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey,
+      applicationServerKey: applicationServerKey,
     });
+
+    if (!subscription) {
+      console.log('No subscription');
+    }
+
     console.log('User subscribed:', subscription);
     // Send subscription to the server
-    await updateSubscriptionOnServer(subscription);
+    await updateSubscriptionOnServer(subscription, apiEndpoint, accessToken);
   } catch (error) {
     console.error('User subscription failed:', error);
   }
@@ -68,22 +117,30 @@ const urlB64ToUint8Array = base64String => {
 };
 
 // Helper function to update subscription on the server
-const updateSubscriptionOnServer = async subscription => {
+const updateSubscriptionOnServer = async (
+  subscription,
+  apiEndpoint,
+  accessToken
+) => {
+  console.log('subscription:', subscription);
+  console.log('apiEndpoint:', apiEndpoint);
+
   const endpoint = subscription.endpoint;
   const p256dh_key = arrayBufferToBase64(subscription.getKey('p256dh'));
   const auth_key = arrayBufferToBase64(subscription.getKey('auth'));
 
   const subscriptionData = {
-    endpoint,
-    p256dh_key,
-    auth_key,
+    endpoint: endpoint,
+    p256dh_key: p256dh_key,
+    auth_key: auth_key,
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}/subscribe/pushnotification`, {
+    const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(subscriptionData),
     });
@@ -105,31 +162,45 @@ const PushNotificationPage = ({ onClose }) => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const accessToken = Cookies.get('access_token');
+  const accessToken = Cookies.get('access_token');
 
+  useEffect(() => {
     const initializePushNotifications = async () => {
       setLoading(true);
+
+      if (!accessToken) {
+        console.error(
+          'No access token found, aborting push notification setup'
+        );
+        setLoading(false);
+        return;
+      }
+
       const vapidPublicKey = await fetchVapidPublicKey(accessToken);
 
       if (vapidPublicKey) {
         Notification.requestPermission().then(permission => {
           if (permission === 'granted') {
             console.log('Notification permission granted');
-            registerServiceWorker(vapidPublicKey);
+            registerServiceWorker(
+              '/service_worker.js',
+              vapidPublicKey,
+              `${API_BASE_URL}/subscribe/pushnotification`,
+              accessToken
+            );
             setIsSubscribed(true);
           } else {
             alert('Notification permission denied.');
           }
         });
       } else {
-        alert('Failed to fetch VAPID public key.');
+        // alert('Failed to fetch VAPID public key.');
       }
       setLoading(false);
     };
 
     initializePushNotifications();
-  }, [onClose]);
+  }, [accessToken]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">

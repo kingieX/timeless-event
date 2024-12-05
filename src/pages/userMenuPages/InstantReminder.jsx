@@ -167,6 +167,7 @@ const InstantReminder = () => {
               <option value="sms">SMS</option>
               <option value="email">Email</option>
               <option value="whatsapp">WhatsApp</option>
+              <option value="browser">Browser</option>
             </select>
           </div>
 

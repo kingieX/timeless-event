@@ -134,6 +134,13 @@ const UserMenuModal = ({ toggleModal, onToggleSidebar }) => {
       onToggleSidebar(); // Safely call the function if it's defined
     }
 
+    // logic for push notification
+    if (link === 'push-notification') {
+      navigate('/push-notification'); // Navigate to the PushNotificationPage
+    } else {
+      navigate(link); // Navigate to other links
+    }
+
     if (link === 'print') {
       printPage(); // Call the printPage function if "Print" is clicked
     } else {
