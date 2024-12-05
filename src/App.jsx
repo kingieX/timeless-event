@@ -84,6 +84,7 @@ import SubtaskDetailPage from './pages/sidebarMenuPages/workspace/subtask/Subtas
 import PersonalProjectsPage from './pages/sidebarMenuPages/Personal-projects/PersonalProjects';
 import NetworkStatus from './NetworkErrorPage';
 import AuthProvider from './withAuth';
+import PushNotificationPage from './pages/userMenuPages/PushNotification';
 
 const App = () => {
   return (
@@ -209,6 +210,10 @@ const App = () => {
             <Route path="add-team" element={<AddTeam />} />
             <Route path="add-guest" element={<AddGuest />} />
             <Route path="instant-reminder" element={<InstantReminder />} />
+            <Route
+              path="push-notification"
+              element={<PushNotificationPage />}
+            />
             <Route path="activity-log" element={<ActivityLog />} />
             <Route path="print" element={<Print />} />
             <Route path="contact-support" element={<ContactSupport />} />

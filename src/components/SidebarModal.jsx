@@ -37,6 +37,11 @@ const menuGroups = [
       link: 'instant-reminder',
       logo: '/image/modal-assets/reminder.png',
     },
+    {
+      name: 'Subscribe to Push Notification',
+      link: 'push-notification',
+      logo: '/image/modal-assets/notification.gif',
+    },
   ],
   [
     // {
