@@ -51,8 +51,9 @@ self.addEventListener('push', function (event) {
     body: body || 'Default body',
     icon: icon || '/default-icon.png',
     image: media || '',
-    badge: '/badge-icon.png',
-    vibrate: [200, 100, 200], // Vibration pattern
+    badge: '/badge-icon.png' || '',
+    vibrate: [200, 100, 200],
+    requireInteraction: true, // Keeps the notification until the user dismisses it
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
